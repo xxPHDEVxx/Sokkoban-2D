@@ -3,6 +3,7 @@ package sokoban.view;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.DoubleBinding;
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
@@ -30,7 +31,14 @@ public class BoardView extends BorderPane {
         start(primaryStage);
     }
     private void start(Stage stage){
+        configMainComponents(stage);
 
+        Scene scene = new Scene(this, SCENE_MIN_WIDTH,SCENE_MIN_HEIGHT);
+        // implementation css ?
+        stage.setScene(scene);
+        stage.show();
+        stage.setMinHeight(stage.getHeight());
+        stage.setMinWidth(stage.getWidth());
     }
     private void createMenuBar(){
         fileMenu.getItems().addAll(menuItemNew,menuItemOpen,menuItemSave,menuItemExit);
@@ -53,11 +61,13 @@ public class BoardView extends BorderPane {
                 headerBox.heightProperty());
         GridView gridView = new GridView(boardViewModel.getGridViewModel(), gridWidth);
 
-        // Grille carrée
-        gridView.minHeightProperty().bind(gridWidth);
+        /* gridView.minHeightProperty().bind(gridWidth);
         gridView.minWidthProperty().bind(gridWidth);
         gridView.maxHeightProperty().bind(gridWidth);
         gridView.maxWidthProperty().bind(gridWidth);
+
+        -- Faire attention pour la taille de la grid par défault qui est de 10x15 --
+        */
 
         setCenter(gridView);
     }

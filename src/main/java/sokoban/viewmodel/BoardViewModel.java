@@ -1,6 +1,7 @@
 package sokoban.viewmodel;
 
 import javafx.beans.binding.LongBinding;
+import sokoban.model.Board;
 
 public class BoardViewModel {
     private final GridViewModel gridViewModel;

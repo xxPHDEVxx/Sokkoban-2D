@@ -5,8 +5,7 @@ import javafx.beans.binding.LongBinding;
 import javafx.beans.property.ReadOnlyObjectProperty;
 
 public class Board {
-    public int MAX_FILLED_CELLS;
-    // faire un calul en fonction du nombre de grille
+    public int MAX_FILLED_CELLS = 75;
     private final Grid grid = new Grid();
     private final BooleanBinding isFull;
     public Board(){
