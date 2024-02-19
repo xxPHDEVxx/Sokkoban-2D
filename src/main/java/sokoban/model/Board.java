@@ -5,18 +5,19 @@ import javafx.beans.binding.LongBinding;
 import javafx.beans.property.ReadOnlyObjectProperty;
 
 public class Board {
-    public int MAX_FILLED_CELLS = 75;
+    public static int MAX_FILLED_CELLS = 75;
     private final Grid grid = new Grid();
     private final BooleanBinding isFull;
     public Board(){
-        isFull = grid.filledCellsCountProperty().isEqualsTo(Board.MAX_FILLED_CELLS);
+        isFull = grid.filledCellsCountProperty().isEqualTo(Board.MAX_FILLED_CELLS);
     }
     public CellValue play(int line, int col){
-        if (grid.getValue(line, col) == CellValue.EMPTY && isFull())
-            return CellValue.EMPTY;
+        if (grid.getValue(line, col) == CellValue.GROUND && isFull())
+            return CellValue.GROUND;
         // grid.play(line, col, grid.getValue(line, col) == CellValue.EMPTY ? CellValue.X : CellValue.EMPTY);
         // return grid.getValue(line, col);
         // a adapter avec les enum du sokoban
+        return CellValue.GROUND;
     }
     public static int maxFilledCells(){
         return Board.MAX_FILLED_CELLS;

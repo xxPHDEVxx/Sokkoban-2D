@@ -9,8 +9,8 @@ import java.lang.reflect.Array;
 import java.util.Arrays;
 
 public class Grid {
-    public int GRID_WIDTH = 10;
-    public int GRID_HEIGHT = 15;
+    public static int GRID_WIDTH = 10;
+    public static int GRID_HEIGHT = 15;
     private final Cell[][] matrix;
     private final LongBinding filledCellsCount;
 
@@ -29,7 +29,7 @@ public class Grid {
                 .filter(cell -> !cell.isEmpty())
                 .count());
     }
-    public int getGridWidth(){return GRID_WIDTH;}
+    public static int getGridWidth(){return GRID_WIDTH;}
     public int getGridHeight(){return GRID_HEIGHT;}
 
     ReadOnlyObjectProperty<CellValue> valueProperty(int line, int col) {return matrix[line][col].valueProperty();}
