@@ -16,6 +16,9 @@ public class BoardViewModel {
     public static int gridWidth() {
         return Grid.getGridWidth();
     }
+    public static int gridHeight() {
+        return Grid.getGridHeight();
+    }
 
     public GridViewModel getGridViewModel() {
         return gridViewModel;

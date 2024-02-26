@@ -10,17 +10,20 @@ import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import sokoban.viewmodel.BoardViewModel;
+import sokoban.viewmodel.ToolViewModel;
 
 public class BoardView extends BorderPane {
     private final BoardViewModel boardViewModel;
     private static final int GRID_WIDTH = BoardViewModel.gridWidth();
-    private static final int SCENE_MIN_WIDTH = 420;
-    private static final int SCENE_MIN_HEIGHT = 420;
+    private static final int SCENE_MIN_WIDTH = 500;
+    private static final int SCENE_MIN_HEIGHT = 500;
     private final Label headerLabel = new Label("");
     private final HBox headerBox = new HBox();
     private final MenuBar menuBar = new MenuBar();
+    private final ToolView ToolView = new ToolView();
     private final Menu fileMenu = new Menu("Fichier");
     private final MenuItem menuItemNew= new MenuItem("New...");
     private final MenuItem menuItemOpen = new MenuItem("Open...");
@@ -33,12 +36,13 @@ public class BoardView extends BorderPane {
     private void start(Stage stage){
         configMainComponents(stage);
 
-        Scene scene = new Scene(this, SCENE_MIN_WIDTH,SCENE_MIN_HEIGHT);
+        HBox box = new HBox(ToolView,this);
+        Scene scene = new Scene(box);
         // implementation css ?
         stage.setScene(scene);
         stage.show();
-        stage.setMinHeight(stage.getHeight());
-        stage.setMinWidth(stage.getWidth());
+//        stage.setMinHeight(stage.getHeight());
+//        stage.setMinWidth(stage.getWidth());
     }
     private void createMenuBar(){
         fileMenu.getItems().addAll(menuItemNew,menuItemOpen,menuItemSave,menuItemExit);
