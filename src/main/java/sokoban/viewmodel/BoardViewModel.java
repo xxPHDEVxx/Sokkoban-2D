@@ -28,6 +28,10 @@ public class BoardViewModel {
         return board.filledCellsCountProperty();
     }
 
+    public LongBinding error(){
+        return board.err();
+    }
+
     public int maxFilledCells() {
         return Board.maxFilledCells();
     }

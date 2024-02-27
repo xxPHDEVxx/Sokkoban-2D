@@ -20,6 +20,7 @@ public class Board {
         return CellValue.GROUND;
     }
     public static int maxFilledCells(){
+        MAX_FILLED_CELLS = (Grid.getGridHeight() + Grid.getGridWidth())/2;
         return Board.MAX_FILLED_CELLS;
         // adapter par rapport au validation métier
     }
@@ -29,8 +30,12 @@ public class Board {
     public ReadOnlyObjectProperty<CellValue> valueProperty(int line, int col) {
         return grid.valueProperty(line, col);
     }
+
     public LongBinding filledCellsCountProperty() {
         return grid.filledCellsCountProperty();
+    }
+    public LongBinding err(){
+        return grid.err();
     }
     public boolean isEmpty(int line, int col) {
         return grid.isEmpty(line, col);
