@@ -2,12 +2,15 @@ package sokoban.view;
 
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.DoubleBinding;
+import javafx.event.EventHandler;
 import javafx.geometry.Pos;
+import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -39,6 +42,15 @@ public class BoardView extends BorderPane {
         HBox box = new HBox(ToolView,this);
         Scene scene = new Scene(box);
         // implementation css ?
+
+
+
+        ToolView.setOnMouseEntered((MouseEvent me) -> {
+                scene.setCursor(Cursor.HAND);
+        });
+        scene.setOnMouseEntered((MouseEvent me) -> {
+                scene.setCursor(Cursor.DEFAULT);
+        });
         stage.setScene(scene);
         stage.show();
 //        stage.setMinHeight(stage.getHeight());
