@@ -17,6 +17,7 @@ public class CellView extends StackPane {
     private static final Image groundImage = new Image("ground.png");
     private final CellViewModel viewModel;
 
+    //a utiliser pour récuperer l'image de la cell qu'on veut mettre
 //    private static ToolViewModel toolViewModel;
 
     private final DoubleBinding widthProperty;
@@ -40,23 +41,26 @@ public class CellView extends StackPane {
         //listener au clic
         //this.setOnMouseClicked();
 
-
-        viewModel.valueProperty().addListener((obs, old, newVal) -> System.out.println("clic"));
-
-        //Instantiating the ColorAdjust class
-        ColorAdjust colorAdjust = new ColorAdjust();
-        colorAdjust.setBrightness(0.001);
-        imageView.setEffect(colorAdjust);
+        //changement d'image au click a finir
+        viewModel.valueProperty().addListener((obs, oldVal, newVal) -> setImage(imageView, newVal));
+        //image grisé au moment du hover
         hoverProperty().addListener(this::hoverChanged);
     }
 
     //changement d'image au click
     private void setImage(ImageView imageView, CellValue cellValue) {
-        //todo
+    //case ground -> superpose du player ou cible
     }
 
     //image grisé au moment du hover
-    private void hoverChanged(ObservableValue<? extends Boolean> ons, Boolean oldVal, Boolean newVal) {
-
+    private void hoverChanged(ObservableValue<? extends Boolean> obs, Boolean oldVal, Boolean newVal) {
+        if (newVal) {
+            ColorAdjust colorAdjust = new ColorAdjust();
+            colorAdjust.setBrightness(-0.4); // Réduit la luminosité pour griser l'image
+            imageView.setEffect(colorAdjust);
+        } else {
+            // Remettre l'image normale lorsque le survol est terminé
+            imageView.setEffect(null);
+        }
     }
 }
