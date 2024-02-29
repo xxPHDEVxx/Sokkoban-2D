@@ -56,7 +56,7 @@ public class CellView extends StackPane {
     private void hoverChanged(ObservableValue<? extends Boolean> obs, Boolean oldVal, Boolean newVal) {
         if (newVal) {
             ColorAdjust colorAdjust = new ColorAdjust();
-            colorAdjust.setBrightness(-0.4); // Réduit la luminosité pour griser l'image
+            colorAdjust.setBrightness(-0.1); // Réduit la luminosité pour griser l'image
             imageView.setEffect(colorAdjust);
         } else {
             // Remettre l'image normale lorsque le survol est terminé
