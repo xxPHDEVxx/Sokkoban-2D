@@ -12,6 +12,8 @@ class GridView extends GridPane {
     private static final int GRID_WIDTH = BoardViewModel.gridWidth();
     private static final int GRID_HEIGHT = BoardViewModel.gridHeight();
 
+
+
     GridView(GridViewModel gridViewModel, DoubleBinding gridWidth) {
 
         setGridLinesVisible(true);
@@ -29,4 +31,20 @@ class GridView extends GridPane {
                 add(cellView, j, i); // lignes/colonnes inversées dans gridpane
             }
         }
-    }}
+    }
+
+    // à corriger
+    private void setupCellClickHandlers() {
+        for (int i = 0; i < GRID_HEIGHT; ++i) {
+            for (int j = 0; j < GRID_WIDTH; ++j) {
+                int row = i;
+                int col = j;
+                //CellView cellView = ...;
+                //cellView.setOnMouseClicked(event -> {
+                    CellValue selectedCellValue = toolViewModel.getValue();
+                    boardViewModel.placeCell(row, col, selectedCellValue);
+                });
+            }
+        }
+    }
+}
