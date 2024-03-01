@@ -10,7 +10,6 @@ import sokoban.model.CellValue;
 public class CellViewModel {
     private final Board board;
     private final int line,col;
-    private final BooleanProperty hoverColor = new SimpleBooleanProperty(false);
     CellViewModel(int line, int col, Board board) {
         this.board = board;
         this.line = line;

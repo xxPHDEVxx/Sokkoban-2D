@@ -2,7 +2,6 @@ package sokoban.view;
 
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.DoubleBinding;
-import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
@@ -13,10 +12,8 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import sokoban.viewmodel.BoardViewModel;
-import sokoban.viewmodel.ToolViewModel;
 
 public class BoardView extends BorderPane {
     private final BoardViewModel boardViewModel;
@@ -43,18 +40,10 @@ public class BoardView extends BorderPane {
         Scene scene = new Scene(box);
         // implementation css ?
 
+        createGrid(scene);
 
-
-        ToolView.setOnMouseEntered((MouseEvent me) -> {
-                scene.setCursor(Cursor.HAND);
-        });
-        scene.setOnMouseEntered((MouseEvent me) -> {
-                scene.setCursor(Cursor.DEFAULT);
-        });
         stage.setScene(scene);
         stage.show();
-//        stage.setMinHeight(stage.getHeight());
-//        stage.setMinWidth(stage.getWidth());
     }
     private void createMenuBar(){
         fileMenu.getItems().addAll(menuItemNew,menuItemOpen,menuItemSave,menuItemExit);
@@ -63,27 +52,24 @@ public class BoardView extends BorderPane {
     private void configMainComponents(Stage stage){
         stage.setTitle("Sokoban");
         createMenuBar();
-        createGrid();
         createHeader();
     }
-    public void createGrid(){
+    public void createGrid(Scene scene){
         DoubleBinding gridWidth = Bindings.createDoubleBinding(
                 () -> {
-                    var size = Math.min(widthProperty().get(), heightProperty().get() - headerBox.heightProperty().get());
+                    var size = Math.min(scene.getWidth(), scene.getHeight() - headerBox.getHeight());
                     return Math.floor(size / GRID_WIDTH) * GRID_WIDTH;
                 },
-                widthProperty(),
-                heightProperty(),
+                scene.widthProperty(),
+                scene.heightProperty(),
                 headerBox.heightProperty());
         GridView gridView = new GridView(boardViewModel.getGridViewModel(), gridWidth);
 
-        /* gridView.minHeightProperty().bind(gridWidth);
-        gridView.minWidthProperty().bind(gridWidth);
-        gridView.maxHeightProperty().bind(gridWidth);
-        gridView.maxWidthProperty().bind(gridWidth);
+        // Définir la largeur et la hauteur de la grid en fonction de la largeur calculée
+        gridView.setPrefWidth(gridWidth.get());
+        gridView.setPrefHeight(gridWidth.get());
 
-        -- Faire attention pour la taille de la grid par défault qui est de 10x15 --
-        */
+
 
         setCenter(gridView);
     }
