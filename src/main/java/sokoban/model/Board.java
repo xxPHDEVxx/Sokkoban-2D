@@ -3,6 +3,10 @@ package sokoban.model;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.binding.LongBinding;
 import javafx.beans.property.ReadOnlyObjectProperty;
+import javafx.collections.ObservableList;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Board {
     public static int MAX_FILLED_CELLS = 75;
@@ -40,5 +44,42 @@ public class Board {
     public boolean isEmpty(int line, int col) {
         return grid.isEmpty(line, col);
         //appelation cohérente? car ground n'est pas vide
+    }
+    public List<String> validate(){
+        List<String> errors = new ArrayList<>();
+
+        int playerCount = 0;
+        int targetCount = 0;
+        int boxCount = 0;
+
+        int width = grid.getGridWidth();
+        int height = grid.getGridHeight();
+
+        for (int line = 0; line < height; line++) {
+            for (int col = 0; col < width; col++) {
+                CellValue value = grid.getValue(line, col);
+
+                switch (value) {
+                    case PLAYER -> playerCount++;
+                    case GOAL -> targetCount++;
+                    case BOX -> boxCount++;
+                    default -> {
+                    }
+                }
+            }
+        }
+
+        if (playerCount != 1) {
+            errors.add("Il doit y avoir exactement un joueur sur la grille.");
+        }
+
+        if (targetCount < 1 || boxCount < 1) {
+            errors.add("Il doit y avoir au moins une cible et une caisse sur la grille.");
+        }
+
+        if (targetCount != boxCount) {
+            errors.add("Il doit y avoir autant de cibles que de caisses sur la grille.");
+        }
+        return errors;
     }
 }
