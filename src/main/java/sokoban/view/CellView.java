@@ -1,27 +1,27 @@
 package sokoban.view;
 
-import javafx.beans.Observable;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Pos;
+import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import sokoban.model.CellValue;
 import sokoban.viewmodel.CellViewModel;
-import sokoban.viewmodel.ToolViewModel;
 
 public class CellView extends StackPane {
     private static final Image groundImage = new Image("ground.png");
-    private final CellViewModel cellViewModel;
+    private final CellViewModel viewModel;
 
+    //a utiliser pour récuperer l'image de la cell qu'on veut mettre
 //    private static ToolViewModel toolViewModel;
 
     private final DoubleBinding widthProperty;
 
     private ImageView imageView = new ImageView();
-    CellView(CellViewModel cellViewModel, DoubleBinding cellWidthProperty) {
-        this.cellViewModel = cellViewModel;
+    CellView(CellViewModel viewModel, DoubleBinding cellWidthProperty) {
+        this.viewModel = viewModel;
         this.widthProperty = cellWidthProperty;
         setAlignment(Pos.CENTER);
 
@@ -38,16 +38,26 @@ public class CellView extends StackPane {
         //listener au clic
         //this.setOnMouseClicked();
 
-
+        //changement d'image au click a finir
+        viewModel.valueProperty().addListener((obs, oldVal, newVal) -> setImage(imageView, newVal));
+        //image grisé au moment du hover
         hoverProperty().addListener(this::hoverChanged);
     }
+
     //changement d'image au click
     private void setImage(ImageView imageView, CellValue cellValue) {
-        //todo
+    //case ground -> superpose du player ou cible
     }
 
     //image grisé au moment du hover
-    private void hoverChanged(ObservableValue<? extends Boolean> ons, Boolean oldVal, Boolean newVal) {
-        //TODO
+    private void hoverChanged(ObservableValue<? extends Boolean> obs, Boolean oldVal, Boolean newVal) {
+        if (newVal) {
+            ColorAdjust colorAdjust = new ColorAdjust();
+            colorAdjust.setBrightness(-0.1); // Réduit la luminosité pour griser l'image
+            imageView.setEffect(colorAdjust);
+        } else {
+            // Remettre l'image normale lorsque le survol est terminé
+            imageView.setEffect(null);
+        }
     }
 }

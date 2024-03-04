@@ -14,7 +14,7 @@ class GridView extends GridPane {
 
     GridView(GridViewModel gridViewModel, DoubleBinding gridWidth) {
 
-        setGridLinesVisible(true);
+        setPrefSize(300,300);
         setPadding(new Insets(PADDING));
 
         //taille de chaque cellule

@@ -4,8 +4,6 @@ package sokoban.model;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.LongBinding;
 import javafx.beans.property.ReadOnlyObjectProperty;
-
-import java.lang.reflect.Array;
 import java.util.Arrays;
 
 public class Grid {
@@ -16,10 +14,10 @@ public class Grid {
     private final LongBinding err;
 
     Grid() {
-        matrix = new Cell[GRID_WIDTH][GRID_HEIGHT];
-        for (int i = 0; i < GRID_WIDTH; i++) {
-            matrix[i]=new Cell[GRID_WIDTH];
-            for (int j = 0; j < GRID_HEIGHT; j++) {
+        matrix = new Cell[GRID_HEIGHT][];
+        for (int i = 0; i < GRID_HEIGHT; ++i) {
+            matrix[i] = new Cell[GRID_WIDTH];
+            for (int j = 0; j < GRID_WIDTH; ++j) {
                 matrix[i][j] = new Cell();
             }
         }
