@@ -1,9 +1,12 @@
 package sokoban.viewmodel;
 
 import javafx.beans.binding.LongBinding;
+import javafx.scene.Scene;
+import javafx.stage.FileChooser;
 import sokoban.model.Board;
 import sokoban.model.Grid;
 
+import java.io.File;
 import java.util.List;
 
 public class BoardViewModel {
@@ -44,5 +47,17 @@ public class BoardViewModel {
     public List<String> getErrors() {
         return errors;
     }
+    public static void exitMenu(){System.exit(0);}
+    public static void newBoardMenu(){
+        Board board = new Board();
+        //voir si ça créer nouveau et dialogue box pour confirmer
+        }
+    public static void openBoard(){
+        // gérer ce qu'il doit faire avec le fichier
+    }
+    public static void saveMenu(){
+        //save
+    }
+
 }
 

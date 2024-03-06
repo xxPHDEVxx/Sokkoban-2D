@@ -24,15 +24,12 @@ import java.io.File;
 
 public class BoardView extends BorderPane {
     private final BoardViewModel boardViewModel;
-    FileChooser fileChooser = new FileChooser();
     private static final int GRID_WIDTH = BoardViewModel.gridWidth();
     private static final int SCENE_MIN_WIDTH = 500;
     private static final int SCENE_MIN_HEIGHT = 500;
     private final Label headerLabel = new Label("");
-    private final BorderPane root = new BorderPane();
     private final VBox vbox = new VBox();
     private final HBox headerBox = new HBox();
-    private final MenuBar menuBar = new MenuBar();
     private final ToolView ToolView = new ToolView();
     private final Menu fileMenu = new Menu("Fichier");
     private final MenuItem menuItemNew= new MenuItem("New...");
@@ -47,39 +44,36 @@ public class BoardView extends BorderPane {
         configMainComponents(stage);
 
         HBox box = new HBox(ToolView,this);
-        Scene scene = new Scene(box);
-        // implementation css ?
+        Scene scene = new Scene(vbox,stage.getWidth(),stage.getHeight());
 
         createGrid(scene);
+        vbox.getChildren().add(box);
+        //integration de la grid dans la vue mais pas sur de la facon de faire
 
         stage.setScene(scene);
         stage.show();
+
         //Voir si bonne endroit pour les fonctionnalités
         menuItemExit.setOnAction(action -> {
-            System.exit(0);
+            BoardViewModel.exitMenu();
         });
         menuItemNew.setOnAction(action -> {
-            Board board = new Board();
-            //voir si ça créer nouveau et dialogue box pour confirmer
+            BoardViewModel.newBoardMenu();
         });
         menuItemOpen.setOnAction(action -> {
+            FileChooser fileChooser = new FileChooser();
             File selectedFile = fileChooser.showOpenDialog(stage);
-            // gérer ce qu'il doit faire avec le fichier
+            //gérer avec un try catch?
+            BoardViewModel.openBoard();
         });
         menuItemSave.setOnAction(action -> {
-            //
+            FileChooser fileChooser = new FileChooser();
+            File selectedFile = fileChooser.showSaveDialog(stage);
+            //gérer avec un try catch?
+            BoardViewModel.saveMenu();
         });;
-//        stage.setMinHeight(stage.getHeight());
-//        stage.setMinWidth(stage.getWidth());
     }
-        private void createMenuBar() {
-            fileMenu.getItems().addAll(menuItemNew, menuItemOpen, menuItemSave, menuItemExit);
-            MenuBar sameMenuBar = new MenuBar(fileMenu);
-            headerBox.getChildren().add(sameMenuBar);
-            headerBox.setAlignment(Pos.CENTER_LEFT);
-            root.setLeft(menuBar);
 
-        }
     private void configMainComponents(Stage stage){
         stage.setTitle("Sokoban");
         createMenuBar();
@@ -100,9 +94,13 @@ public class BoardView extends BorderPane {
         gridView.setPrefWidth(gridWidth.get());
         gridView.setPrefHeight(gridWidth.get());
 
-
-
         setCenter(gridView);
+    }
+    private void createMenuBar() {
+        fileMenu.getItems().addAll(menuItemNew, menuItemOpen, menuItemSave, menuItemExit);
+        MenuBar sameMenuBar = new MenuBar();
+        sameMenuBar.getMenus().add(fileMenu);
+        vbox.getChildren().add(sameMenuBar);
     }
     public void createHeader(){
         headerLabel.textProperty().bind(boardViewModel.filledCellsCountProperty()
@@ -111,6 +109,6 @@ public class BoardView extends BorderPane {
         headerLabel.getStyleClass().add("header");
         headerBox.getChildren().add(headerLabel);
         headerBox.setAlignment(Pos.CENTER);
-        setTop(headerBox);
+        vbox.getChildren().add(headerBox);
     }
 }
