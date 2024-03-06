@@ -59,5 +59,8 @@ public class BoardViewModel {
         //save
     }
 
+    public static boolean isChanged(){
+        return true;
+    }
 }
 

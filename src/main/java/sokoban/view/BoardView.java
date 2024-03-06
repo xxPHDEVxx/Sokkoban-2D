@@ -5,14 +5,12 @@ import javafx.beans.binding.DoubleBinding;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.MenuItem;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.Window;
@@ -28,8 +26,10 @@ public class BoardView extends BorderPane {
     private static final int SCENE_MIN_WIDTH = 500;
     private static final int SCENE_MIN_HEIGHT = 500;
     private final Label headerLabel = new Label("");
+    private final Label headerLabel2 = new Label("");
     private final VBox vbox = new VBox();
     private final HBox headerBox = new HBox();
+    private final HBox headerBox2 = new HBox();
     private final ToolView ToolView = new ToolView();
     private final Menu fileMenu = new Menu("Fichier");
     private final MenuItem menuItemNew= new MenuItem("New...");
@@ -52,31 +52,11 @@ public class BoardView extends BorderPane {
 
         stage.setScene(scene);
         stage.show();
-
-        //Voir si bonne endroit pour les fonctionnalités
-        menuItemExit.setOnAction(action -> {
-            BoardViewModel.exitMenu();
-        });
-        menuItemNew.setOnAction(action -> {
-            BoardViewModel.newBoardMenu();
-        });
-        menuItemOpen.setOnAction(action -> {
-            FileChooser fileChooser = new FileChooser();
-            File selectedFile = fileChooser.showOpenDialog(stage);
-            //gérer avec un try catch?
-            BoardViewModel.openBoard();
-        });
-        menuItemSave.setOnAction(action -> {
-            FileChooser fileChooser = new FileChooser();
-            File selectedFile = fileChooser.showSaveDialog(stage);
-            //gérer avec un try catch?
-            BoardViewModel.saveMenu();
-        });;
     }
 
     private void configMainComponents(Stage stage){
         stage.setTitle("Sokoban");
-        createMenuBar();
+        createMenuBar(stage);
         createHeader();
     }
     public void createGrid(Scene scene){
@@ -96,19 +76,60 @@ public class BoardView extends BorderPane {
 
         setCenter(gridView);
     }
-    private void createMenuBar() {
+    private void createMenuBar(Stage stage) {
         fileMenu.getItems().addAll(menuItemNew, menuItemOpen, menuItemSave, menuItemExit);
         MenuBar sameMenuBar = new MenuBar();
         sameMenuBar.getMenus().add(fileMenu);
         vbox.getChildren().add(sameMenuBar);
+        menuItemExit.setOnAction(action -> {
+            if (BoardViewModel.isChanged()){
+                saveConfirm.showDialog();
+                BoardViewModel.exitMenu();
+            }
+            BoardViewModel.exitMenu();
+        });
+
+        menuItemNew.setOnAction(action -> {
+            if (BoardViewModel.isChanged()){
+                saveConfirm.showDialog();
+                BoardViewModel.newBoardMenu();
+            } else {
+                BoardViewModel.newBoardMenu();
+            }
+            //fonction qui doit check si le board a changé
+        });
+
+        menuItemOpen.setOnAction(action -> {
+            if (BoardViewModel.isChanged()){
+                saveConfirm.showDialog();
+                FileChooser fileChooser = new FileChooser();
+                File selectedFile = fileChooser.showOpenDialog(stage);
+                //gérer avec un try catch?
+                BoardViewModel.openBoard();
+            }
+            FileChooser fileChooser = new FileChooser();
+            File selectedFile = fileChooser.showOpenDialog(stage);
+            //gérer avec un try catch?
+            BoardViewModel.openBoard();
+        });
+        menuItemSave.setOnAction(action -> {
+            FileChooser fileChooser = new FileChooser();
+            File selectedFile = fileChooser.showSaveDialog(stage);
+            //gérer avec un try catch?
+            BoardViewModel.saveMenu();
+        });;
     }
     public void createHeader(){
         headerLabel.textProperty().bind(boardViewModel.filledCellsCountProperty()
                 .asString("Number of filled cells: %d of " + boardViewModel.maxFilledCells()));
-        //headerLabel.textProperty().bind(boardViewModel,).asString("Please correct the following error(s)");
+        headerLabel2.textProperty().bind(boardViewModel.error().asString("Please correct the following error(s)"));
+        headerLabel2.setTextFill(Color.RED);
         headerLabel.getStyleClass().add("header");
         headerBox.getChildren().add(headerLabel);
+        headerBox2.getChildren().add(headerLabel2);
         headerBox.setAlignment(Pos.CENTER);
+        headerBox2.setAlignment(Pos.CENTER);
         vbox.getChildren().add(headerBox);
+        vbox.getChildren().add(headerBox2);
     }
 }
