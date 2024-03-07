@@ -49,6 +49,7 @@ public class BoardViewModel {
     }
     public static void exitMenu(){System.exit(0);}
     public static void newBoardMenu(){
+
         Board board = new Board();
         //voir si ça créer nouveau et dialogue box pour confirmer
         }

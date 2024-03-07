@@ -12,6 +12,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 import sokoban.model.Board;
@@ -94,10 +95,9 @@ public class BoardView extends BorderPane {
         menuItemNew.setOnAction(action -> {
             if (BoardViewModel.isChanged()){
                 saveConfirm.showDialog();
-                BoardViewModel.newBoardMenu();
-            } else {
-                BoardViewModel.newBoardMenu();
             }
+            newGridView.showDialog();
+            BoardViewModel.newBoardMenu();
             //fonction qui doit check si le board a changé
         });
 
