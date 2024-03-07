@@ -81,12 +81,14 @@ public class BoardView extends BorderPane {
         MenuBar sameMenuBar = new MenuBar();
         sameMenuBar.getMenus().add(fileMenu);
         vbox.getChildren().add(sameMenuBar);
+
         menuItemExit.setOnAction(action -> {
             if (BoardViewModel.isChanged()){
                 saveConfirm.showDialog();
                 BoardViewModel.exitMenu();
+            } else {
+                BoardViewModel.exitMenu();
             }
-            BoardViewModel.exitMenu();
         });
 
         menuItemNew.setOnAction(action -> {
@@ -106,11 +108,13 @@ public class BoardView extends BorderPane {
                 File selectedFile = fileChooser.showOpenDialog(stage);
                 //gérer avec un try catch?
                 BoardViewModel.openBoard();
+            } else {
+                FileChooser fileChooser = new FileChooser();
+                File selectedFile = fileChooser.showOpenDialog(stage);
+                //gérer avec un try catch?
+                BoardViewModel.openBoard();
+                // correction avec le boutton cancel
             }
-            FileChooser fileChooser = new FileChooser();
-            File selectedFile = fileChooser.showOpenDialog(stage);
-            //gérer avec un try catch?
-            BoardViewModel.openBoard();
         });
         menuItemSave.setOnAction(action -> {
             FileChooser fileChooser = new FileChooser();
