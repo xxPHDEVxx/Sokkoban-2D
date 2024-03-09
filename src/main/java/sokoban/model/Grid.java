@@ -71,6 +71,23 @@ public class Grid {
         return line >= 0 && line < GRID_HEIGHT && col >= 0 && col < GRID_WIDTH;
     }
 
+    public class Board {
+        private CellValue[][] cells;
+
+        // Autres déclarations de la classe
+
+        public void placeTool(int row, int col, CellValue tool) {
+            // Vérifiez d'abord si les coordonnées sont valides
+            if (row >= 0 && row < GRID_HEIGHT && col >= 0 && col < GRID_WIDTH) {
+                // Mettez à jour la valeur de la cellule à la position spécifiée avec l'outil sélectionné
+                cells[row][col] = tool;
+            }
+        }
+
+        // Autres méthodes de la classe
+    }
+
+
 }
 
 
