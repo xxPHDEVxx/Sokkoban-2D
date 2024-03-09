@@ -6,8 +6,7 @@ import javafx.scene.layout.GridPane;
 import sokoban.viewmodel.BoardViewModel;
 import sokoban.viewmodel.GridViewModel;
 
-class GridView extends GridPane {
-
+public class GridView extends GridPane {
     private static final int PADDING = 20;
     private static final int GRID_WIDTH = BoardViewModel.gridWidth();
     private static final int GRID_HEIGHT = BoardViewModel.gridHeight();
@@ -29,4 +28,5 @@ class GridView extends GridPane {
                 add(cellView, j, i); // lignes/colonnes inversées dans gridpane
             }
         }
-    }}
+    }
+}

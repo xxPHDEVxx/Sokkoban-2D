@@ -13,7 +13,7 @@ import java.util.List;
 
 public class Board {
     public static int MAX_FILLED_CELLS = 75;
-    private final Grid grid = new Grid();
+    private static final Grid grid = new Grid();
     private final BooleanBinding isFull;
     public Board(){
         isFull = grid.filledCellsCountProperty().isEqualTo(Board.MAX_FILLED_CELLS);
@@ -40,9 +40,7 @@ public class Board {
     public LongBinding filledCellsCountProperty() {
         return grid.filledCellsCountProperty();
     }
-    public LongBinding err(){
-        return grid.err();
-    }
+
     public boolean isEmpty(int line, int col) {
         return grid.isEmpty(line, col);
         //appelation cohérente? car ground n'est pas vide

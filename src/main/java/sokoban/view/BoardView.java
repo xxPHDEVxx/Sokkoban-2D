@@ -101,7 +101,6 @@ public class BoardView extends BorderPane {
                 saveConfirm.showDialog();
             }
             newGridView.showDialog();
-            BoardViewModel.newBoardMenu();
             //fonction qui doit check si le board a changé
         });
 
@@ -137,14 +136,14 @@ public class BoardView extends BorderPane {
                 .then("")
                 .otherwise(
                         Bindings.createStringBinding(() -> {
-                        StringBuilder errorsStringBuilder = new StringBuilder();
-                        ObservableList<String> errorsList = boardViewModel.errorsProperty();
-                        for (String error : errorsList) {
-                            errorsStringBuilder.append(error).append("\n");
-                        }
-                        return "Please correct the following error(s):\n" + errorsStringBuilder.toString();
-                    }, boardViewModel.errorsProperty())
-                        )
+                            StringBuilder errorsStringBuilder = new StringBuilder();
+                            ObservableList<String> errorsList = boardViewModel.errorsProperty();
+                            for (String error : errorsList) {
+                                errorsStringBuilder.append(error).append("\n");
+                            }
+                            return "Please correct the following error(s):\n" + errorsStringBuilder.toString();
+                        }, boardViewModel.errorsProperty())
+                )
         );
 
         headerLabel2.setTextFill(Color.RED);
@@ -155,5 +154,8 @@ public class BoardView extends BorderPane {
         headerBox2.setAlignment(Pos.CENTER);
         vbox.getChildren().add(headerBox);
         vbox.getChildren().add(headerBox2);
+    }
+    public void refresh(){
+        
     }
 }
