@@ -59,32 +59,16 @@ public class Grid {
         return matrix[line][col].isEmpty();
     }
 
-    // Place la cellule de la valeur spécifiée à la position (line, col) sur la grille
-    public void placeCell(int line, int col, CellValue cellValue) {
-        if (isValidPosition(line, col)) {
-            matrix[line][col].setValue(cellValue);
-        }
-    }
-
     // Vérifie si la position (line, col) est valide dans la grille
     private boolean isValidPosition(int line, int col) {
         return line >= 0 && line < GRID_HEIGHT && col >= 0 && col < GRID_WIDTH;
     }
 
-    public class Board {
-        private CellValue[][] cells;
 
-        // Autres déclarations de la classe
-
-        public void placeTool(int row, int col, CellValue tool) {
-            // Vérifiez d'abord si les coordonnées sont valides
-            if (row >= 0 && row < GRID_HEIGHT && col >= 0 && col < GRID_WIDTH) {
-                // Mettez à jour la valeur de la cellule à la position spécifiée avec l'outil sélectionné
-                cells[row][col] = tool;
-            }
+    public void placeTool(int row, int col, CellValue tool) {
+        if (isValidPosition(row,col)) {
+            matrix[row][col].setValue(tool);
         }
-
-        // Autres méthodes de la classe
     }
 
 
