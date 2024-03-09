@@ -2,6 +2,7 @@ package sokoban.view;
 
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.DoubleBinding;
+import javafx.beans.value.ObservableValue;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
@@ -68,7 +69,6 @@ public class BoardView extends BorderPane {
         // Définir la largeur et la hauteur de la grid en fonction de la largeur calculée
         gridView.setPrefWidth(gridWidth.get());
         gridView.setPrefHeight(gridWidth.get());
-
 
 
         setCenter(gridView);
