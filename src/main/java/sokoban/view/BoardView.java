@@ -2,11 +2,8 @@ package sokoban.view;
 
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.DoubleBinding;
-<<<<<<< HEAD
 import javafx.beans.value.ObservableValue;
-=======
 import javafx.collections.ObservableList;
->>>>>>> 0d06d86376b62f3924eb5f4e2ab5ca53f5ee0fd6
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
