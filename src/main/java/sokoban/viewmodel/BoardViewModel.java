@@ -1,6 +1,9 @@
 package sokoban.viewmodel;
 
 import javafx.beans.binding.LongBinding;
+import javafx.beans.property.ListProperty;
+import javafx.beans.property.SimpleListProperty;
+import javafx.collections.FXCollections;
 import javafx.scene.Scene;
 import javafx.stage.FileChooser;
 import sokoban.model.Board;
@@ -12,17 +15,21 @@ import java.util.List;
 public class BoardViewModel {
     private final GridViewModel gridViewModel;
     private final Board board;
-    private List<String> errors;
+    private final ListProperty<String> errorsProperty = new SimpleListProperty<>(FXCollections.observableArrayList());
+
+    public ListProperty<String> errorsProperty() {
+        return board.validate();
+    }
+    public boolean validateBoard() {
+        List<String> errors = board.validate();
+        errorsProperty.setAll(errors);
+        return errors.isEmpty();
+    }
 
     public BoardViewModel(Board board) {
         this.board = board;
         gridViewModel = new GridViewModel(board);
-        validateBoard();
     }
-    private void validateBoard() {
-        errors = board.validate();
-    }
-
     public static int gridWidth() {
         return Grid.getGridWidth();
     }
@@ -38,15 +45,10 @@ public class BoardViewModel {
         return board.filledCellsCountProperty();
     }
 
-    public LongBinding error(){
-        return board.err();
-    }
     public int maxFilledCells() {
         return Board.maxFilledCells();
     }
-    public List<String> getErrors() {
-        return errors;
-    }
+
     public static void exitMenu(){System.exit(0);}
     public static void newBoardMenu(){
 
@@ -59,7 +61,6 @@ public class BoardViewModel {
     public static void saveMenu(){
         //save
     }
-
     public static boolean isChanged(){
         return true;
     }

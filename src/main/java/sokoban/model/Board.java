@@ -2,7 +2,10 @@ package sokoban.model;
 
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.binding.LongBinding;
+import javafx.beans.property.ListProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
+import javafx.beans.property.SimpleListProperty;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.util.ArrayList;
@@ -26,7 +29,6 @@ public class Board {
     public static int maxFilledCells(){
         MAX_FILLED_CELLS = (Grid.getGridHeight() + Grid.getGridWidth())/2;
         return Board.MAX_FILLED_CELLS;
-        // adapter par rapport au validation métier
     }
     public Boolean isFull(){
         return isFull.get();
@@ -45,8 +47,8 @@ public class Board {
         return grid.isEmpty(line, col);
         //appelation cohérente? car ground n'est pas vide
     }
-    public List<String> validate(){
-        List<String> errors = new ArrayList<>();
+    public ListProperty<String> validate(){
+        ListProperty<String> errors = new SimpleListProperty<>(FXCollections.observableArrayList());
 
         int playerCount = 0;
         int targetCount = 0;
@@ -70,15 +72,18 @@ public class Board {
         }
 
         if (playerCount != 1) {
-            errors.add("Il doit y avoir exactement un joueur sur la grille.");
+            errors.add("- A player is required.");
         }
 
-        if (targetCount < 1 || boxCount < 1) {
-            errors.add("Il doit y avoir au moins une cible et une caisse sur la grille.");
+        if (targetCount < 1) {
+            errors.add("- At least one target is required.");
         }
 
-        if (targetCount != boxCount) {
-            errors.add("Il doit y avoir autant de cibles que de caisses sur la grille.");
+        if (boxCount < 1) {
+            errors.add("- At least one box is required.");
+        }
+        if (targetCount != boxCount){
+            errors.add("- Number of box and target must be equals.");
         }
         return errors;
     }

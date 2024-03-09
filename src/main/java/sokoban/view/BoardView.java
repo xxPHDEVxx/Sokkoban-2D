@@ -2,6 +2,7 @@ package sokoban.view;
 
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.DoubleBinding;
+import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
@@ -11,6 +12,8 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -22,6 +25,7 @@ import sokoban.viewmodel.BoardViewModel;
 import java.io.File;
 
 public class BoardView extends BorderPane {
+
     private final BoardViewModel boardViewModel;
     private static final int GRID_WIDTH = BoardViewModel.gridWidth();
     private static final int SCENE_MIN_WIDTH = 500;
@@ -126,7 +130,18 @@ public class BoardView extends BorderPane {
     public void createHeader(){
         headerLabel.textProperty().bind(boardViewModel.filledCellsCountProperty()
                 .asString("Number of filled cells: %d of " + boardViewModel.maxFilledCells()));
-        headerLabel2.textProperty().bind(boardViewModel.error().asString("Please correct the following error(s)"));
+        Font font = Font.font("Verdana", FontWeight.BOLD, 20);
+        headerLabel.setFont(font);
+
+        headerLabel2.textProperty().bind(Bindings.createStringBinding(() -> {
+            StringBuilder errorsStringBuilder = new StringBuilder();
+            ObservableList<String> errorsList = boardViewModel.errorsProperty();
+            for (String error : errorsList) {
+                errorsStringBuilder.append(error).append("\n");
+            }
+            return "Please correct the following error(s):\n" + errorsStringBuilder.toString();
+        }, boardViewModel.errorsProperty()));
+
         headerLabel2.setTextFill(Color.RED);
         headerLabel.getStyleClass().add("header");
         headerBox.getChildren().add(headerLabel);
