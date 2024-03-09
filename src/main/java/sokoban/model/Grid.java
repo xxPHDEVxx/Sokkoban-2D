@@ -12,7 +12,7 @@ public class Grid {
     private final Cell[][] matrix;
     private final LongBinding filledCellsCount;
 
-    Grid() {
+    public Grid() {
         matrix = new Cell[GRID_HEIGHT][];
         for (int i = 0; i < GRID_HEIGHT; ++i) {
             matrix[i] = new Cell[GRID_WIDTH];

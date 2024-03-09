@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.stage.Stage;
 import sokoban.model.Board;
 import sokoban.view.BoardView;
+import sokoban.view.GridView;
 import sokoban.viewmodel.BoardViewModel;
 
 public class SokobanApp extends Application  {
