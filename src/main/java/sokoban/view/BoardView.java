@@ -133,14 +133,19 @@ public class BoardView extends BorderPane {
         Font font = Font.font("Verdana", FontWeight.BOLD, 20);
         headerLabel.setFont(font);
 
-        headerLabel2.textProperty().bind(Bindings.createStringBinding(() -> {
-            StringBuilder errorsStringBuilder = new StringBuilder();
-            ObservableList<String> errorsList = boardViewModel.errorsProperty();
-            for (String error : errorsList) {
-                errorsStringBuilder.append(error).append("\n");
-            }
-            return "Please correct the following error(s):\n" + errorsStringBuilder.toString();
-        }, boardViewModel.errorsProperty()));
+        headerLabel2.textProperty().bind(Bindings.when(boardViewModel.errorsProperty().emptyProperty())
+                .then("")
+                .otherwise(
+                        Bindings.createStringBinding(() -> {
+                        StringBuilder errorsStringBuilder = new StringBuilder();
+                        ObservableList<String> errorsList = boardViewModel.errorsProperty();
+                        for (String error : errorsList) {
+                            errorsStringBuilder.append(error).append("\n");
+                        }
+                        return "Please correct the following error(s):\n" + errorsStringBuilder.toString();
+                    }, boardViewModel.errorsProperty())
+                        )
+        );
 
         headerLabel2.setTextFill(Color.RED);
         headerLabel.getStyleClass().add("header");
