@@ -17,11 +17,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.FileChooser;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.Window;
-import sokoban.model.Board;
-import sokoban.model.Grid;
 import sokoban.viewmodel.BoardViewModel;
 
 import java.io.File;

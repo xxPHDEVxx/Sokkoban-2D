@@ -1,9 +1,6 @@
 package sokoban.viewmodel;
 
-import javafx.beans.binding.BooleanBinding;
-import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
-import javafx.beans.property.SimpleBooleanProperty;
 import sokoban.model.Board;
 import sokoban.model.CellValue;
 

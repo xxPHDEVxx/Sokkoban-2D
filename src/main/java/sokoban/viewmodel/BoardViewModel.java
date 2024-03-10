@@ -6,11 +6,8 @@ import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.collections.FXCollections;
-import javafx.stage.Stage;
-import sokoban.SokobanApp;
 import sokoban.model.Board;
 import sokoban.model.Grid;
-import sokoban.view.BoardView;
 
 
 public class BoardViewModel {

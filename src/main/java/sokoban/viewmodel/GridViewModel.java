@@ -1,7 +1,6 @@
 package sokoban.viewmodel;
 
 import sokoban.model.Board;
-import sokoban.model.Grid;
 
 public class GridViewModel {
     private final Board board;
