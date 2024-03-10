@@ -36,6 +36,7 @@ class GridView extends GridPane {
                 add(cellView, j, i); // lignes/colonnes inversées dans gridpane
             }
         }
+        setBoardClickHandlers(gridViewModel);
     }
 
     // Méthode pour créer et retourner une instance de CellView pour une cellule spécifique
@@ -44,7 +45,7 @@ class GridView extends GridPane {
         // Vous pouvez également configurer d'autres propriétés de la CellView ici si nécessaire
         return cellView;
     }
-    private void setBoardClickHandlers(BoardViewModel boardViewModel) {
+    private void setBoardClickHandlers(GridViewModel gridViewModel) {
         for (int i = 0; i < GRID_HEIGHT; i++) {
             for (int j = 0; j < GRID_WIDTH; j++) {
                 CellView cellView = createCellView(i, j, gridViewModel.getCellViewModel(i,j), cellWidth);
@@ -52,7 +53,7 @@ class GridView extends GridPane {
                 int col = j;
                 cellView.setOnMouseClicked(event -> {
                     CellValue selectedTool = CellValue.PLAYER;
-                    boardViewModel.placeTool(row, col, selectedTool);
+                    gridViewModel.placeTool(row, col, selectedTool);
                 });
             }
         }

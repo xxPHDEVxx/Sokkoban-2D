@@ -40,6 +40,10 @@ public class ToolView extends FlowPane {
         addHoverHandler(goalView);
 
         setToolEventHandlers(playerView);
+        setToolEventHandlers(boxView);
+        setToolEventHandlers(groundView);
+        setToolEventHandlers(wallView);
+        setToolEventHandlers(goalView);
 
         setOrientation(Orientation.VERTICAL);
         setAlignment(Pos.CENTER);
