@@ -36,6 +36,8 @@ public class ToolView extends FlowPane {
         addHoverHandler(wallView);
         addHoverHandler(goalView);
 
+        setToolEventHandlers(playerView);
+
         setOrientation(Orientation.VERTICAL);
         setAlignment(Pos.CENTER);
         setVgap(20);
@@ -48,6 +50,10 @@ public class ToolView extends FlowPane {
     private void addHoverHandler(ImageView imageView) {
         imageView.setOnMouseEntered(event -> imageView.setOpacity(0.7)); // Réduire l'opacité de l'image lors du survol
         imageView.setOnMouseExited(event -> imageView.setOpacity(1.0)); // Rétablir l'opacité normale lorsque la souris quitte l'image
+    }
+
+    private void setToolEventHandlers(ImageView imageView) {
+        imageView.setOnMouseClicked(event -> imageSelected.set(player));
     }
 
 

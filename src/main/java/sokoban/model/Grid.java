@@ -66,7 +66,7 @@ public class Grid {
 
 
     public void placeTool(int row, int col, CellValue tool) {
-        if (isValidPosition(row,col)) {
+        if (isValidPosition(row, col)) {
             matrix[row][col].setValue(tool);
         }
     }

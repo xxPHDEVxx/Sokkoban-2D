@@ -2,6 +2,7 @@ package sokoban.viewmodel;
 
 import javafx.beans.binding.LongBinding;
 import sokoban.model.Board;
+import sokoban.model.CellValue;
 import sokoban.model.Grid;
 
 public class BoardViewModel {
@@ -30,5 +31,9 @@ public class BoardViewModel {
 
     public int maxFilledCells() {
         return Board.maxFilledCells();
+    }
+
+    public void placeTool(int row, int col, CellValue tool) {
+        board.getGrid().placeTool(row, col, tool);
     }
 }
