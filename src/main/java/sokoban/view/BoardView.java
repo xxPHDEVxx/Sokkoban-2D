@@ -84,21 +84,7 @@ public class BoardView extends BorderPane {
         headerBox.setAlignment(Pos.CENTER);
         setTop(headerBox);
     }
-    private void setBoardClickHandlers(BoardViewModel boardViewModel) {
-        for (int i = 0; i < BoardViewModel.gridHeight(); i++) {
-            for (int j = 0; j < GRID_WIDTH; j++) {
-                int row = i;
-                int col = j;
-                CellView cellView = cellViews[i][j];
 
-                // Définissez le gestionnaire d'événements de clic sur la CellView
-                cellView.setOnCellClicked(event -> {
-                    CellValue selectedTool = boardViewModel.getSelectedTool();
-                    boardViewModel.placeTool(row, col, selectedTool);
-                });
-            }
-        }
-    }
 
 
 }

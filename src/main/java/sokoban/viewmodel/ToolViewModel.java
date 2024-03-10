@@ -11,7 +11,7 @@ public class ToolViewModel {
     private static ToolView toolView;
     private static Tool tool;
     private static ObjectProperty<CellValue> value = new SimpleObjectProperty<>(CellValue.GROUND);
-    private final ObjectProperty<CellValue> selectedTool = new SimpleObjectProperty<>(CellValue.GROUND);
+    private  ObjectProperty<CellValue> selectedTool = new SimpleObjectProperty<>(CellValue.GROUND);
 
     public ToolViewModel(ToolView toolView) {
         this.tool = new Tool();
