@@ -7,6 +7,7 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.collections.FXCollections;
 import sokoban.model.Board;
+import sokoban.model.CellValue;
 import sokoban.model.Grid;
 
 

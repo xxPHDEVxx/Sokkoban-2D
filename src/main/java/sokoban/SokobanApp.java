@@ -7,7 +7,8 @@ import sokoban.view.BoardView;
 import sokoban.view.GridView;
 import sokoban.viewmodel.BoardViewModel;
 
-public class SokobanApp extends Application  {
+public class
+SokobanApp extends Application  {
 
     @Override
     public void start(Stage primaryStage) {

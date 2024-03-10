@@ -2,10 +2,12 @@ package sokoban.view;
 
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.value.ObservableValue;
+import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import sokoban.model.CellValue;
 import sokoban.viewmodel.CellViewModel;
@@ -29,6 +31,10 @@ public class CellView extends StackPane {
 
     }
 
+    public void setOnCellClicked(EventHandler<MouseEvent> eventHandler) {
+        this.setOnMouseClicked(eventHandler);
+    }
+
     private void configureBindings() {
         //image de base en fond
         imageView.setImage(groundImage);
@@ -45,6 +51,7 @@ public class CellView extends StackPane {
         viewModel.valueProperty().addListener((obs, oldVal, newVal) -> setImage(imageView, newVal));
         //image grisé au moment du hover
         hoverProperty().addListener(this::hoverChanged);
+
     }
 
     //changement d'image au click
