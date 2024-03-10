@@ -4,9 +4,11 @@
 
 ### Liste des bugs connus
 
-* bug 1
-* bug 2
-* ...
+* redimension du board en fonction de la scène
+* création d'une nouvelle grille
+* ouverture d'un fichier pas terminé
+* sauvegarde pas terminé
+* bug d'affichage lors du placement d'outil sur la grille - CellView
 
 ### Liste des fonctionnalités supplémentaires
 
