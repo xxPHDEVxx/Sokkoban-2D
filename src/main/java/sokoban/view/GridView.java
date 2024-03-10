@@ -52,7 +52,7 @@ class GridView extends GridPane {
                 int row = i;
                 int col = j;
                 cellView.setOnMouseClicked(event -> {
-                    CellValue selectedTool = CellValue.PLAYER;
+                    CellValue selectedTool = CellValue.PLAYER; // à modifier pour tous les outils
                     gridViewModel.placeTool(row, col, selectedTool);
                 });
             }
