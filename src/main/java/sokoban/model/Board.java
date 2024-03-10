@@ -13,7 +13,7 @@ import java.util.List;
 
 public class Board {
     public static int MAX_FILLED_CELLS = 75;
-    private static final Grid grid = new Grid();
+    private static Grid grid = new Grid();
     private final BooleanBinding isFull;
     public Board(){
         isFull = grid.filledCellsCountProperty().isEqualTo(Board.MAX_FILLED_CELLS);
@@ -84,5 +84,13 @@ public class Board {
             errors.add("- Number of box and target must be equals.");
         }
         return errors;
+    }
+
+    public static Grid getGrid() {
+        return grid;
+    }
+
+    public void setGrid(Grid newGrid) {
+        grid = newGrid;
     }
 }

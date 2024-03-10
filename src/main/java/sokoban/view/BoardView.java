@@ -6,6 +6,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
@@ -29,8 +30,6 @@ public class BoardView extends BorderPane {
 
     private final BoardViewModel boardViewModel;
     private static final int GRID_WIDTH = BoardViewModel.gridWidth();
-    private static final int SCENE_MIN_WIDTH = 500;
-    private static final int SCENE_MIN_HEIGHT = 500;
     private final Label headerLabel = new Label("");
     private final Label headerLabel2 = new Label("");
     private final VBox vbox = new VBox();
@@ -42,14 +41,15 @@ public class BoardView extends BorderPane {
     private final MenuItem menuItemOpen = new MenuItem("Open...");
     private final MenuItem menuItemSave = new MenuItem("Save As...");
     private final MenuItem menuItemExit = new MenuItem("Exit...");
+    private static HBox box = new HBox();
     public BoardView(Stage primaryStage, BoardViewModel boardViewModel) {
         this.boardViewModel = boardViewModel;
         start(primaryStage);
     }
-    private void start(Stage stage){
+    public void start(Stage stage){
         configMainComponents(stage);
 
-        HBox box = new HBox(ToolView,this);
+        box.getChildren().addAll(ToolView, this);
         Scene scene = new Scene(vbox,stage.getWidth(),stage.getHeight());
 
         createGrid(scene);
@@ -124,7 +124,7 @@ public class BoardView extends BorderPane {
             File selectedFile = fileChooser.showSaveDialog(stage);
             //gérer avec un try catch?
             BoardViewModel.saveMenu();
-        });;
+        });
     }
     public void createHeader(){
         headerLabel.textProperty().bind(boardViewModel.filledCellsCountProperty()
@@ -156,6 +156,7 @@ public class BoardView extends BorderPane {
         vbox.getChildren().add(headerBox2);
     }
     public void refresh(){
-        
+        box.getChildren().remove(this);
     }
+
 }

@@ -36,7 +36,10 @@ public class CellView extends StackPane {
 
         getChildren().add(imageView);
         //listener au clic
-        //this.setOnMouseClicked();
+        setOnMouseClicked(event -> {
+                    System.out.println(viewModel.valueProperty());
+                });
+
 
         //changement d'image au click a finir
         viewModel.valueProperty().addListener((obs, oldVal, newVal) -> setImage(imageView, newVal));
@@ -59,5 +62,13 @@ public class CellView extends StackPane {
             // Remettre l'image normale lorsque le survol est terminé
             imageView.setEffect(null);
         }
+    }
+
+    public void refresh() {
+        //image de base en fond
+        imageView.setImage(groundImage);
+        imageView.setPreserveRatio(true);
+
+        configureBindings();
     }
 }

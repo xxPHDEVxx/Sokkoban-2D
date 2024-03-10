@@ -11,6 +11,7 @@ import javafx.scene.layout.FlowPane;
 import sokoban.viewmodel.ToolViewModel;
 
 public class ToolView extends FlowPane {
+    private final int PADDING = 20;
     private static final Image player = new Image("player.png");
     private static final Image box = new Image("box.png");
     private static final Image ground = new Image("ground.png");
@@ -35,7 +36,7 @@ public class ToolView extends FlowPane {
         setVgap(20);
         setHgap(20);
         getChildren().addAll(groundView,goalView,wallView,playerView,boxView);
-
+        setPadding(new Insets(PADDING));
     }
 
 

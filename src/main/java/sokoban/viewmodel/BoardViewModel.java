@@ -1,26 +1,20 @@
 package sokoban.viewmodel;
 
-import javafx.beans.binding.Bindings;
-import javafx.beans.binding.DoubleBinding;
 import javafx.beans.binding.LongBinding;
+import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ListProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.collections.FXCollections;
-import javafx.scene.Scene;
-import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import sokoban.SokobanApp;
 import sokoban.model.Board;
 import sokoban.model.Grid;
 import sokoban.view.BoardView;
-import sokoban.view.GridView;
-import sokoban.view.newGridView;
 
-import java.io.File;
-import java.util.List;
 
 public class BoardViewModel {
     private final GridViewModel gridViewModel;
-    private GridView gridView;
     private final Board board;
     private final ListProperty<String> errorsProperty = new SimpleListProperty<>(FXCollections.observableArrayList());
     public ListProperty<String> errorsProperty() {
@@ -29,7 +23,6 @@ public class BoardViewModel {
 
     public BoardViewModel(Board board) {
         this.board = board;
-        this.gridView = gridView;
         gridViewModel = new GridViewModel(board);
     }
     public static int gridWidth() {
@@ -53,21 +46,14 @@ public class BoardViewModel {
 
     public static void exitMenu(){System.exit(0);}
     public static void newGridMenu(int width, int height){
-        int d = Grid.getGridHeight();
-        int c = Grid.getGridWidth();
-        System.out.println(d +""+ c);
-        System.out.println(Board.MAX_FILLED_CELLS);
 
-        Grid.GRID_WIDTH = width;
-        Grid.GRID_HEIGHT = height;
-        Grid grid = new Grid();
-        Board.maxFilledCells();
+        IntegerProperty otherWidthProperty = new SimpleIntegerProperty(width);;
+        IntegerProperty otherHeightProperty = new SimpleIntegerProperty(height);;
 
 
-        int a = Grid.getGridHeight();
-        int b = Grid.getGridWidth();
-        System.out.println(a +  "" + b);
-        System.out.println(Board.MAX_FILLED_CELLS);
+        Grid.GRID_HEIGHTProperty().bind(otherHeightProperty);
+        Grid.GRID_WIDTHProperty().bind(otherWidthProperty);
+
 
     }
     public static void openBoard(){
@@ -79,5 +65,7 @@ public class BoardViewModel {
     public static boolean isChanged(){
         return true;
     }
+
+
 }
 
