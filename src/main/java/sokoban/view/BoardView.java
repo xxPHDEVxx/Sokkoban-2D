@@ -12,6 +12,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import sokoban.model.CellValue;
 import sokoban.viewmodel.BoardViewModel;
 import sokoban.viewmodel.ToolViewModel;
 
@@ -83,4 +84,21 @@ public class BoardView extends BorderPane {
         headerBox.setAlignment(Pos.CENTER);
         setTop(headerBox);
     }
+    private void setBoardClickHandlers(BoardViewModel boardViewModel) {
+        for (int i = 0; i < BoardViewModel.gridHeight(); i++) {
+            for (int j = 0; j < GRID_WIDTH; j++) {
+                int row = i;
+                int col = j;
+                CellView cellView = cellViews[i][j];
+
+                // Définissez le gestionnaire d'événements de clic sur la CellView
+                cellView.setOnCellClicked(event -> {
+                    CellValue selectedTool = boardViewModel.getSelectedTool();
+                    boardViewModel.placeTool(row, col, selectedTool);
+                });
+            }
+        }
+    }
+
+
 }

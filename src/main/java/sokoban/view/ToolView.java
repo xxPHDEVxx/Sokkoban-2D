@@ -8,6 +8,7 @@ import javafx.geometry.Pos;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
+import sokoban.model.Tool;
 import sokoban.viewmodel.ToolViewModel;
 import sokoban.model.CellValue;
 
@@ -18,6 +19,8 @@ public class ToolView extends FlowPane {
     private static final Image wall = new Image("wall.png");
     private static final Image goal = new Image("goal.png");
     private static ObjectProperty<Image> imageSelected  = new SimpleObjectProperty<>();
+    private ToolViewModel toolViewModel;
+
     public ToolView() {
 
         layoutControls();
@@ -53,8 +56,28 @@ public class ToolView extends FlowPane {
     }
 
     private void setToolEventHandlers(ImageView imageView) {
-        imageView.setOnMouseClicked(event -> imageSelected.set(player));
+        imageView.setOnMouseClicked(event -> {
+            CellValue selectedTool = determineToolFromImageView(imageView);
+            if (selectedTool != null) {
+                toolViewModel.setSelectedTool(selectedTool);
+            }
+        });
     }
 
-
+    // Méthode pour déterminer l'outil correspondant à l'ImageView
+    private CellValue determineToolFromImageView(ImageView imageView) {
+        if (imageView.getImage() == player) {
+            return CellValue.PLAYER;
+        } else if (imageView.getImage() == box) {
+            return CellValue.BOX;
+        } else if (imageView.getImage() == ground) {
+            return CellValue.GROUND;
+        } else if (imageView.getImage() == wall) {
+            return CellValue.WALL;
+        } else if (imageView.getImage() == goal) {
+            return CellValue.GOAL;
+        }
+        return null;
+    }
 }
+
