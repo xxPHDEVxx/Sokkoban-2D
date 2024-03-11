@@ -19,7 +19,7 @@ import sokoban.viewmodel.BoardViewModel;
 import java.util.function.UnaryOperator;
 import java.util.regex.Pattern;
 
-public class newGridView {
+public class NewGridView {
     public static void showDialog(){
         Stage dialog = new Stage();
         dialog.initModality(Modality.APPLICATION_MODAL);
