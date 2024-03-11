@@ -85,7 +85,7 @@ public class BoardView extends BorderPane {
 
         menuItemExit.setOnAction(action -> {
             if (BoardViewModel.isChanged()){
-                saveConfirm.showDialog();
+                SaveConfirm.showDialog();
                 BoardViewModel.exitMenu();
             } else {
                 BoardViewModel.exitMenu();
@@ -94,15 +94,16 @@ public class BoardView extends BorderPane {
 
         menuItemNew.setOnAction(action -> {
             if (BoardViewModel.isChanged()){
-                saveConfirm.showDialog();
+                SaveConfirm.showDialog();
             }
-            newGridView.showDialog();
+            NewGridView.showDialog();
+
             //fonction qui doit check si le board a changé
         });
 
         menuItemOpen.setOnAction(action -> {
             if (BoardViewModel.isChanged()){
-                saveConfirm.showDialog();
+                SaveConfirm.showDialog();
                 FileChooser fileChooser = new FileChooser();
                 File selectedFile = fileChooser.showOpenDialog(stage);
                 //gérer avec un try catch?
