@@ -14,6 +14,7 @@ import sokoban.viewmodel.CellViewModel;
 
 public class CellView extends StackPane {
     private static final Image groundImage = new Image("ground.png");
+    private static final Image wall = new Image("wall.png");// juste pour tester
     private final CellViewModel viewModel;
 
     //a utiliser pour récuperer l'image de la cell qu'on veut mettre
@@ -46,7 +47,8 @@ public class CellView extends StackPane {
                     System.out.println(viewModel.valueProperty());
                 });
 
-
+        // clic sur la cellule permet de changer sa valeur
+        this.setOnMouseClicked(e -> imageView.setImage(wall));
         //changement d'image au click a finir
         viewModel.valueProperty().addListener((obs, oldVal, newVal) -> setImage(imageView, newVal));
         //image grisé au moment du hover
@@ -56,7 +58,7 @@ public class CellView extends StackPane {
 
     //changement d'image au click
     private void setImage(ImageView imageView, CellValue cellValue) {
-    //case ground -> superpose du player ou cible
+        imageView.setImage(imageView.getImage());
     }
 
     //image grisé au moment du hover
