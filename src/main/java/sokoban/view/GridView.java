@@ -39,7 +39,7 @@ public class GridView extends GridPane {
         }
 
 
-        setBoardClickHandlers(gridViewModel);
+        //setBoardClickHandlers(gridViewModel);
     }
 
     // Méthode pour créer et retourner une instance de CellView pour une cellule spécifique
@@ -48,7 +48,9 @@ public class GridView extends GridPane {
         // Vous pouvez également configurer d'autres propriétés de la CellView ici si nécessaire
         return cellView;
     }
-    private void setBoardClickHandlers(GridViewModel gridViewModel) {
+
+    // peut être inutile
+    /*private void setBoardClickHandlers(GridViewModel gridViewModel) {
         for (int i = 0; i < GRID_HEIGHT; i++) {
             for (int j = 0; j < GRID_WIDTH; j++) {
                 CellView cellView = createCellView(i, j, gridViewModel.getCellViewModel(i,j), cellWidth);
@@ -60,5 +62,5 @@ public class GridView extends GridPane {
                 });
             }
         }
-    }
+    }*/
 }

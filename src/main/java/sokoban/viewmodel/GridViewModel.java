@@ -9,7 +9,4 @@ public class GridViewModel {
     public CellViewModel getCellViewModel(int line, int col) {
         return new CellViewModel(line,col, board);
     }
-    public void placeTool(int row, int col, CellValue tool) {
-        board.getGrid().placeTool(row, col, tool);
-    }
 }

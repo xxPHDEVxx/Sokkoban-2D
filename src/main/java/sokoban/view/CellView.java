@@ -48,7 +48,7 @@ public class CellView extends StackPane {
                 });
 
         // clic sur la cellule permet de changer sa valeur
-        this.setOnMouseClicked(e -> imageView.setImage(wall));
+        this.setOnMouseClicked(e -> imageView.setImage(ToolView.getImageSelected()));
         //changement d'image au click a finir
         viewModel.valueProperty().addListener((obs, oldVal, newVal) -> setImage(imageView, newVal));
         //image grisé au moment du hover

@@ -1,6 +1,7 @@
 package sokoban.view;
 
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.Property;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
@@ -19,7 +20,7 @@ public class ToolView extends FlowPane {
     private static final Image ground = new Image("ground.png");
     private static final Image wall = new Image("wall.png");
     private static final Image goal = new Image("goal.png");
-    private static ObjectProperty<Image> imageSelected  = new SimpleObjectProperty<>();
+    private static Image imageSelected;
     private ToolViewModel toolViewModel;
 
     public ToolView() {
@@ -62,10 +63,7 @@ public class ToolView extends FlowPane {
 
     private void setToolEventHandlers(ImageView imageView) {
         imageView.setOnMouseClicked(event -> {
-            CellValue selectedTool = determineToolFromImageView(imageView);
-            if (selectedTool != null) {
-                toolViewModel.setSelectedTool(selectedTool);
-            }
+            imageSelected = imageView.getImage();
         });
     }
 
@@ -83,6 +81,10 @@ public class ToolView extends FlowPane {
             return CellValue.GOAL;
         }
         return null;
+    }
+
+    public static Image getImageSelected() {
+        return imageSelected;
     }
 }
 
