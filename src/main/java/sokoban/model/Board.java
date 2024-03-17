@@ -20,7 +20,7 @@ public class Board {
     }
 
     public static int maxFilledCells(){
-        MAX_FILLED_CELLS = (Grid.getGridHeight() + Grid.getGridWidth())/2;
+        MAX_FILLED_CELLS = (Grid.getGridHeight() * Grid.getGridWidth())/2;
         return Board.MAX_FILLED_CELLS;
     }
     public Boolean isFull(){

@@ -14,7 +14,6 @@ public class BoardViewModel {
     private final GridViewModel gridViewModel;
     private final Board board;
 
-
     public ListProperty<String> errorsProperty() {
         return board.validate();
     }
@@ -48,6 +47,7 @@ public class BoardViewModel {
         Board.setGrid(new Grid(width, height));
         Grid.setGridHeight(height);
         Grid.setGridWidth(width);
+
 
     }
     public static void openBoard(){
