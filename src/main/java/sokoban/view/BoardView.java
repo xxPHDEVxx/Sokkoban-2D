@@ -2,6 +2,7 @@ package sokoban.view;
 
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.DoubleBinding;
+import javafx.beans.property.IntegerProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
@@ -25,7 +26,9 @@ import java.io.File;
 public class BoardView extends BorderPane {
 
     private final BoardViewModel boardViewModel;
-    private static final int GRID_WIDTH = BoardViewModel.gridWidth();
+    private int GRID_WIDTH = BoardViewModel.gridWidth();
+
+
     private final Label headerLabel = new Label("");
     private final Label headerLabel2 = new Label("");
     private final VBox vbox = new VBox();
@@ -38,8 +41,11 @@ public class BoardView extends BorderPane {
     private final MenuItem menuItemSave = new MenuItem("Save As...");
     private final MenuItem menuItemExit = new MenuItem("Exit...");
     private static HBox box = new HBox();
+    private  Stage primaryStage ;
+    private Scene scene;
     public BoardView(Stage primaryStage, BoardViewModel boardViewModel) {
         this.boardViewModel = boardViewModel;
+        this.primaryStage = primaryStage;
         start(primaryStage);
     }
     public void start(Stage stage){
@@ -54,6 +60,7 @@ public class BoardView extends BorderPane {
 
         stage.setScene(scene);
         stage.show();
+        this.scene = scene;
     }
 
     private void configMainComponents(Stage stage){
@@ -65,7 +72,7 @@ public class BoardView extends BorderPane {
         DoubleBinding gridWidth = Bindings.createDoubleBinding(
                 () -> {
                     var size = Math.min(scene.getWidth(), scene.getHeight() - headerBox.getHeight());
-                    return Math.floor(size / GRID_WIDTH) * GRID_WIDTH;
+                    return Math.floor(size / GRID_WIDTH * GRID_WIDTH);
                 },
                 scene.widthProperty(),
                 scene.heightProperty(),
@@ -76,6 +83,8 @@ public class BoardView extends BorderPane {
         gridView.setPrefWidth(gridWidth.get());
         gridView.setPrefHeight(gridWidth.get());
         setCenter(gridView);
+
+
     }
     private void createMenuBar(Stage stage) {
         fileMenu.getItems().addAll(menuItemNew, menuItemOpen, menuItemSave, menuItemExit);
@@ -96,7 +105,7 @@ public class BoardView extends BorderPane {
             if (BoardViewModel.isChanged()){
                 SaveConfirm.showDialog();
             }
-            NewGridView.showDialog();
+            NewGridView.showDialog(this);
 
             //fonction qui doit check si le board a changé
         });
@@ -153,7 +162,7 @@ public class BoardView extends BorderPane {
         vbox.getChildren().add(headerBox2);
     }
     public void refresh(){
-        box.getChildren().remove(this);
+        createGrid(scene);
     }
 
 }

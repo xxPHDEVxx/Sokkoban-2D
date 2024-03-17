@@ -1,7 +1,5 @@
 package sokoban.view;
 
-import javafx.animation.PauseTransition;
-import javafx.event.Event;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -11,16 +9,14 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 import javafx.util.converter.IntegerStringConverter;
-import sokoban.model.Grid;
 import sokoban.viewmodel.BoardViewModel;
 
 import java.util.function.UnaryOperator;
 import java.util.regex.Pattern;
 
 public class NewGridView {
-    public static void showDialog(){
+    public static void showDialog(BoardView boardView){
         Stage dialog = new Stage();
         dialog.initModality(Modality.APPLICATION_MODAL);
         dialog.setTitle("Sokoban");
@@ -38,10 +34,10 @@ public class NewGridView {
             int width = Integer.parseInt(txtWidth.getText());
             int height = Integer.parseInt(txtHeight.getText());
 
-            BoardViewModel.newGridMenu(width,height);
-
+            BoardViewModel.newGridMenu(width, height);
             dialog.close();
-        });
+            boardView.refresh();
+         });
         btnCancel.setOnAction(e -> {
             dialog.close();
         });

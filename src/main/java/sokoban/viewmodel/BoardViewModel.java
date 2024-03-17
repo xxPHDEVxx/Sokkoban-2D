@@ -13,7 +13,8 @@ import sokoban.model.Grid;
 public class BoardViewModel {
     private final GridViewModel gridViewModel;
     private final Board board;
-    private final ListProperty<String> errorsProperty = new SimpleListProperty<>(FXCollections.observableArrayList());
+
+
     public ListProperty<String> errorsProperty() {
         return board.validate();
     }
@@ -21,12 +22,6 @@ public class BoardViewModel {
     public BoardViewModel(Board board) {
         this.board = board;
         gridViewModel = new GridViewModel(board);
-    }
-    public static int gridWidth() {
-        return Grid.getGridWidth();
-    }
-    public static int gridHeight() {
-        return Grid.getGridHeight();
     }
 
     public GridViewModel getGridViewModel() {
@@ -37,20 +32,22 @@ public class BoardViewModel {
         return board.filledCellsCountProperty();
     }
 
-    public int maxFilledCells() {
+    public static int maxFilledCells() {
         return Board.maxFilledCells();
+    }
+    public static int gridWidth() {
+        return Grid.getGridWidth();
+    }
+    public static int gridHeight() {
+        return Grid.getGridHeight();
     }
 
     public static void exitMenu(){System.exit(0);}
     public static void newGridMenu(int width, int height){
 
-        IntegerProperty otherWidthProperty = new SimpleIntegerProperty(width);;
-        IntegerProperty otherHeightProperty = new SimpleIntegerProperty(height);;
-
-
-        Grid.GRID_HEIGHTProperty().bind(otherHeightProperty);
-        Grid.GRID_WIDTHProperty().bind(otherWidthProperty);
-
+        Board.setGrid(new Grid(width, height));
+        Grid.setGridHeight(height);
+        Grid.setGridWidth(width);
 
     }
     public static void openBoard(){

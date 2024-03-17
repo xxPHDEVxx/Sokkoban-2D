@@ -1,6 +1,7 @@
 package sokoban.view;
 
 import javafx.beans.binding.DoubleBinding;
+import javafx.beans.property.IntegerProperty;
 import javafx.geometry.Insets;
 import javafx.scene.layout.GridPane;
 import sokoban.viewmodel.BoardViewModel;
@@ -8,10 +9,13 @@ import sokoban.viewmodel.GridViewModel;
 
 public class GridView extends GridPane {
     private static final int PADDING = 20;
-    private static final int GRID_WIDTH = BoardViewModel.gridWidth();
-    private static final int GRID_HEIGHT = BoardViewModel.gridHeight();
+    private int GRID_WIDTH = BoardViewModel.gridWidth();
+    private int GRID_HEIGHT = BoardViewModel.gridHeight();
 
     GridView(GridViewModel gridViewModel, DoubleBinding gridWidth) {
+
+        System.out.println(GRID_WIDTH);
+        System.out.println(GRID_HEIGHT);
 
         setPrefSize(300,300);
         setPadding(new Insets(PADDING));

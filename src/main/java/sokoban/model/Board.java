@@ -18,14 +18,7 @@ public class Board {
     public Board(){
         isFull = grid.filledCellsCountProperty().isEqualTo(Board.MAX_FILLED_CELLS);
     }
-    public CellValue play(int line, int col){
-        if (grid.getValue(line, col) == CellValue.GROUND && isFull())
-            return CellValue.GROUND;
-        // grid.play(line, col, grid.getValue(line, col) == CellValue.EMPTY ? CellValue.X : CellValue.EMPTY);
-        // return grid.getValue(line, col);
-        // a adapter avec les enum du sokoban
-        return CellValue.GROUND;
-    }
+
     public static int maxFilledCells(){
         MAX_FILLED_CELLS = (Grid.getGridHeight() + Grid.getGridWidth())/2;
         return Board.MAX_FILLED_CELLS;
@@ -90,7 +83,7 @@ public class Board {
         return grid;
     }
 
-    public void setGrid(Grid newGrid) {
+    public static void setGrid(Grid newGrid) {
         grid = newGrid;
     }
 }
