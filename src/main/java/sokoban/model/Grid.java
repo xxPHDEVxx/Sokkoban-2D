@@ -67,7 +67,7 @@ public class Grid {
     }
     public boolean isEmpty(int line, int col) {return matrix[line][col].isEmpty();}
 
-    CellValue getValue ( int line, int col){
+    public CellValue getValue ( int line, int col){
         return matrix[line][col].getValue();
     }
 
@@ -91,6 +91,8 @@ public class Grid {
             matrix[row][col].setValue(tool);
         }
     }
-
+    public Grid getGrid(){
+        return this;
+    }
 
 }

@@ -92,4 +92,7 @@ public class Board {
     public Grid getGrid() {
         return grid;
     }
+    public Board getBoard(){
+        return this;
+    }
 }

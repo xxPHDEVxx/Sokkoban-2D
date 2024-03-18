@@ -19,8 +19,11 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import sokoban.model.Board;
 import sokoban.model.CellValue;
+import sokoban.model.Grid;
 import sokoban.viewmodel.BoardViewModel;
+import sokoban.viewmodel.GridViewModel;
 
 import java.io.File;
 
@@ -129,8 +132,10 @@ public class BoardView extends BorderPane {
         menuItemSave.setOnAction(action -> {
             FileChooser fileChooser = new FileChooser();
             File selectedFile = fileChooser.showSaveDialog(stage);
-            //gérer avec un try catch?
-            BoardViewModel.saveMenu();
+
+            Grid grid = boardViewModel.getGrid();
+            GridViewModel gvm = boardViewModel.getGridVM();
+            gvm.saveMenu(grid , selectedFile);
         });
     }
     public void createHeader(){

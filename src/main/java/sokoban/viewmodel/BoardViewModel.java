@@ -10,6 +10,11 @@ import sokoban.model.Board;
 import sokoban.model.CellValue;
 import sokoban.model.Grid;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+
 
 public class BoardViewModel {
     private final GridViewModel gridViewModel;
@@ -48,19 +53,17 @@ public class BoardViewModel {
         Board.setGrid(new Grid(width, height));
         Grid.setGridHeight(height);
         Grid.setGridWidth(width);
-
-
     }
     public static void openBoard(){
         // gérer ce qu'il doit faire avec le fichier
     }
-    public static void saveMenu(){
-        //save
-    }
     public static boolean isChanged(){
         return true;
     }
-
-
+    public Grid getGrid(){
+        return board.getGrid();
+    }
+    public GridViewModel getGridVM(){
+        return gridViewModel;
+    }
 }
-
