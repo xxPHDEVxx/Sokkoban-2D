@@ -15,7 +15,8 @@ public class Board {
     public static int MAX_FILLED_CELLS = 75;
     private static Grid grid = new Grid();
     private final BooleanBinding isFull;
-    public Board(){
+
+    public Board() {
         isFull = grid.filledCellsCountProperty().isEqualTo(Board.MAX_FILLED_CELLS);
     }
 
@@ -23,9 +24,11 @@ public class Board {
         MAX_FILLED_CELLS = (Grid.getGridHeight() * Grid.getGridWidth())/2;
         return Board.MAX_FILLED_CELLS;
     }
-    public Boolean isFull(){
+
+    public Boolean isFull() {
         return isFull.get();
     }
+
     public ReadOnlyObjectProperty<CellValue> valueProperty(int line, int col) {
         return grid.valueProperty(line, col);
     }
@@ -38,6 +41,7 @@ public class Board {
         return grid.isEmpty(line, col);
         //appelation cohérente? car ground n'est pas vide
     }
+
     public ListProperty<String> validate(){
         ListProperty<String> errors = new SimpleListProperty<>(FXCollections.observableArrayList());
 
@@ -79,11 +83,13 @@ public class Board {
         return errors;
     }
 
-    public static Grid getGrid() {
-        return grid;
-    }
+
 
     public static void setGrid(Grid newGrid) {
         grid = newGrid;
+    }
+
+    public Grid getGrid() {
+        return grid;
     }
 }

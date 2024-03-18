@@ -2,16 +2,19 @@ package sokoban.view;
 
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.value.ObservableValue;
+import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import sokoban.model.CellValue;
 import sokoban.viewmodel.CellViewModel;
 
 public class CellView extends StackPane {
     private static final Image groundImage = new Image("ground.png");
+    private static final Image wall = new Image("wall.png");// juste pour tester
     private final CellViewModel viewModel;
 
     //a utiliser pour récuperer l'image de la cell qu'on veut mettre
@@ -29,6 +32,10 @@ public class CellView extends StackPane {
 
     }
 
+    public void setOnCellClicked(EventHandler<MouseEvent> eventHandler) {
+        this.setOnMouseClicked(eventHandler);
+    }
+
     private void configureBindings() {
         //image de base en fond
         imageView.setImage(groundImage);
@@ -40,16 +47,18 @@ public class CellView extends StackPane {
                     System.out.println(viewModel.valueProperty());
                 });
 
-
+        // clic sur la cellule permet de changer sa valeur
+        this.setOnMouseClicked(e -> imageView.setImage(ToolView.getImageSelected()));
         //changement d'image au click a finir
         viewModel.valueProperty().addListener((obs, oldVal, newVal) -> setImage(imageView, newVal));
         //image grisé au moment du hover
         hoverProperty().addListener(this::hoverChanged);
+
     }
 
     //changement d'image au click
     private void setImage(ImageView imageView, CellValue cellValue) {
-    //case ground -> superpose du player ou cible
+        imageView.setImage(imageView.getImage());
     }
 
     //image grisé au moment du hover
