@@ -68,7 +68,7 @@ public class ToolView extends FlowPane {
     }
 
     // Méthode pour déterminer l'outil correspondant à l'ImageView
-    private CellValue determineToolFromImageView(ImageView imageView) {
+    public static CellValue determineToolFromImageView(ImageView imageView) {
         if (imageView.getImage() == player) {
             return CellValue.PLAYER;
         } else if (imageView.getImage() == box) {

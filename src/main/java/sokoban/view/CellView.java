@@ -9,6 +9,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
+import sokoban.model.Cell;
 import sokoban.model.CellValue;
 import sokoban.viewmodel.CellViewModel;
 
@@ -16,9 +17,6 @@ public class CellView extends StackPane {
     private static final Image groundImage = new Image("ground.png");
     private static final Image wall = new Image("wall.png");// juste pour tester
     private final CellViewModel viewModel;
-
-    //a utiliser pour récuperer l'image de la cell qu'on veut mettre
-//    private static ToolViewModel toolViewModel;
 
     private final DoubleBinding widthProperty;
 
@@ -30,10 +28,6 @@ public class CellView extends StackPane {
 
         configureBindings();
 
-    }
-
-    public void setOnCellClicked(EventHandler<MouseEvent> eventHandler) {
-        this.setOnMouseClicked(eventHandler);
     }
 
     private void configureBindings() {
@@ -48,9 +42,7 @@ public class CellView extends StackPane {
                 });
 
         // clic sur la cellule permet de changer sa valeur
-        this.setOnMouseClicked(e -> imageView.setImage(ToolView.getImageSelected()));
-        //changement d'image au click a finir
-        viewModel.valueProperty().addListener((obs, oldVal, newVal) -> setImage(imageView, newVal));
+        setOnClickHandler();
         //image grisé au moment du hover
         hoverProperty().addListener(this::hoverChanged);
 
@@ -71,6 +63,16 @@ public class CellView extends StackPane {
             // Remettre l'image normale lorsque le survol est terminé
             imageView.setEffect(null);
         }
+    }
+
+    // ajoute outil sur grille au clic (à améliorer et corriger)
+    public void setOnClickHandler(){
+        ImageView imageView2 = new ImageView();
+        getChildren().add(imageView2);
+        Cell[][] matrix = viewModel.getBoard().getGrid().getMatrix();
+        this.setOnMouseClicked(e -> imageView2.setImage(ToolView.getImageSelected()));
+        CellValue tool = ToolView.determineToolFromImageView(imageView2);
+        matrix[viewModel.getLine()][viewModel.getCol()].setValue(tool);
     }
 
     public void refresh() {

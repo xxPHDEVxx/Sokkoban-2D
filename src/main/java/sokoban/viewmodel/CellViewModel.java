@@ -18,6 +18,15 @@ public class CellViewModel {
     public boolean isEmpty() {
         return board.isEmpty(line, col);
     }
+    public Board getBoard() {
+        return board;
+    }
 
+    public int getLine() {
+        return line;
+    }
 
+    public int getCol() {
+        return col;
+    }
 }

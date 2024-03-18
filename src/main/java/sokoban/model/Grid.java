@@ -84,6 +84,8 @@ public class Grid {
                     }
                 }
 
-
-            }
+    public Cell[][] getMatrix() {
+        return matrix;
+    }
+}
 
