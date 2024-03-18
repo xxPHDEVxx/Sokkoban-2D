@@ -1,10 +1,7 @@
 package sokoban.viewmodel;
 
 import javafx.beans.binding.LongBinding;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.ListProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleListProperty;
+import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import sokoban.model.Board;
 import sokoban.model.Grid;
@@ -14,7 +11,7 @@ public class BoardViewModel {
     private final GridViewModel gridViewModel;
     private final Board board;
 
-    public ListProperty<String> errorsProperty() {
+    public SetProperty<String> errorsProperty() {
         return board.validate();
     }
 
@@ -43,11 +40,7 @@ public class BoardViewModel {
 
     public static void exitMenu(){System.exit(0);}
     public static void newGridMenu(int width, int height){
-
         Board.setGrid(new Grid(width, height));
-        Grid.setGridHeight(height);
-        Grid.setGridWidth(width);
-
 
     }
     public static void openBoard(){

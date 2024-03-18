@@ -14,9 +14,6 @@ public class GridView extends GridPane {
 
     GridView(GridViewModel gridViewModel, DoubleBinding gridWidth) {
 
-        System.out.println(GRID_WIDTH);
-        System.out.println(GRID_HEIGHT);
-
         setPrefSize(300,300);
         setPadding(new Insets(PADDING));
 

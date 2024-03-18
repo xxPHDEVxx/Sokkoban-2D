@@ -2,9 +2,7 @@ package sokoban.model;
 
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.binding.LongBinding;
-import javafx.beans.property.ListProperty;
-import javafx.beans.property.ReadOnlyObjectProperty;
-import javafx.beans.property.SimpleListProperty;
+import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -15,6 +13,8 @@ public class Board {
     public static int MAX_FILLED_CELLS = 75;
     private static Grid grid = new Grid();
     private final BooleanBinding isFull;
+    private SetProperty<String> errors = new SimpleSetProperty<>(FXCollections.observableSet());
+
     public Board(){
         isFull = grid.filledCellsCountProperty().isEqualTo(Board.MAX_FILLED_CELLS);
     }
@@ -38,8 +38,7 @@ public class Board {
         return grid.isEmpty(line, col);
         //appelation cohérente? car ground n'est pas vide
     }
-    public ListProperty<String> validate(){
-        ListProperty<String> errors = new SimpleListProperty<>(FXCollections.observableArrayList());
+    public SetProperty<String> validate(){
 
         int playerCount = 0;
         int targetCount = 0;

@@ -5,6 +5,7 @@ import javafx.beans.binding.DoubleBinding;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
+import javafx.collections.ObservableSet;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.Parent;
@@ -28,7 +29,6 @@ public class BoardView extends BorderPane {
     private final BoardViewModel boardViewModel;
     private int GRID_WIDTH = BoardViewModel.gridWidth();
 
-
     private final Label headerLabel = new Label("");
     private final Label headerLabel2 = new Label("");
     private final VBox vbox = new VBox();
@@ -41,14 +41,14 @@ public class BoardView extends BorderPane {
     private final MenuItem menuItemSave = new MenuItem("Save As...");
     private final MenuItem menuItemExit = new MenuItem("Exit...");
     private static HBox box = new HBox();
-    private  Stage primaryStage ;
     private Scene scene;
+    private GridView gridView;
     public BoardView(Stage primaryStage, BoardViewModel boardViewModel) {
         this.boardViewModel = boardViewModel;
-        this.primaryStage = primaryStage;
         start(primaryStage);
     }
     public void start(Stage stage){
+
         configMainComponents(stage);
 
         box.getChildren().addAll(ToolView, this);
@@ -61,27 +61,30 @@ public class BoardView extends BorderPane {
         stage.setScene(scene);
         stage.show();
         this.scene = scene;
+
     }
 
     private void configMainComponents(Stage stage){
         stage.setTitle("Sokoban");
         createMenuBar(stage);
         createHeader();
+        insertHeader();
     }
     public void createGrid(Scene scene){
         DoubleBinding gridWidth = Bindings.createDoubleBinding(
                 () -> {
-                    var size = Math.min(scene.getWidth(), scene.getHeight() - headerBox.getHeight());
+                    var size = Math.min(scene.getWidth(), scene.getHeight() - (vbox.getHeight()) );
                     return Math.floor(size / GRID_WIDTH * GRID_WIDTH);
                 },
                 scene.widthProperty(),
                 scene.heightProperty(),
                 headerBox.heightProperty());
-        GridView gridView = new GridView(boardViewModel.getGridViewModel(), gridWidth);
+        gridView = new GridView(boardViewModel.getGridViewModel(), gridWidth);
 
         // Définir la largeur et la hauteur de la grid en fonction de la largeur calculée
         gridView.setPrefWidth(gridWidth.get());
         gridView.setPrefHeight(gridWidth.get());
+
         setCenter(gridView);
 
 
@@ -133,6 +136,7 @@ public class BoardView extends BorderPane {
         });
     }
     public void createHeader(){
+
         headerLabel.textProperty().bind(boardViewModel.filledCellsCountProperty()
                 .asString("Number of filled cells: %d of " + boardViewModel.maxFilledCells()));
         Font font = Font.font("Verdana", FontWeight.BOLD, 20);
@@ -143,15 +147,19 @@ public class BoardView extends BorderPane {
                 .otherwise(
                         Bindings.createStringBinding(() -> {
                             StringBuilder errorsStringBuilder = new StringBuilder();
-                            ObservableList<String> errorsList = boardViewModel.errorsProperty();
+                            ObservableSet<String> errorsList = boardViewModel.errorsProperty();
                             for (String error : errorsList) {
                                 errorsStringBuilder.append(error).append("\n");
                             }
-                            return "Please correct the following error(s):\n" + errorsStringBuilder.toString();
-                        }, boardViewModel.errorsProperty())
+                            return "Please correct the following error(s): \n" + errorsStringBuilder ;
+                        })
                 )
         );
 
+
+
+    }
+    public void insertHeader() {
         headerLabel2.setTextFill(Color.RED);
         headerLabel.getStyleClass().add("header");
         headerBox.getChildren().add(headerLabel);
@@ -161,8 +169,14 @@ public class BoardView extends BorderPane {
         vbox.getChildren().add(headerBox);
         vbox.getChildren().add(headerBox2);
     }
+
+
     public void refresh(){
         createGrid(scene);
+        createHeader();
+        box.setAlignment(Pos.CENTER);
+
     }
+
 
 }

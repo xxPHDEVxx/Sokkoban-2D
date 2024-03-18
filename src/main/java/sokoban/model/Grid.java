@@ -43,16 +43,7 @@ public class Grid {
     public static int getGridWidth(){return GRID_WIDTH;}
     public static int getGridHeight(){return GRID_HEIGHT;}
 
-    public static void setGridWidth(int gridWidth) {
-        GRID_WIDTH = gridWidth;
-    }
-
-    public static void setGridHeight(int gridHeight) {
-        GRID_HEIGHT = gridHeight;
-    }
-
     ReadOnlyObjectProperty<CellValue> valueProperty(int line, int col) {
-
         return matrix[line][col].valueProperty();    }
     CellValue getValue(int line, int col) {return  matrix[line][col].getValue();}
     void play(int line, int col, CellValue playerValue) {
