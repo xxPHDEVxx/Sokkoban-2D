@@ -26,6 +26,7 @@ import sokoban.viewmodel.BoardViewModel;
 import sokoban.viewmodel.GridViewModel;
 
 import java.io.File;
+import java.io.IOException;
 
 public class BoardView extends BorderPane {
 
@@ -115,18 +116,21 @@ public class BoardView extends BorderPane {
         });
 
         menuItemOpen.setOnAction(action -> {
-            if (BoardViewModel.isChanged()){
+            if (BoardViewModel.isChanged()) {
                 SaveConfirm.showDialog();
-                FileChooser fileChooser = new FileChooser();
-                File selectedFile = fileChooser.showOpenDialog(stage);
-                //gérer avec un try catch?
-                BoardViewModel.openBoard();
-            } else {
-                FileChooser fileChooser = new FileChooser();
-                File selectedFile = fileChooser.showOpenDialog(stage);
-                //gérer avec un try catch?
-                BoardViewModel.openBoard();
-                // correction avec le boutton cancel
+            }
+
+            FileChooser fileChooser = new FileChooser();
+            File selectedFile = fileChooser.showOpenDialog(stage);
+            if (selectedFile != null) {
+                try {
+                    Grid newGrid = readFile(selectedFile);
+
+                    // Afficher le nouveau tableau dans votre application --
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         });
         menuItemSave.setOnAction(action -> {
@@ -170,6 +174,8 @@ public class BoardView extends BorderPane {
     public void refresh(){
         createGrid(scene);
     }
+    private Grid readFile(File file) throws IOException {
+        //logique de lecture puis retourner la grille
 
-
+    }
 }
