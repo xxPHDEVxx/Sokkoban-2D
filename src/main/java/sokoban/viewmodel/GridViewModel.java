@@ -21,7 +21,8 @@ public class GridViewModel {
         try (PrintWriter writer = new PrintWriter(new FileWriter(selectedFile))) {
             for (int i = 0; i < grid.getGridHeight(); i++) {
                 for (int j = 0; j < grid.getGridWidth(); j++) {
-                    char symbol = CellViewModel.getSymbolForElement(CellViewModel.valueProperty());
+                    CellValue cellValue = grid.getValue(i, j);
+                    char symbol = CellViewModel.getSymbolForElement(cellValue);
                     writer.print(symbol);
                 }
                 writer.println();

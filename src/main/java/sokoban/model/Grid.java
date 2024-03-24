@@ -91,8 +91,12 @@ public class Grid {
             matrix[row][col].setValue(tool);
         }
     }
-    public Grid getGrid(){
-        return this;
+    public void setValue(int row, int col, Cell value) {
+        if (isValidPosition(row, col)) {
+            matrix[row][col] = value;
+        } else {
+            throw new IllegalArgumentException("Invalid row or column index");
+        }
     }
 
 }

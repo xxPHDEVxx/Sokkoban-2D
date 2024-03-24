@@ -27,6 +27,7 @@ import sokoban.viewmodel.GridViewModel;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Scanner;
 
 public class BoardView extends BorderPane {
 
@@ -41,23 +42,25 @@ public class BoardView extends BorderPane {
     private final HBox headerBox2 = new HBox();
     private final ToolView ToolView = new ToolView();
     private final Menu fileMenu = new Menu("Fichier");
-    private final MenuItem menuItemNew= new MenuItem("New...");
+    private final MenuItem menuItemNew = new MenuItem("New...");
     private final MenuItem menuItemOpen = new MenuItem("Open...");
     private final MenuItem menuItemSave = new MenuItem("Save As...");
     private final MenuItem menuItemExit = new MenuItem("Exit...");
     private static HBox box = new HBox();
-    private  Stage primaryStage ;
+    private Stage primaryStage;
     private Scene scene;
+
     public BoardView(Stage primaryStage, BoardViewModel boardViewModel) {
         this.boardViewModel = boardViewModel;
         this.primaryStage = primaryStage;
         start(primaryStage);
     }
-    public void start(Stage stage){
+
+    public void start(Stage stage) {
         configMainComponents(stage);
 
         box.getChildren().addAll(ToolView, this);
-        Scene scene = new Scene(vbox,stage.getWidth(),stage.getHeight());
+        Scene scene = new Scene(vbox, stage.getWidth(), stage.getHeight());
 
         createGrid(scene);
         vbox.getChildren().add(box);
@@ -68,12 +71,13 @@ public class BoardView extends BorderPane {
         this.scene = scene;
     }
 
-    private void configMainComponents(Stage stage){
+    private void configMainComponents(Stage stage) {
         stage.setTitle("Sokoban");
         createMenuBar(stage);
         createHeader();
     }
-    public void createGrid(Scene scene){
+
+    public void createGrid(Scene scene) {
         DoubleBinding gridWidth = Bindings.createDoubleBinding(
                 () -> {
                     var size = Math.min(scene.getWidth(), scene.getHeight() - headerBox.getHeight());
@@ -91,6 +95,7 @@ public class BoardView extends BorderPane {
 
 
     }
+
     private void createMenuBar(Stage stage) {
         fileMenu.getItems().addAll(menuItemNew, menuItemOpen, menuItemSave, menuItemExit);
         MenuBar sameMenuBar = new MenuBar();
@@ -98,7 +103,7 @@ public class BoardView extends BorderPane {
         vbox.getChildren().add(sameMenuBar);
 
         menuItemExit.setOnAction(action -> {
-            if (BoardViewModel.isChanged()){
+            if (BoardViewModel.isChanged()) {
                 SaveConfirm.showDialog();
                 BoardViewModel.exitMenu();
             } else {
@@ -107,7 +112,7 @@ public class BoardView extends BorderPane {
         });
 
         menuItemNew.setOnAction(action -> {
-            if (BoardViewModel.isChanged()){
+            if (BoardViewModel.isChanged()) {
                 SaveConfirm.showDialog();
             }
             NewGridView.showDialog(this);
@@ -139,10 +144,11 @@ public class BoardView extends BorderPane {
 
             Grid grid = boardViewModel.getGrid();
             GridViewModel gvm = boardViewModel.getGridVM();
-            gvm.saveMenu(grid , selectedFile);
+            gvm.saveMenu(grid, selectedFile);
         });
     }
-    public void createHeader(){
+
+    public void createHeader() {
         headerLabel.textProperty().bind(boardViewModel.filledCellsCountProperty()
                 .asString("Number of filled cells: %d of " + boardViewModel.maxFilledCells()));
         Font font = Font.font("Verdana", FontWeight.BOLD, 20);
@@ -171,11 +177,45 @@ public class BoardView extends BorderPane {
         vbox.getChildren().add(headerBox);
         vbox.getChildren().add(headerBox2);
     }
-    public void refresh(){
+
+    public void refresh() {
         createGrid(scene);
     }
-    private Grid readFile(File file) throws IOException {
-        //logique de lecture puis retourner la grille
 
+    private Grid readFile(File file) throws IOException {
+        Grid grid = new Grid();
+
+        try (Scanner scanner = new Scanner(file)) {
+            int row = 0;
+            while (scanner.hasNextLine()) {
+                String line = scanner.nextLine().trim();
+                if (!line.isEmpty()) {
+                    // Parcourir chaque caractère de la ligne
+                    for (int col = 0; col < line.length(); col++) {
+                        char symbol = line.charAt(col);
+                        // Convertir le caractère en CellValue et ajouter à la grille
+                        CellValue cellValue = convertSymbolToCellValue(symbol);
+                        grid.setValue(row, col, cellValue);
+                    }
+                    row++;
+                }
+            }
+        }
+        return grid;
+    }
+
+    private CellValue convertSymbolToCellValue(char symbol) {
+        switch (symbol) {
+            case '#':
+                return CellValue.WALL;
+            case '.':
+                return CellValue.GOAL;
+            case '$':
+                return CellValue.BOX;
+            case '@':
+                return CellValue.PLAYER;
+            default:
+                return CellValue.GROUND;
+        }
     }
 }
