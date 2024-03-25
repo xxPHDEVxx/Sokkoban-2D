@@ -16,6 +16,9 @@ public class CellViewModel {
         this.col = col;
     }
 
+    public void play(){
+        board.play(line, col);
+    }
     public ReadOnlyObjectProperty<CellValue> valueProperty() {
         return board.valueProperty(line, col);
     }
@@ -40,10 +43,21 @@ public class CellViewModel {
             case PLAYER:
                 return '@';
             case GROUND:
-                return 'a';
+                return ' ';
             //case PLAYER,GOAL: return '+';
             default:
                 return ' ';
         }
+    }
+    public Board getBoard() {
+        return board;
+    }
+
+    public int getLine() {
+        return line;
+    }
+
+    public int getCol() {
+        return col;
     }
 }

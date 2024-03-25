@@ -20,7 +20,6 @@ public class ToolView extends FlowPane {
     private static final Image ground = new Image("ground.png");
     private static final Image wall = new Image("wall.png");
     private static final Image goal = new Image("goal.png");
-    private static Image imageSelected;
     private ToolViewModel toolViewModel;
 
     public ToolView() {
@@ -63,12 +62,12 @@ public class ToolView extends FlowPane {
 
     private void setToolEventHandlers(ImageView imageView) {
         imageView.setOnMouseClicked(event -> {
-            imageSelected = imageView.getImage();
+            ToolViewModel.setToolSelected(determineToolFromImageView(imageView));
         });
     }
 
     // Méthode pour déterminer l'outil correspondant à l'ImageView
-    private CellValue determineToolFromImageView(ImageView imageView) {
+    public static CellValue determineToolFromImageView(ImageView imageView) {
         if (imageView.getImage() == player) {
             return CellValue.PLAYER;
         } else if (imageView.getImage() == box) {
@@ -81,10 +80,6 @@ public class ToolView extends FlowPane {
             return CellValue.GOAL;
         }
         return null;
-    }
-
-    public static Image getImageSelected() {
-        return imageSelected;
     }
 }
 

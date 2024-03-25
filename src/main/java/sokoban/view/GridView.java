@@ -22,17 +22,11 @@ public class GridView extends GridPane {
 
     GridView(GridViewModel gridViewModel, DoubleBinding gridWidth) {
 
-        System.out.println(GRID_WIDTH);
-        System.out.println(GRID_HEIGHT);
-
-        setPrefSize(300,300);
-        this.gridViewModel = gridViewModel;
-        setGridLinesVisible(true);
-
+        setPrefSize(300, 300);
         setPadding(new Insets(PADDING));
 
         //taille de chaque cellule
-        cellWidth = gridWidth
+        DoubleBinding cellWidth = gridWidth
                 .subtract(PADDING * 2)
                 .divide(GRID_WIDTH);
 
@@ -43,30 +37,5 @@ public class GridView extends GridPane {
                 add(cellView, j, i); // lignes/colonnes inversées dans gridpane
             }
         }
-
-
-        //setBoardClickHandlers(gridViewModel);
     }
-
-    // Méthode pour créer et retourner une instance de CellView pour une cellule spécifique
-    public CellView createCellView(int row, int col, CellViewModel cellViewModel, DoubleBinding cellWidth) {
-        CellView cellView = new CellView(cellViewModel, cellWidth);
-        // Vous pouvez également configurer d'autres propriétés de la CellView ici si nécessaire
-        return cellView;
-    }
-
-    // peut être inutile
-    /*private void setBoardClickHandlers(GridViewModel gridViewModel) {
-        for (int i = 0; i < GRID_HEIGHT; i++) {
-            for (int j = 0; j < GRID_WIDTH; j++) {
-                CellView cellView = createCellView(i, j, gridViewModel.getCellViewModel(i,j), cellWidth);
-                int row = i;
-                int col = j;
-                cellView.setOnMouseClicked(event -> {
-                    CellValue selectedTool = CellValue.PLAYER; // à modifier pour tous les outils
-                    gridViewModel.placeTool(row, col, selectedTool);
-                });
-            }
-        }
-    }*/
 }

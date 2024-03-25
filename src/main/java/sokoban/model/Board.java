@@ -2,32 +2,39 @@ package sokoban.model;
 
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.binding.LongBinding;
-import javafx.beans.property.ListProperty;
-import javafx.beans.property.ReadOnlyObjectProperty;
-import javafx.beans.property.SimpleListProperty;
+import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 import javafx.collections.ObservableList;
+import sokoban.viewmodel.ToolViewModel;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+
 public class Board {
     public static int MAX_FILLED_CELLS = 75;
     private static Grid grid = new Grid();
     private final BooleanBinding isFull;
 
-    public Board() {
+    private SetProperty<String> errors = new SimpleSetProperty<>(FXCollections.observableSet());
+
+    public Board(){
         isFull = grid.filledCellsCountProperty().isEqualTo(Board.MAX_FILLED_CELLS);
     }
 
-    public static int maxFilledCells(){
-        MAX_FILLED_CELLS = (Grid.getGridHeight() * Grid.getGridWidth())/2;
+    public static int maxFilledCells() {
+        MAX_FILLED_CELLS = (Grid.getGridHeight() * Grid.getGridWidth()) / 2;
         return Board.MAX_FILLED_CELLS;
+    }
+
+
+    public void play(int line, int col){
+        grid.play(line, col, grid.getValue(line, col) != (CellValue.GROUND) ? CellValue.GROUND : ToolViewModel.getToolSelected());
     }
 
     public Boolean isFull() {
@@ -47,8 +54,8 @@ public class Board {
         //appelation cohérente? car ground n'est pas vide
     }
 
-    public ListProperty<String> validate(){
-        ListProperty<String> errors = new SimpleListProperty<>(FXCollections.observableArrayList());
+    public SetProperty<String> validate(){
+
 
         int playerCount = 0;
         int targetCount = 0;
@@ -87,8 +94,6 @@ public class Board {
         }
         return errors;
     }
-
-
 
     public static void setGrid(Grid newGrid) {
         grid = newGrid;
