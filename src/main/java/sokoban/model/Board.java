@@ -29,7 +29,7 @@ public class Board {
 
 
     public void play(int line, int col){
-        grid.play(line, col, ToolViewModel.getToolSelected());
+        grid.play(line, col, grid.getValue(line, col) != (CellValue.GROUND) ? CellValue.GROUND : ToolViewModel.getToolSelected());
     }
 
     public Boolean isFull() {
