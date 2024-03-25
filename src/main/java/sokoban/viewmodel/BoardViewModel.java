@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Scanner;
 
 
 public class BoardViewModel {
@@ -54,8 +55,9 @@ public class BoardViewModel {
         Grid.setGridHeight(height);
         Grid.setGridWidth(width);
     }
-    public static void openBoard(){
-        // gérer ce qu'il doit faire avec le fichier
+    public Grid openBoard(File file){
+        Grid grid = board.open(file);
+        return grid;
     }
     public static boolean isChanged(){
         return true;
@@ -66,4 +68,5 @@ public class BoardViewModel {
     public GridViewModel getGridVM(){
         return gridViewModel;
     }
+
 }

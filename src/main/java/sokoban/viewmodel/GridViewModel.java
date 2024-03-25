@@ -3,7 +3,6 @@ package sokoban.viewmodel;
 import sokoban.model.Board;
 import sokoban.model.CellValue;
 import sokoban.model.Grid;
-import sokoban.model.Cell;
 
 import java.io.File;
 import java.io.FileWriter;

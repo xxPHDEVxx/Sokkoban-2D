@@ -91,9 +91,9 @@ public class Grid {
             matrix[row][col].setValue(tool);
         }
     }
-    public void setValue(int row, int col, Cell value) {
+    public void setValue(int row, int col, CellValue value) {
         if (isValidPosition(row, col)) {
-            matrix[row][col] = value;
+            matrix[row][col].getCell().setValue(value);
         } else {
             throw new IllegalArgumentException("Invalid row or column index");
         }
