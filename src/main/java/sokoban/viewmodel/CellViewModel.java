@@ -1,6 +1,7 @@
 package sokoban.viewmodel;
 
 import javafx.beans.property.ReadOnlyObjectProperty;
+import javafx.scene.control.Cell;
 import sokoban.model.Board;
 import sokoban.model.CellValue;
 import sokoban.view.CellView;

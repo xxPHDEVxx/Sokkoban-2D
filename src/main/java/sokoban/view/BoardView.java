@@ -23,6 +23,7 @@ import sokoban.model.Board;
 import sokoban.model.CellValue;
 import sokoban.model.Grid;
 import sokoban.viewmodel.BoardViewModel;
+import sokoban.viewmodel.CellViewModel;
 import sokoban.viewmodel.GridViewModel;
 
 import java.io.File;
@@ -128,14 +129,7 @@ public class BoardView extends BorderPane {
             FileChooser fileChooser = new FileChooser();
             File selectedFile = fileChooser.showOpenDialog(stage);
             if (selectedFile != null) {
-                try {
-                    Grid newGrid = readFile(selectedFile);
-
-                    // Afficher le nouveau tableau dans votre application --
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                boardViewModel.openBoard(selectedFile);
             }
         });
         menuItemSave.setOnAction(action -> {
@@ -177,45 +171,7 @@ public class BoardView extends BorderPane {
         vbox.getChildren().add(headerBox);
         vbox.getChildren().add(headerBox2);
     }
-
     public void refresh() {
         createGrid(scene);
-    }
-
-    private Grid readFile(File file) throws IOException {
-        Grid grid = new Grid();
-
-        try (Scanner scanner = new Scanner(file)) {
-            int row = 0;
-            while (scanner.hasNextLine()) {
-                String line = scanner.nextLine().trim();
-                if (!line.isEmpty()) {
-                    // Parcourir chaque caractère de la ligne
-                    for (int col = 0; col < line.length(); col++) {
-                        char symbol = line.charAt(col);
-                        // Convertir le caractère en CellValue et ajouter à la grille
-                        CellValue cellValue = convertSymbolToCellValue(symbol);
-                        grid.setValue(row, col, cellValue);
-                    }
-                    row++;
-                }
-            }
-        }
-        return grid;
-    }
-
-    private CellValue convertSymbolToCellValue(char symbol) {
-        switch (symbol) {
-            case '#':
-                return CellValue.WALL;
-            case '.':
-                return CellValue.GOAL;
-            case '$':
-                return CellValue.BOX;
-            case '@':
-                return CellValue.PLAYER;
-            default:
-                return CellValue.GROUND;
-        }
     }
 }
