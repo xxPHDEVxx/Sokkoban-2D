@@ -12,12 +12,26 @@ public class CellViewModel {
         this.line = line;
         this.col = col;
     }
+
+    public void play(){
+        board.play(line, col);
+    }
+
     public ReadOnlyObjectProperty<CellValue> valueProperty() {
         return board.valueProperty(line, col);
     }
     public boolean isEmpty() {
         return board.isEmpty(line, col);
     }
+    public Board getBoard() {
+        return board;
+    }
 
+    public int getLine() {
+        return line;
+    }
 
+    public int getCol() {
+        return col;
+    }
 }

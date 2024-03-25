@@ -5,27 +5,37 @@ import javafx.beans.binding.LongBinding;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import sokoban.viewmodel.ToolViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
+
 
 public class Board {
     public static int MAX_FILLED_CELLS = 75;
     private static Grid grid = new Grid();
     private final BooleanBinding isFull;
+
     private SetProperty<String> errors = new SimpleSetProperty<>(FXCollections.observableSet());
 
     public Board(){
         isFull = grid.filledCellsCountProperty().isEqualTo(Board.MAX_FILLED_CELLS);
     }
 
-    public static int maxFilledCells(){
-        MAX_FILLED_CELLS = (Grid.getGridHeight() * Grid.getGridWidth())/2;
+    public static int maxFilledCells() {
+        MAX_FILLED_CELLS = (Grid.getGridHeight() * Grid.getGridWidth()) / 2;
         return Board.MAX_FILLED_CELLS;
     }
-    public Boolean isFull(){
+
+
+    public void play(int line, int col){
+        grid.play(line, col, ToolViewModel.getToolSelected());
+    }
+
+    public Boolean isFull() {
         return isFull.get();
     }
+
     public ReadOnlyObjectProperty<CellValue> valueProperty(int line, int col) {
         return grid.valueProperty(line, col);
     }
@@ -38,7 +48,9 @@ public class Board {
         return grid.isEmpty(line, col);
         //appelation cohérente? car ground n'est pas vide
     }
+
     public SetProperty<String> validate(){
+
 
         int playerCount = 0;
         int targetCount = 0;
@@ -78,11 +90,13 @@ public class Board {
         return errors;
     }
 
-    public static Grid getGrid() {
-        return grid;
-    }
+
 
     public static void setGrid(Grid newGrid) {
         grid = newGrid;
+    }
+
+    public Grid getGrid() {
+        return grid;
     }
 }
