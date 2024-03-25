@@ -76,16 +76,5 @@ public class Grid {
                 private boolean isValidPosition ( int line, int col){
                     return line >= 0 && line < GRID_HEIGHT.getValue() && col >= 0 && col < GRID_WIDTH.getValue();
                 }
-
-
-                public void placeTool ( int row, int col, CellValue tool){
-                    if (isValidPosition(row, col)) {
-                        matrix[row][col].setValue(tool);
-                    }
-                }
-
-    public Cell[][] getMatrix() {
-        return matrix;
-    }
 }
 

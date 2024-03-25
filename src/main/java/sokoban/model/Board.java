@@ -7,9 +7,11 @@ import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import sokoban.viewmodel.ToolViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
+
 
 public class Board {
     public static int MAX_FILLED_CELLS = 75;
@@ -18,6 +20,10 @@ public class Board {
 
     public Board() {
         isFull = grid.filledCellsCountProperty().isEqualTo(Board.MAX_FILLED_CELLS);
+    }
+
+    public void play(int line, int col){
+        grid.play(line, col, ToolViewModel.getToolSelected());
     }
 
     public static int maxFilledCells() {

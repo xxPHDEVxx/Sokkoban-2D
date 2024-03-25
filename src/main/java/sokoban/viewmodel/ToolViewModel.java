@@ -12,6 +12,8 @@ public class ToolViewModel {
     private static Tool tool;
     private static ObjectProperty<CellValue> value = new SimpleObjectProperty<>(CellValue.GROUND);
 
+    private static CellValue toolSelected;
+
     public ToolViewModel(ToolView toolView) {
         this.tool = new Tool();
         this.toolView = toolView;
@@ -29,6 +31,13 @@ public class ToolViewModel {
         return value;
     }
 
+    public  static void setToolSelected(CellValue toolSelected) {
+        ToolViewModel.toolSelected = toolSelected;
+    }
+
+    public static CellValue getToolSelected() {
+        return toolSelected;
+    }
 }
 
 

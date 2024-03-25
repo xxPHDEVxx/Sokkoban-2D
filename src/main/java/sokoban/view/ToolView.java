@@ -20,7 +20,6 @@ public class ToolView extends FlowPane {
     private static final Image ground = new Image("ground.png");
     private static final Image wall = new Image("wall.png");
     private static final Image goal = new Image("goal.png");
-    private static Image imageSelected;
     private ToolViewModel toolViewModel;
 
     public ToolView() {
@@ -63,7 +62,7 @@ public class ToolView extends FlowPane {
 
     private void setToolEventHandlers(ImageView imageView) {
         imageView.setOnMouseClicked(event -> {
-            imageSelected = imageView.getImage();
+            ToolViewModel.setToolSelected(determineToolFromImageView(imageView));
         });
     }
 
@@ -81,10 +80,6 @@ public class ToolView extends FlowPane {
             return CellValue.GOAL;
         }
         return null;
-    }
-
-    public static Image getImageSelected() {
-        return imageSelected;
     }
 }
 
