@@ -4,8 +4,12 @@ import javafx.beans.binding.DoubleBinding;
 import javafx.beans.property.IntegerProperty;
 import javafx.geometry.Insets;
 import javafx.scene.layout.GridPane;
+import sokoban.model.CellValue;
+import sokoban.model.Tool;
 import sokoban.viewmodel.BoardViewModel;
+import sokoban.viewmodel.CellViewModel;
 import sokoban.viewmodel.GridViewModel;
+import sokoban.viewmodel.ToolViewModel;
 
 public class GridView extends GridPane {
     private static final int PADDING = 20;
@@ -33,5 +37,4 @@ public class GridView extends GridPane {
             }
         }
     }
-
 }

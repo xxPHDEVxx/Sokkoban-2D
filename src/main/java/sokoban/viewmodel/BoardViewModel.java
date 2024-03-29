@@ -4,6 +4,7 @@ import javafx.beans.binding.LongBinding;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import sokoban.model.Board;
+import sokoban.model.CellValue;
 import sokoban.model.Grid;
 
 

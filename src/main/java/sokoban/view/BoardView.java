@@ -15,6 +15,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import sokoban.model.CellValue;
 import sokoban.viewmodel.BoardViewModel;
 
 import java.io.File;

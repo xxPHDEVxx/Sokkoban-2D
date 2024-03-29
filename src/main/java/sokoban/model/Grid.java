@@ -12,11 +12,13 @@ import java.util.Arrays;
 public class Grid {
     private static int GRID_WIDTH = 15;
     private static int GRID_HEIGHT = 10;
+
     private final Cell[][] matrix;
     private LongBinding filledCellsCount;
 
 
     public Grid() {
+
         this(GRID_WIDTH, GRID_HEIGHT);
     }
 
@@ -55,5 +57,6 @@ public class Grid {
         return filledCellsCount;
     }
     public boolean isEmpty(int line, int col) {return matrix[line][col].isEmpty();}
+
 }
 
