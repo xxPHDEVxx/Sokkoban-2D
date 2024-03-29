@@ -18,11 +18,13 @@ public class CellView extends StackPane {
 //    private static ToolViewModel toolViewModel;
 
     private final DoubleBinding widthProperty;
+    private final DoubleBinding heightProperty;
 
     private ImageView imageView = new ImageView();
-    CellView(CellViewModel viewModel, DoubleBinding cellWidthProperty) {
+    CellView(CellViewModel viewModel, DoubleBinding cellWidthProperty, DoubleBinding cellHeightProperty) {
         this.viewModel = viewModel;
         this.widthProperty = cellWidthProperty;
+        this.heightProperty = cellHeightProperty;
         setAlignment(Pos.CENTER);
 
         configureBindings();
@@ -30,6 +32,8 @@ public class CellView extends StackPane {
     }
 
     private void configureBindings() {
+        minHeightProperty().bind(heightProperty);
+        minWidthProperty().bind(widthProperty);
         //image de base en fond
         imageView.setImage(groundImage);
         imageView.setPreserveRatio(true);
