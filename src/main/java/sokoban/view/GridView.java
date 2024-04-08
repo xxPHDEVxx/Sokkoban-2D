@@ -24,7 +24,7 @@ public class GridView extends GridPane {
         DoubleBinding cellWidth = gridWidth
                 .subtract(PADDING * 2)
                 .divide(GRID_WIDTH);
-        //taille de chaque cellule
+
         DoubleBinding cellHeight = gridHeight
                 .subtract(PADDING * 2)
                 .divide(GRID_HEIGHT);

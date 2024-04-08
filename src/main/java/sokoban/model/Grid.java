@@ -15,6 +15,9 @@ public class Grid {
 
     private final Cell[][] matrix;
     private LongBinding filledCellsCount;
+    private LongBinding boxCount;
+    private LongBinding playerCount;
+    private LongBinding goalCount;
 
 
     public Grid() {
@@ -33,6 +36,9 @@ public class Grid {
             }
         }
         setFilledCellsCount();
+        setBoxCellsCount();
+        setPlayerCount();
+        setGoalCount();
     }
 
     public void setFilledCellsCount() {
@@ -40,6 +46,27 @@ public class Grid {
                 .stream(matrix)
                 .flatMap(Arrays::stream)
                 .filter(cell -> !cell.isEmpty())
+                .count());
+    }
+    public void setBoxCellsCount() {
+        boxCount = Bindings.createLongBinding(() -> Arrays
+                .stream(matrix)
+                .flatMap(Arrays::stream)
+                .filter(cell -> cell.isBox())
+                .count());
+    }
+    public void setPlayerCount() {
+        playerCount = Bindings.createLongBinding(() -> Arrays
+                .stream(matrix)
+                .flatMap(Arrays::stream)
+                .filter(cell -> cell.isPlayer())
+                .count());
+    }
+    public void setGoalCount() {
+        goalCount = Bindings.createLongBinding(() -> Arrays
+                .stream(matrix)
+                .flatMap(Arrays::stream)
+                .filter(cell -> cell.isGoal())
                 .count());
     }
     public static int getGridWidth(){return GRID_WIDTH;}
@@ -55,6 +82,9 @@ public class Grid {
 
     public LongBinding filledCellsCountProperty() {
         return filledCellsCount;
+    }
+    public LongBinding boxCountProperty() {
+        return boxCount;
     }
     public boolean isEmpty(int line, int col) {return matrix[line][col].isEmpty();}
 

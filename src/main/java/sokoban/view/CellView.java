@@ -20,7 +20,6 @@ public class CellView extends StackPane {
     private static final Image wall = new Image("wall.png");
     private static final Image goal = new Image("goal.png");
     private final CellViewModel viewModel;
-
     private final DoubleBinding widthProperty;
     private final DoubleBinding heightProperty;
 
@@ -38,6 +37,7 @@ public class CellView extends StackPane {
     private void configureBindings() {
         minHeightProperty().bind(heightProperty);
         minWidthProperty().bind(widthProperty);
+
         //image de base en fond
         imageView.setImage(ground);
         imageView.setPreserveRatio(true);

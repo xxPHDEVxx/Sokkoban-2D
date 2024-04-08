@@ -9,5 +9,8 @@ public class Cell {
     CellValue getValue() {return value.getValue();}
     public void setValue(CellValue value) {this.value.setValue(value);}
     boolean isEmpty() {return value.get() == CellValue.GROUND;}
+    boolean isBox() {return value.get() == CellValue.BOX;}
+    boolean isPlayer() {return value.get() == CellValue.PLAYER;}
+    boolean isGoal() {return value.get() == CellValue.GOAL;}
     ReadOnlyObjectProperty<CellValue> valueProperty() {return value;}
 }

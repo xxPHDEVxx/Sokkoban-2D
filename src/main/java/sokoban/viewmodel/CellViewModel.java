@@ -1,6 +1,8 @@
 package sokoban.viewmodel;
 
 import javafx.beans.property.ReadOnlyObjectProperty;
+import javafx.beans.property.SetProperty;
+import javafx.beans.property.SetPropertyBase;
 import sokoban.model.Board;
 import sokoban.model.CellValue;
 
@@ -15,6 +17,7 @@ public class CellViewModel {
 
     public void play(){
         board.play(line, col);
+        board.validate();
     }
 
     public ReadOnlyObjectProperty<CellValue> valueProperty() {
@@ -34,4 +37,5 @@ public class CellViewModel {
     public int getCol() {
         return col;
     }
+
 }

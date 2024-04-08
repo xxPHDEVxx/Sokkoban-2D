@@ -5,6 +5,7 @@ import javafx.beans.binding.LongBinding;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.ObservableSet;
 import sokoban.viewmodel.ToolViewModel;
 
 import java.util.ArrayList;
@@ -16,10 +17,13 @@ public class Board {
     private static Grid grid = new Grid();
     private final BooleanBinding isFull;
 
+    //private final BooleanBinding CountOK;
+
     private SetProperty<String> errors = new SimpleSetProperty<>(FXCollections.observableSet());
 
     public Board(){
         isFull = grid.filledCellsCountProperty().isEqualTo(Board.MAX_FILLED_CELLS);
+        System.out.println(grid.boxCountProperty());
     }
 
     public static int maxFilledCells() {
@@ -30,6 +34,8 @@ public class Board {
 
     public void play(int line, int col){
         grid.play(line, col, grid.getValue(line, col) != (CellValue.GROUND) ? CellValue.GROUND : ToolViewModel.getToolSelected());
+        System.out.println(grid.boxCountProperty());
+
     }
 
     public Boolean isFull() {
@@ -87,8 +93,42 @@ public class Board {
         if (targetCount != boxCount){
             errors.add("- Number of box and target must be equals.");
         }
+        System.out.println(boxCount);
         return errors;
     }
+
+    public boolean validCount() {
+        int playerCount = 0;
+        int targetCount = 0;
+        int boxCount = 0;
+
+        int width = grid.getGridWidth();
+        int height = grid.getGridHeight();
+
+        for (int line = 0; line < height; line++) {
+            for (int col = 0; col < width; col++) {
+                CellValue value = grid.getValue(line, col);
+
+                switch (value) {
+                    case PLAYER -> playerCount++;
+                    case GOAL -> targetCount++;
+                    case BOX -> boxCount++;
+                    default -> {
+                    }
+                }
+            }
+        }
+
+
+        if (boxCount < 1) {
+            return true;
+        }
+
+        return false;
+
+
+    }
+
 
 
 
