@@ -4,12 +4,17 @@ import javafx.beans.binding.BooleanBinding;
 import javafx.beans.binding.LongBinding;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
+
+import java.io.FileNotFoundException;
+import java.util.Scanner;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableSet;
 import sokoban.viewmodel.ToolViewModel;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 
 public class Board {
@@ -96,7 +101,6 @@ public class Board {
         System.out.println(boxCount);
         return errors;
     }
-
     public boolean validCount() {
         int playerCount = 0;
         int targetCount = 0;
@@ -118,25 +122,55 @@ public class Board {
                 }
             }
         }
-
-
         if (boxCount < 1) {
             return true;
         }
 
         return false;
-
-
     }
-
-
-
-
     public static void setGrid(Grid newGrid) {
         grid = newGrid;
     }
 
     public Grid getGrid() {
         return grid;
+    }
+    public Board getBoard(){
+        return this;
+    }
+    public Grid open(File file){
+        try (Scanner scanner = new Scanner(file)) {
+            int row = 0;
+            while (scanner.hasNextLine()) {
+                String line = scanner.nextLine().trim();
+                if (!line.isEmpty()) {
+                    // Parcourir chaque caractère de la ligne
+                    for (int col = 0; col < line.length(); col++) {
+                        char symbol = line.charAt(col);
+                        // Convertir le caractère en CellValue et ajouter à la grille
+                        CellValue cellValue = convertSymbolToCellValue(symbol);
+                        grid.setValue(row, col, cellValue);
+                    }
+                    row++;
+                }
+            }
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        return grid;
+    }
+    private static CellValue convertSymbolToCellValue(char symbol) {
+        switch (symbol) {
+            case '#':
+                return CellValue.WALL;
+            case '.':
+                return CellValue.GOAL;
+            case '$':
+                return CellValue.BOX;
+            case '@':
+                return CellValue.PLAYER;
+            default:
+                return CellValue.GROUND;
+        }
     }
 }
