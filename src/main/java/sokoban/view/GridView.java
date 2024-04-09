@@ -15,6 +15,10 @@ public class GridView extends GridPane {
     private static final int PADDING = 20;
     private int GRID_WIDTH = BoardViewModel.gridWidth();
     private int GRID_HEIGHT = BoardViewModel.gridHeight();
+    //private static final int GRID_WIDTH = BoardViewModel.gridWidth();
+    //private static final int GRID_HEIGHT = BoardViewModel.gridHeight();
+    private GridViewModel gridViewModel;
+    private DoubleBinding cellWidth;
 
     GridView(GridViewModel gridViewModel, DoubleBinding gridWidth, DoubleBinding gridHeight) {
 

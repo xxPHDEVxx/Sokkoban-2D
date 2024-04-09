@@ -12,7 +12,6 @@ import java.util.Arrays;
 public class Grid {
     private static int GRID_WIDTH = 15;
     private static int GRID_HEIGHT = 10;
-
     private final Cell[][] matrix;
     private LongBinding filledCellsCount;
     private LongBinding boxCount;
@@ -21,7 +20,6 @@ public class Grid {
 
 
     public Grid() {
-
         this(GRID_WIDTH, GRID_HEIGHT);
     }
 
@@ -73,7 +71,6 @@ public class Grid {
 
     ReadOnlyObjectProperty<CellValue> valueProperty(int line, int col) {
         return matrix[line][col].valueProperty();    }
-    CellValue getValue(int line, int col) {return  matrix[line][col].getValue();}
     void play(int line, int col, CellValue playerValue) {
         matrix[line][col].setValue(playerValue);
         filledCellsCount.invalidate();
@@ -105,5 +102,26 @@ public class Grid {
 
     }
 
-}
+    public CellValue getValue ( int line, int col){
+        return matrix[line][col].getValue();
+    }
 
+    // Vérifie si la position (line, col) est valide dans la grille
+    private boolean isValidPosition ( int line, int col){
+        return line >= 0 && line < GRID_HEIGHT && col >= 0 && col < GRID_WIDTH;
+    }
+
+    public void placeTool ( int row, int col, CellValue tool){
+        if (isValidPosition(row, col)) {
+            matrix[row][col].setValue(tool);
+        }
+    }
+    public void setValue(int row, int col, CellValue value) {
+        if (isValidPosition(row, col)) {
+            matrix[row][col].getCell().setValue(value);
+        } else {
+            throw new IllegalArgumentException("Invalid row or column index");
+        }
+    }
+
+}

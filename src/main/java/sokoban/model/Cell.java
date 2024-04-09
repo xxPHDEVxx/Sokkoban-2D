@@ -13,4 +13,7 @@ public class Cell {
     boolean isPlayer() {return value.get() == CellValue.PLAYER;}
     boolean isGoal() {return value.get() == CellValue.GOAL;}
     ReadOnlyObjectProperty<CellValue> valueProperty() {return value;}
+    public Cell getCell(){
+        return this;
+    }
 }
