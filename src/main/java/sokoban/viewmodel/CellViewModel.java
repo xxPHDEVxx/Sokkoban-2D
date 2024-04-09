@@ -17,7 +17,6 @@ public class CellViewModel {
 
     public void play(){
         board.play(line, col);
-        board.validate();
     }
 
     public ReadOnlyObjectProperty<CellValue> valueProperty() {

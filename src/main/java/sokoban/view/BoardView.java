@@ -2,11 +2,9 @@ package sokoban.view;
 
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.DoubleBinding;
-import javafx.collections.ObservableSet;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -15,7 +13,6 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import sokoban.model.CellValue;
 import sokoban.viewmodel.BoardViewModel;
 
 import java.io.File;
@@ -26,11 +23,14 @@ public class BoardView extends BorderPane {
     private int GRID_WIDTH = BoardViewModel.gridWidth();
     private int GRID_HEIGHT = BoardViewModel.gridHeight();
 
-    private final Label headerLabel = new Label("");
-    private final Label headerLabel2 = new Label("");
+    private final Label cellCountLabel = new Label("");
+    private final Label errPlayer = new Label("- A player is required.");
+    private final Label errGoal = new Label("- At least one target is required.");
+    private final Label errBox = new Label("- At least one box is required.");
+    private final Label errCountBoxGoal = new Label("- Number of box and target must be equals.");
     private final VBox vbox = new VBox();
-    private final HBox headerBox = new HBox();
-    private final HBox headerBox2 = new HBox();
+    private final HBox boxCellCount = new HBox();
+    private final VBox boxRules = new VBox();
     private final ToolView ToolView = new ToolView();
     private final Menu fileMenu = new Menu("Fichier");
     private final MenuItem menuItemNew= new MenuItem("New...");
@@ -64,7 +64,6 @@ public class BoardView extends BorderPane {
         this.scene = scene;
 
 
-
     }
 
     private void configMainComponents(Stage stage){
@@ -77,22 +76,22 @@ public class BoardView extends BorderPane {
         DoubleBinding gridWidth = Bindings.createDoubleBinding(
                 () -> {
                     var size = Math.min(widthProperty().get() - ToolView.widthProperty().get(), heightProperty().get() -
-                            (headerBox.heightProperty().get() + headerBox2.heightProperty().get()));
+                            (boxCellCount.heightProperty().get() + boxRules.heightProperty().get()));
                     return Math.floor(size / GRID_WIDTH) * GRID_WIDTH;
                 },
                 scene.widthProperty(),
                 scene.heightProperty(),
-                headerBox.heightProperty());
+                boxCellCount.heightProperty());
 
         DoubleBinding gridHeight = Bindings.createDoubleBinding(
                 () -> {
-                    var size = Math.min(heightProperty().get() - (headerBox.heightProperty().get()+ headerBox2.heightProperty().get()) , widthProperty().get() -
+                    var size = Math.min(heightProperty().get() - (boxCellCount.heightProperty().get()+ boxRules.heightProperty().get()) , widthProperty().get() -
                             ToolView.widthProperty().get());
                     return Math.floor(size / GRID_HEIGHT) * GRID_HEIGHT;
                 },
                 scene.widthProperty(),
                 scene.heightProperty(),
-                headerBox.heightProperty());
+                boxCellCount.heightProperty());
         gridView = new GridView(boardViewModel.getGridViewModel(), gridWidth, gridHeight );
 
         // Définir la largeur et la hauteur de la grid en fonction de la largeur calculée
@@ -157,41 +156,55 @@ public class BoardView extends BorderPane {
     }
     public void createHeader(){
 
-        headerLabel.textProperty().bind(boardViewModel.filledCellsCountProperty()
+        cellCountLabel.textProperty().bind(boardViewModel.filledCellsCountProperty()
                 .asString("Number of filled cells: %d of " + boardViewModel.maxFilledCells()));
         Font font = Font.font("Verdana", FontWeight.BOLD, 20);
-        headerLabel.setFont(font);
+        cellCountLabel.setFont(font);
 
-        headerLabel2.textProperty().bind(Bindings.when(boardViewModel.errorsProperty().emptyProperty())
-                .then("")
-                .otherwise(
-                        Bindings.createStringBinding(() -> {
-                            StringBuilder errorsStringBuilder = new StringBuilder();
-                            ObservableSet<String> errorsList = boardViewModel.errorsProperty();
-                            for (String error : errorsList) {
-                                errorsStringBuilder.append(error).append("\n");
-                            }
-                            return "Please correct the following error(s): \n" + errorsStringBuilder ;
-                        })
-                )
-        );
+        //visible de base
+        errBox.setVisible(true);
+        errBox.setManaged(true);
 
+        errGoal.setVisible(true);
+        errGoal.setManaged(true);
 
+        errPlayer.setVisible(true);
+        errPlayer.setManaged(true);
+
+        errCountBoxGoal.setVisible(true);
+        errCountBoxGoal.setManaged(true);
 
     }
     public void insertHeader() {
-        headerLabel2.setTextFill(Color.RED);
-        headerLabel.getStyleClass().add("header");
-        headerBox.getChildren().add(headerLabel);
-        headerBox2.getChildren().add(headerLabel2);
-        headerBox.setAlignment(Pos.CENTER);
-        headerBox2.setAlignment(Pos.CENTER);
-        vbox.getChildren().add(headerBox);
-        vbox.getChildren().add(headerBox2);
-        headerBox.setMinHeight(10);
-        headerBox2.setMinHeight(70);
-        headerBox.setMinWidth(100);
-        headerBox2.setMinWidth(100);
+
+        //se 'supprime' et enleve son espace quand la condition est respecté
+        errBox.visibleProperty().bind(boardViewModel.boxCountProperty().lessThan(1));
+        errBox.managedProperty().bind(errBox.visibleProperty());
+
+        errGoal.visibleProperty().bind(boardViewModel.goalCountProperty().lessThan(1));
+        errGoal.managedProperty().bind(errGoal.visibleProperty());
+
+        errPlayer.visibleProperty().bind(boardViewModel.playerCountProperty().isNotEqualTo(1));
+        errPlayer.managedProperty().bind(errPlayer.visibleProperty());
+
+        errCountBoxGoal.visibleProperty().bind(boardViewModel.boxCountProperty().isNotEqualTo(boardViewModel.goalCountProperty()));
+        errCountBoxGoal.managedProperty().bind(errCountBoxGoal.visibleProperty());
+
+        //afficher en rouge
+        errBox.setTextFill(Color.RED);
+        errGoal.setTextFill(Color.RED);
+        errPlayer.setTextFill(Color.RED);
+        errCountBoxGoal.setTextFill(Color.RED);
+
+        cellCountLabel.getStyleClass().add("header");
+        boxCellCount.getChildren().add(cellCountLabel);
+        boxRules.getChildren().addAll(errBox, errGoal, errPlayer, errCountBoxGoal);
+        boxCellCount.setAlignment(Pos.CENTER);
+        boxRules.setAlignment(Pos.CENTER);
+        vbox.getChildren().add(boxCellCount);
+        vbox.getChildren().add(boxRules);
+        boxCellCount.setMinHeight(10);
+        boxCellCount.setMinWidth(100);
     }
 
 

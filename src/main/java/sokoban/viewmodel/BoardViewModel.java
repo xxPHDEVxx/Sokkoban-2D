@@ -1,10 +1,7 @@
 package sokoban.viewmodel;
 
 import javafx.beans.binding.LongBinding;
-import javafx.beans.property.*;
-import javafx.collections.FXCollections;
 import sokoban.model.Board;
-import sokoban.model.CellValue;
 import sokoban.model.Grid;
 
 
@@ -12,9 +9,6 @@ public class BoardViewModel {
     private final GridViewModel gridViewModel;
     private final Board board;
 
-    public SetProperty<String> errorsProperty() {
-        return board.validate();
-    }
 
     public BoardViewModel(Board board) {
         this.board = board;
@@ -27,6 +21,15 @@ public class BoardViewModel {
 
     public LongBinding filledCellsCountProperty() {
         return board.filledCellsCountProperty();
+    }
+    public LongBinding boxCountProperty() {
+        return board.boxCountProperty();
+    }
+    public LongBinding goalCountProperty() {
+        return board.goalCountProperty();
+    }
+    public LongBinding playerCountProperty() {
+        return board.playerCountProperty();
     }
 
     public static int maxFilledCells() {

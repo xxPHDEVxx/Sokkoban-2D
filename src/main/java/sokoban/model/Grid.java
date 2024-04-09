@@ -36,9 +36,8 @@ public class Grid {
             }
         }
         setFilledCellsCount();
-        setBoxCellsCount();
-        setPlayerCount();
-        setGoalCount();
+        countCell();
+
     }
 
     public void setFilledCellsCount() {
@@ -78,6 +77,11 @@ public class Grid {
     void play(int line, int col, CellValue playerValue) {
         matrix[line][col].setValue(playerValue);
         filledCellsCount.invalidate();
+        playerCount.invalidate();
+        goalCount.invalidate();
+        boxCount.invalidate();
+
+
     }
 
     public LongBinding filledCellsCountProperty() {
@@ -86,7 +90,20 @@ public class Grid {
     public LongBinding boxCountProperty() {
         return boxCount;
     }
+    public LongBinding goalCountProperty() {
+        return goalCount;
+    }
+    public LongBinding playerCountProperty() {
+        return playerCount;
+    }
+
     public boolean isEmpty(int line, int col) {return matrix[line][col].isEmpty();}
+    public void countCell () {
+        setBoxCellsCount();
+        setPlayerCount();
+        setGoalCount();
+
+    }
 
 }
 
