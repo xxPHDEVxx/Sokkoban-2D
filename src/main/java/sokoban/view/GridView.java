@@ -3,7 +3,8 @@ package sokoban.view;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.property.IntegerProperty;
 import javafx.geometry.Insets;
-import javafx.scene.layout.GridPane;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import sokoban.model.CellValue;
 import sokoban.model.Tool;
 import sokoban.viewmodel.BoardViewModel;
@@ -15,10 +16,6 @@ public class GridView extends GridPane {
     private static final int PADDING = 20;
     private int GRID_WIDTH = BoardViewModel.gridWidth();
     private int GRID_HEIGHT = BoardViewModel.gridHeight();
-    //private static final int GRID_WIDTH = BoardViewModel.gridWidth();
-    //private static final int GRID_HEIGHT = BoardViewModel.gridHeight();
-    private GridViewModel gridViewModel;
-    private DoubleBinding cellWidth;
 
     GridView(GridViewModel gridViewModel, DoubleBinding gridWidth, DoubleBinding gridHeight) {
 
@@ -31,7 +28,7 @@ public class GridView extends GridPane {
 
         DoubleBinding cellHeight = gridHeight
                 .subtract(PADDING * 2)
-                .divide(GRID_HEIGHT);
+                .divide(GRID_WIDTH);
 
         // Remplissage de la grille
         for (int i = 0; i < GRID_HEIGHT; ++i) {

@@ -24,6 +24,7 @@ public class CellView extends StackPane {
     private final DoubleBinding heightProperty;
 
     private ImageView imageView = new ImageView();
+    private ImageView topImageView = new ImageView();
     CellView(CellViewModel viewModel, DoubleBinding cellWidthProperty, DoubleBinding cellHeightProperty) {
         this.viewModel = viewModel;
         this.widthProperty = cellWidthProperty;
@@ -35,14 +36,15 @@ public class CellView extends StackPane {
     }
 
     private void configureBindings() {
-        minHeightProperty().bind(heightProperty);
-        minWidthProperty().bind(widthProperty);
 
+        minWidthProperty().bind(widthProperty);
+        minHeightProperty().bind(heightProperty);
         //image de base en fond
         imageView.setImage(ground);
         imageView.setPreserveRatio(true);
+        topImageView.setPreserveRatio(true);
 
-        getChildren().add(imageView);
+        getChildren().addAll(imageView, topImageView);
         //listener au clic
         setOnMouseClicked(event -> {
                     System.out.println(viewModel.valueProperty());
@@ -61,19 +63,25 @@ public class CellView extends StackPane {
 
     //changement d'image au click
     private void setImage(ImageView imageView, CellValue cellValue) {
-        Image image;
         if (cellValue == CellValue.WALL){
-            image = wall;
+            topImageView.setImage(null);
+            imageView.setImage(wall);
         } else if (cellValue == CellValue.BOX) {
-            image = box;
+            topImageView.setImage(null);
+            imageView.setImage(box);
         } else if (cellValue == CellValue.GOAL) {
-            image = goal;
+            topImageView.setImage(goal);
+            imageView.setImage(ground);
         } else if (cellValue == CellValue.PLAYER) {
-            image = player;
+            topImageView.setImage(player);
+            imageView.setImage(ground);
         } else {
-            image = ground;
+            topImageView.setImage(null);
+            imageView.setImage(ground);
         }
-        imageView.setImage(image);
+
+
+
     }
 
     //image grisé au moment du hover

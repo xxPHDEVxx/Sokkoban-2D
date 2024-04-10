@@ -26,9 +26,9 @@ public class BoardView extends BorderPane {
     private int GRID_HEIGHT = BoardViewModel.gridHeight();
 
     private final Label cellCountLabel = new Label("");
-    private final Label errPlayer = new Label("- A player is required.");
+    private final Label errPlayer = new Label("");
     private final Label errGoal = new Label("- At least one target is required.");
-    private final Label errBox = new Label("- At least one box is required.");
+    private final Label errBox = new Label("");
     private final Label errCountBoxGoal = new Label("- Number of box and target must be equals.");
     private final VBox vbox = new VBox();
     private final HBox boxCellCount = new HBox();
@@ -41,9 +41,8 @@ public class BoardView extends BorderPane {
     private final MenuItem menuItemExit = new MenuItem("Exit...");
     private static HBox boardGame = new HBox();
     private static final int SCENE_MIN_WIDTH = 1080;
-    private static final int SCENE_MIN_HEIGHT = 830;
+    private static final int SCENE_MIN_HEIGHT = 800;
     private static HBox box = new HBox();
-    private Stage primaryStage;
     private Scene scene;
     private GridView gridView;
 
@@ -105,8 +104,8 @@ public class BoardView extends BorderPane {
         gridView.minHeightProperty().bind(gridHeight);
 
 
-
         boardGame.setAlignment(Pos.CENTER);
+
         setCenter(gridView);
 
 
@@ -165,35 +164,30 @@ public class BoardView extends BorderPane {
         Font font = Font.font("Verdana", FontWeight.BOLD, 20);
         cellCountLabel.setFont(font);
 
-        //visible de base
-        errBox.setVisible(true);
-        errBox.setManaged(true);
 
-        errGoal.setVisible(true);
-        errGoal.setManaged(true);
+        errBox.textProperty().bind(Bindings.when(boardViewModel.boxCountProperty().greaterThan(0))
+                .then("")
+                .otherwise("At least one box is required."));
 
-        errPlayer.setVisible(true);
-        errPlayer.setManaged(true);
+        errGoal.textProperty().bind(Bindings.when(boardViewModel.goalCountProperty().greaterThan(0))
+                .then("")
+                .otherwise("At least one target is required."));
 
-        errCountBoxGoal.setVisible(true);
-        errCountBoxGoal.setManaged(true);
+        errPlayer.textProperty().bind(Bindings.when(boardViewModel.playerCountProperty().isEqualTo(1))
+                .then("")
+                .otherwise("A player is required."));
+
+
+
+        errCountBoxGoal.textProperty().bind(Bindings.when(boardViewModel.boxCountProperty().isEqualTo(boardViewModel.goalCountProperty()))
+                .then("")
+                .otherwise("The number of boxes and targets must be equal."));
+
 
 
     }
     public void insertHeader() {
 
-        //se 'supprime' et enleve son espace quand la condition est respecté
-        errBox.visibleProperty().bind(boardViewModel.boxCountProperty().lessThan(1));
-        errBox.managedProperty().bind(errBox.visibleProperty());
-
-        errGoal.visibleProperty().bind(boardViewModel.goalCountProperty().lessThan(1));
-        errGoal.managedProperty().bind(errGoal.visibleProperty());
-
-        errPlayer.visibleProperty().bind(boardViewModel.playerCountProperty().isNotEqualTo(1));
-        errPlayer.managedProperty().bind(errPlayer.visibleProperty());
-
-        errCountBoxGoal.visibleProperty().bind(boardViewModel.boxCountProperty().isNotEqualTo(boardViewModel.goalCountProperty()));
-        errCountBoxGoal.managedProperty().bind(errCountBoxGoal.visibleProperty());
 
         //afficher en rouge
         errBox.setTextFill(Color.RED);
