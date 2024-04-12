@@ -30,7 +30,7 @@ public class Grid {
         for (int i = 0; i < GRID_HEIGHT; ++i) {
             matrix[i] = new Cell[GRID_WIDTH];
             for (int j = 0; j < GRID_WIDTH; ++j) {
-                matrix[i][j] = new Cell();
+                matrix[i][j] = new Cell4Design();
             }
         }
         setFilledCellsCount();
