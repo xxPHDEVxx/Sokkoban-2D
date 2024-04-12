@@ -124,4 +124,10 @@ public class Grid {
         }
     }
 
+    public void resetBindings() {
+        setFilledCellsCount();
+        setBoxCellsCount();
+        setPlayerCount();
+        setGoalCount();
+    }
 }

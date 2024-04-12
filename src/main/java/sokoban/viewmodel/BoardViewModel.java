@@ -1,14 +1,12 @@
 package sokoban.viewmodel;
 
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.BooleanBinding;
 import javafx.beans.binding.LongBinding;
 import sokoban.model.Board;
 import sokoban.model.Grid;
 
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.Scanner;
 
 
 public class BoardViewModel {
@@ -37,6 +35,10 @@ public class BoardViewModel {
     public LongBinding playerCountProperty() {
         return board.playerCountProperty();
     }
+    public BooleanBinding rulesOKProperty() {
+        return board.getRulesOK();
+    }
+
 
     public static int maxFilledCells() {
         return Board.maxFilledCells();
@@ -65,5 +67,6 @@ public class BoardViewModel {
     public GridViewModel getGridVM(){
         return gridViewModel;
     }
+
 
 }

@@ -16,10 +16,10 @@ public class Board {
 
     private BooleanBinding countBoxOK;
     private BooleanBinding countPlayerOK;
-
     private BooleanBinding countGoalOK;
     private BooleanBinding countGoalBoxOK;
 
+    private static BooleanBinding rulesOK;
 
     public Board(){
         isFull = grid.filledCellsCountProperty().isEqualTo(Board.MAX_FILLED_CELLS);
@@ -34,7 +34,7 @@ public class Board {
 
     public void play(int line, int col){
         grid.play(line, col, grid.getValue(line, col) != (CellValue.GROUND) ? CellValue.GROUND : ToolViewModel.getToolSelected());
-
+        System.out.println(rulesOK);
     }
 
     public Boolean isFull() {
@@ -61,20 +61,24 @@ public class Board {
     }
     public boolean isEmpty(int line, int col) {
         return grid.isEmpty(line, col);
-        //appelation cohérente? car ground n'est pas vide
     }
 
     public void configureBindings() {
-        countBoxOK = grid.boxCountProperty().greaterThan(1);
-        countGoalOK= grid.goalCountProperty().greaterThan(1);
-        countPlayerOK = grid.playerCountProperty().greaterThan(1);
-        countGoalBoxOK = grid.boxCountProperty().isEqualTo(grid.goalCountProperty());
+        countBoxOK = boxCountProperty().greaterThan(0);
+        countGoalOK = goalCountProperty().greaterThan(0);
+        countPlayerOK = playerCountProperty().isEqualTo(1);
+        countGoalBoxOK = boxCountProperty().isEqualTo(goalCountProperty());
 
-
+        rulesOK = countBoxOK.and(countGoalOK).and(countPlayerOK).and(countGoalBoxOK);
+    }
+    public BooleanBinding getRulesOK() {
+        return rulesOK;
     }
 
     public static void setGrid(Grid newGrid) {
         grid = newGrid;
+        grid.resetBindings();
+
     }
 
     public Grid getGrid() {
@@ -118,4 +122,7 @@ public class Board {
                 return CellValue.GROUND;
         }
     }
+
+
+
 }

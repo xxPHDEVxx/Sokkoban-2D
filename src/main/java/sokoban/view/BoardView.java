@@ -1,7 +1,9 @@
 package sokoban.view;
 
 import javafx.beans.binding.Bindings;
+import javafx.beans.binding.BooleanBinding;
 import javafx.beans.binding.DoubleBinding;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -45,6 +47,7 @@ public class BoardView extends BorderPane {
     private static HBox box = new HBox();
     private Scene scene;
     private GridView gridView;
+    private Button btnPlay = new Button("Play");
 
     public BoardView(Stage primaryStage, BoardViewModel boardViewModel) {
         this.boardViewModel = boardViewModel;
@@ -60,7 +63,12 @@ public class BoardView extends BorderPane {
 
         createGrid(scene);
         vbox.getChildren().add(boardGame);
-        //integration de la grid dans la vue mais pas sur de la facon de faire
+        //integration du bouton play
+        HBox boxBtn = new HBox();
+        boxBtn.setAlignment(Pos.CENTER);
+        boxBtn.setPadding(new Insets(10));
+        boxBtn.getChildren().add(btnPlay);
+        vbox.getChildren().add(boxBtn);
 
         stage.setScene(scene);
         stage.show();
@@ -74,7 +82,10 @@ public class BoardView extends BorderPane {
         createMenuBar(stage);
         createHeader();
         insertHeader();
+
+
     }
+
 
     public void createGrid(Scene scene) {
         DoubleBinding gridWidth = Bindings.createDoubleBinding(
@@ -99,7 +110,6 @@ public class BoardView extends BorderPane {
         gridView = new GridView(boardViewModel.getGridViewModel(), gridWidth, gridHeight );
 
         // Définir la largeur et la hauteur de la grid en fonction de la largeur calculée
-        // Lier la largeur et la hauteur de la grid à la largeur calculée
         gridView.minWidthProperty().bind(gridWidth);
         gridView.minHeightProperty().bind(gridHeight);
 
@@ -202,12 +212,12 @@ public class BoardView extends BorderPane {
         boxRules.setAlignment(Pos.CENTER);
         vbox.getChildren().add(boxCellCount);
         vbox.getChildren().add(boxRules);
-        boxCellCount.setMinHeight(10);
         boxCellCount.setMinWidth(100);
     }
     public void refresh(){
         createGrid(scene);
         createHeader();
         box.setAlignment(Pos.CENTER);
+
     }
 }

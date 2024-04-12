@@ -43,12 +43,11 @@ public class CellView extends StackPane {
         imageView.setImage(ground);
         imageView.setPreserveRatio(true);
         topImageView.setPreserveRatio(true);
+        topImageView.fitHeightProperty().bind(heightProperty);
+        topImageView.fitWidthProperty().bind(widthProperty);
+
 
         getChildren().addAll(imageView, topImageView);
-        //listener au clic
-        setOnMouseClicked(event -> {
-                    System.out.println(viewModel.valueProperty());
-                });
 
         // un clic sur la cellule permet de jouer celle-ci
         this.setOnMouseClicked(e -> viewModel.play());
@@ -79,7 +78,6 @@ public class CellView extends StackPane {
             topImageView.setImage(null);
             imageView.setImage(ground);
         }
-
 
 
     }
