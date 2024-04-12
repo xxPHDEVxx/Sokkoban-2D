@@ -4,16 +4,14 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 
-public class Cell {
+public abstract class Cell {
     private final ObjectProperty<CellValue> value = new SimpleObjectProperty<>(CellValue.GROUND);
-    CellValue getValue() {return value.getValue();}
-    public void setValue(CellValue value) {this.value.setValue(value);}
-    boolean isEmpty() {return value.get() == CellValue.GROUND;}
-    boolean isBox() {return value.get() == CellValue.BOX;}
-    boolean isPlayer() {return value.get() == CellValue.PLAYER;}
-    boolean isGoal() {return value.get() == CellValue.GOAL;}
-    ReadOnlyObjectProperty<CellValue> valueProperty() {return value;}
-    public Cell getCell(){
-        return this;
-    }
+    abstract CellValue getValue();
+    public abstract void setValue(CellValue value);
+    abstract boolean isEmpty();
+    abstract boolean isBox();
+    abstract boolean isPlayer();
+    abstract boolean isGoal();
+    abstract ReadOnlyObjectProperty<CellValue> valueProperty();
+    public abstract Cell getCell();
 }
