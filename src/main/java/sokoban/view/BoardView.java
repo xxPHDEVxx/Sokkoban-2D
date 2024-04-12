@@ -194,6 +194,7 @@ public class BoardView extends BorderPane {
                 .otherwise("The number of boxes and targets must be equal."));
 
 
+        btnPlay.disableProperty().bind(boardViewModel.rulesOKProperty().not());;
 
     }
     public void insertHeader() {
@@ -218,6 +219,7 @@ public class BoardView extends BorderPane {
         createGrid(scene);
         createHeader();
         box.setAlignment(Pos.CENTER);
+        btnPlay.disableProperty().bind(boardViewModel.rulesOKProperty().not());;
 
     }
 }

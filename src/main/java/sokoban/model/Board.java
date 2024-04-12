@@ -14,12 +14,12 @@ public class Board {
     private static Grid grid = new Grid();
     private final BooleanBinding isFull;
 
-    private BooleanBinding countBoxOK;
-    private BooleanBinding countPlayerOK;
-    private BooleanBinding countGoalOK;
-    private BooleanBinding countGoalBoxOK;
+    private  BooleanBinding countBoxOK;
+    private  BooleanBinding countPlayerOK;
+    private  BooleanBinding countGoalOK;
+    private  BooleanBinding countGoalBoxOK;
 
-    private static BooleanBinding rulesOK;
+    private BooleanBinding rulesOK;
 
     public Board(){
         isFull = grid.filledCellsCountProperty().isEqualTo(Board.MAX_FILLED_CELLS);
@@ -34,7 +34,6 @@ public class Board {
 
     public void play(int line, int col){
         grid.play(line, col, grid.getValue(line, col) != (CellValue.GROUND) ? CellValue.GROUND : ToolViewModel.getToolSelected());
-        System.out.println(rulesOK);
     }
 
     public Boolean isFull() {
@@ -49,7 +48,7 @@ public class Board {
         return grid.filledCellsCountProperty();
     }
 
-    public LongBinding boxCountProperty() {
+    public static LongBinding boxCountProperty() {
         return grid.boxCountProperty();
     }
     public LongBinding goalCountProperty() {
@@ -77,10 +76,7 @@ public class Board {
 
     public static void setGrid(Grid newGrid) {
         grid = newGrid;
-        grid.resetBindings();
-
     }
-
     public Grid getGrid() {
         return grid;
     }
@@ -106,6 +102,7 @@ public class Board {
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
+        configureBindings();
         return grid;
     }
     private static CellValue convertSymbolToCellValue(char symbol) {
