@@ -48,11 +48,15 @@ public class BoardView extends BorderPane {
     private Scene scene;
     private GridView gridView;
     private Button btnPlay = new Button("Play");
+    private Stage primaryStage;
 
     public BoardView(Stage primaryStage, BoardViewModel boardViewModel) {
+        this.primaryStage = primaryStage;
         this.boardViewModel = boardViewModel;
-        start(primaryStage);
+        start(this.primaryStage);
     }
+
+
     public void start(Stage stage){
         configMainComponents(stage);
 
@@ -83,7 +87,7 @@ public class BoardView extends BorderPane {
         createHeader();
         insertHeader();
 
-
+        actionBtnPlay();
     }
 
 
@@ -117,8 +121,6 @@ public class BoardView extends BorderPane {
         boardGame.setAlignment(Pos.CENTER);
 
         setCenter(gridView);
-
-
 
 
     }
@@ -220,6 +222,28 @@ public class BoardView extends BorderPane {
         createHeader();
         box.setAlignment(Pos.CENTER);
         btnPlay.disableProperty().bind(boardViewModel.rulesOKProperty().not());;
+
+    }
+
+    public void actionBtnPlay() {
+        btnPlay.setOnAction(action -> {
+
+            playGame();
+        });
+    }
+
+    //partie jeu
+    public void playGame() {
+        if (boardViewModel.rulesOKProperty().get()) {
+            Stage playStage = new Stage();
+            playStage.setTitle("Sokoban");
+            primaryStage.close();
+            startGame(playStage);
+        }
+    }
+
+    private void startGame(Stage playStage) {
+        new BoardView4play(playStage, gridView, boardViewModel);
 
     }
 }

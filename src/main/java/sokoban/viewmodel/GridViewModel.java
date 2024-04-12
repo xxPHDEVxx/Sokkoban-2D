@@ -34,4 +34,8 @@ public class GridViewModel {
         Grid grid = board.getGrid();
         return grid;
     }
+
+    public String getMove() {
+        return "board.getMove()";
+    }
 }

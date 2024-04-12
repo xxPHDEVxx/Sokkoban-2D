@@ -3,6 +3,7 @@ package sokoban.viewmodel;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.binding.LongBinding;
+import javafx.beans.value.ObservableValue;
 import sokoban.model.Board;
 import sokoban.model.Grid;
 
@@ -13,6 +14,7 @@ public class BoardViewModel {
     private final GridViewModel gridViewModel;
     private final Board board;
 
+    private static int countMove = 0;
 
     public BoardViewModel(Board board) {
         this.board = board;
@@ -67,6 +69,7 @@ public class BoardViewModel {
     public GridViewModel getGridVM(){
         return gridViewModel;
     }
+
 
 
 }
