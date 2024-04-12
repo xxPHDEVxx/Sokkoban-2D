@@ -2,16 +2,18 @@ package sokoban.view;
 
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.value.ObservableValue;
-import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.TransferMode;
 import javafx.scene.layout.StackPane;
-import sokoban.model.Cell;
+
+
 import sokoban.model.CellValue;
 import sokoban.viewmodel.CellViewModel;
+import sokoban.viewmodel.ToolViewModel;
 
 public class CellView extends StackPane {
     private static final Image player = new Image("player.png");
@@ -45,7 +47,38 @@ public class CellView extends StackPane {
                 });
 
         // un clic sur la cellule permet de jouer celle-ci
-        this.setOnMouseClicked(e -> viewModel.play());
+        this.setOnMouseClicked(e -> {
+            if (ToolViewModel.getToolSelected() != null && !viewModel.getBoard().isFull()) {
+                viewModel.play();
+            } else if (viewModel.getBoard().isFull()) {
+                System.out.println("Nombre maximal d'outils atteint sur la grille.");
+            } else {
+                System.out.println("Aucun outil n'est sélectionné, action ignorée.");
+            }
+        });
+
+        //dragAndDrop
+        this.setOnDragOver(event -> {
+            if (event.getGestureSource() != this && event.getDragboard().hasString()) {
+                event.acceptTransferModes(TransferMode.MOVE);
+            }
+            event.consume();
+        });
+
+        this.setOnDragDropped(event -> {
+            Dragboard db = event.getDragboard();
+            boolean success = false;
+            if (db.hasString()) {
+                if (!viewModel.getBoard().isFull()) {
+                    viewModel.play();
+                    setImage(imageView, ToolViewModel.getToolSelected()); // Hypothétique, à adapter
+                    success = true;
+                }
+            }
+            event.setDropCompleted(success);
+            event.consume();
+        });
+
 
         // quand la cellule change de valeur, adapter l'image affichée
         viewModel.valueProperty().addListener((obs, old, newVal) -> setImage(imageView, newVal));

@@ -8,6 +8,9 @@ import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.TransferMode;
 import javafx.scene.layout.FlowPane;
 import sokoban.model.Tool;
 import sokoban.viewmodel.ToolViewModel;
@@ -40,6 +43,12 @@ public class ToolView extends FlowPane {
         addHoverHandler(wallView);
         addHoverHandler(goalView);
 
+        dragAndRoll(playerView);
+        dragAndRoll(boxView);
+        dragAndRoll(groundView);
+        dragAndRoll(wallView);
+        dragAndRoll(goalView);
+
         setToolEventHandlers(playerView);
         setToolEventHandlers(boxView);
         setToolEventHandlers(groundView);
@@ -58,6 +67,18 @@ public class ToolView extends FlowPane {
     private void addHoverHandler(ImageView imageView) {
         imageView.setOnMouseEntered(event -> imageView.setOpacity(0.7)); // Réduire l'opacité de l'image lors du survol
         imageView.setOnMouseExited(event -> imageView.setOpacity(1.0)); // Rétablir l'opacité normale lorsque la souris quitte l'image
+    }
+
+    private void dragAndRoll(ImageView imageView){
+        imageView.setOnDragDetected(event -> {
+            ToolViewModel.setToolSelected(determineToolFromImageView(imageView));
+            Dragboard db = imageView.startDragAndDrop(TransferMode.MOVE);
+            ClipboardContent content = new ClipboardContent();
+            content.putString("tool");
+            db.setContent(content);
+            event.consume();
+        });
+
     }
 
     private void setToolEventHandlers(ImageView imageView) {
