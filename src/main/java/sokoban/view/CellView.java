@@ -53,6 +53,11 @@ public class CellView extends StackPane {
 
         // un clic sur la cellule permet de jouer celle-ci
         this.setOnMouseClicked(e -> {
+            if (ToolViewModel.getToolSelected() == CellValue.PLAYER && viewModel.getBoard().isPlayerPlaced()) {
+                System.out.println("Un joueur est déjà placé sur la grille.");
+                ToolViewModel.setToolSelected(CellValue.GROUND);
+                return;
+            }
             if (ToolViewModel.getToolSelected() != null && !viewModel.getBoard().isFull()) {
                 viewModel.play();
             } else if (viewModel.getBoard().isFull()) {
@@ -74,6 +79,13 @@ public class CellView extends StackPane {
             Dragboard db = event.getDragboard();
             boolean success = false;
             if (db.hasString()) {
+                if (ToolViewModel.getToolSelected() == CellValue.PLAYER && viewModel.getBoard().isPlayerPlaced()) {
+                    System.out.println("Un joueur est déjà placé sur la grille.");
+                    ToolViewModel.setToolSelected(CellValue.GROUND);
+                    event.setDropCompleted(false);
+                    event.consume();
+                    return;
+                }
                 if (!viewModel.getBoard().isFull()) {
                     viewModel.play();
                     success = true;

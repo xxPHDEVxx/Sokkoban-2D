@@ -119,5 +119,8 @@ public class Board {
                 return CellValue.GROUND;
         }
     }
-
-}
+    // Check le nombre de joueur sur la grille
+    public boolean isPlayerPlaced() {
+        return grid.playerCountProperty().get() > 0;
+    }
+    }
