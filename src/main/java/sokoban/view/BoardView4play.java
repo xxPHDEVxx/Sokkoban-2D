@@ -9,7 +9,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import sokoban.viewmodel.BoardViewModel;
 
-public class BoardView4play   {
+public class BoardView4play extends BoardView  {
     private GridView gridView;
     private BoardViewModel boardViewModel;
     private Label title = new Label("Score");
@@ -23,8 +23,8 @@ public class BoardView4play   {
     private static final int SCENE_MIN_HEIGHT = 800;
 
     public BoardView4play(Stage playStage, GridView gridView, BoardViewModel boardViewModel) {
+        super(playStage, boardViewModel);
         this.gridView = gridView;
-        this.boardViewModel = boardViewModel;
         playStage.setScene(gridView.getScene());
         playStage.show();
         initialize();

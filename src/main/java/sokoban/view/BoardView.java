@@ -21,7 +21,7 @@ import sokoban.viewmodel.GridViewModel;
 
 import java.io.File;
 
-public class BoardView extends BorderPane {
+public abstract class BoardView extends BorderPane {
 
     private final BoardViewModel boardViewModel;
     private int GRID_WIDTH = BoardViewModel.gridWidth();
