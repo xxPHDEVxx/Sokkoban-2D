@@ -72,7 +72,7 @@ public class BoardViewModel {
 
     // Déplacements joueur
 
-    // à modifier pour permettre la superposition avec une cible
+    // Commentaires dispo pour suivi car longue méthode
     public boolean movePlayer(Direction direction) {
         CellViewModel playerCell = findPlayerCell();
         if (playerCell == null) {
@@ -82,27 +82,53 @@ public class BoardViewModel {
 
         int newRow = playerCell.getLine() + direction.getDeltaRow();
         int newCol = playerCell.getCol() + direction.getDeltaCol();
-        System.out.println("Trying to move to: " + newRow + ", " + newCol);
 
-        if (canMove(playerCell, newRow, newCol)) {
-            System.out.println("Move valid, proceeding.");
-
-            if (board.getGrid().getValue(newRow, newCol) == CellValue.BOX)
-                board.getGrid().setValue(newRow + direction.getDeltaRow(), newCol + direction.getDeltaCol(), CellValue.BOX);
-
-            // Clear the previous player position
-            board.getGrid().setValue(playerCell.getLine(), playerCell.getCol(), CellValue.GROUND);
-
-            // Move the player to the new position
-            board.getGrid().setValue(newRow, newCol, CellValue.PLAYER);
-
-            updateMoveCount();
-            return true;
-        } else {
-            System.out.println("Move invalid.");
+        if (!board.getGrid().isValidPosition(newRow, newCol)) {
+            System.out.println("Move invalid: Position is out of bounds.");
+            return false;
         }
-        return false;
+
+        CellValue targetCellValue = board.getGrid().getValue(newRow, newCol);
+        if (targetCellValue == CellValue.WALL) {
+            System.out.println("Move invalid: Wall is blocking the way.");
+            return false;
+        }
+
+        // Check if the movement is to push a box
+        if (targetCellValue == CellValue.BOX || targetCellValue == CellValue.BOX_ON_GOAL) {
+            int nextRow = newRow + direction.getDeltaRow();
+            int nextCol = newCol + direction.getDeltaCol();
+            if (!canPushBox(targetCellValue, newRow, newCol, nextRow, nextCol)) {
+                System.out.println("Move invalid: Cannot push the box.");
+                return false;
+            }
+            // Move the box
+            board.getGrid().setValue(newRow, newCol, (targetCellValue == CellValue.BOX_ON_GOAL) ? CellValue.GOAL : CellValue.GROUND);
+            board.getGrid().setValue(nextRow, nextCol, (board.getGrid().getValue(nextRow, nextCol) == CellValue.GOAL) ? CellValue.BOX_ON_GOAL : CellValue.BOX);
+        }
+
+        // Move the player to the new position
+        CellValue newPlayerCellState = board.getGrid().getValue(newRow, newCol);
+        board.getGrid().setValue(newRow, newCol, (newPlayerCellState == CellValue.GOAL) ? CellValue.PLAYER_ON_GOAL : CellValue.PLAYER);
+
+        // Restore the original player cell
+        CellValue originalPlayerCellState = board.getGrid().getValue(playerCell.getLine(), playerCell.getCol());
+        board.getGrid().setValue(playerCell.getLine(), playerCell.getCol(), (originalPlayerCellState == CellValue.PLAYER_ON_GOAL) ? CellValue.GOAL : CellValue.GROUND);
+
+        updateMoveCount();
+        return true;
     }
+
+    private boolean canPushBox(CellValue boxState, int boxRow, int boxCol, int targetRow, int targetCol) {
+        if (!board.getGrid().isValidPosition(targetRow, targetCol)) {
+            return false;
+        }
+        CellValue targetCellState = board.getGrid().getValue(targetRow, targetCol);
+        return (targetCellState == CellValue.GROUND || targetCellState == CellValue.GOAL);
+    }
+
+
+
 
     private boolean canMove(CellViewModel currentCell, int newRow, int newCol) {
         if (!board.getGrid().isValidPosition(newRow, newCol)) return false;
@@ -127,13 +153,14 @@ public class BoardViewModel {
         for (int row = 0; row < gridHeight(); row++) {
             for (int col = 0; col < gridWidth(); col++) {
                 CellViewModel cell = gridViewModel.getCellViewModel(row, col);
-                if (cell.getCellValue().get() == CellValue.PLAYER) {
+                if (cell.getCellValue().get() == CellValue.PLAYER || cell.getCellValue().get() == CellValue.PLAYER_ON_GOAL) {
                     return cell;
                 }
             }
         }
         return null;
     }
+
 
     public boolean checkPush(CellViewModel currentCell, int newRow, int newCol) {
         // Calculer la position cible pour la boîte après le push
