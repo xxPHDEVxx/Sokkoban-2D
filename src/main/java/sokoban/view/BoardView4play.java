@@ -1,5 +1,6 @@
 package sokoban.view;
 
+import javafx.beans.binding.Bindings;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -8,6 +9,8 @@ import javafx.scene.control.Label;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import sokoban.model.Direction;
 import sokoban.viewmodel.BoardViewModel;
@@ -15,10 +18,10 @@ import sokoban.viewmodel.BoardViewModel;
 public class BoardView4play extends BoardView  {
     private GridView gridView;
     private Label title = new Label("Score");
-    private Label move = new Label("Number of moves played");
+    private Label numberOfMovesPlayed = new Label("Number of moves played");
     private Label goal = new Label("Number of goals reached");
     private HBox level = new HBox();
-    private VBox header = new VBox();
+    private VBox headerPlay = new VBox();
     private VBox boardLvl = new VBox();
     private Button button = new Button("Finish");
     private static final int SCENE_MIN_WIDTH = 1080;
@@ -30,12 +33,11 @@ public class BoardView4play extends BoardView  {
         super(playStage, boardViewModel);
         this.gridView = gridView;
         this.playStage = playStage;
-        this.primaryStage = BoardView.getPrimaryStage();
         playStage.setScene(gridView.getScene());
         playStage.show();
         initialize();
         configureScene(playStage);
-        createHeader();
+        createHeaderPlay();
         actionBtnFinish(boardViewModel);
 
     }
@@ -43,8 +45,10 @@ public class BoardView4play extends BoardView  {
     public void initialize() {
         playStage.setTitle("jeu");
         //style
-        header.getStyleClass().add("header");
-        header.setAlignment(Pos.CENTER);
+        headerPlay.getStyleClass().add("header");
+        Font font = Font.font("Verdana", FontWeight.BOLD, 20);
+        title.setFont(font);
+        headerPlay.setAlignment(Pos.CENTER);
 
         // box button
         HBox boxBtn = new HBox();
@@ -55,8 +59,9 @@ public class BoardView4play extends BoardView  {
         level.getChildren().add(gridView);
         level.setAlignment(Pos.CENTER);
         gridView.setAlignment(Pos.CENTER);
-        header.getChildren().addAll(title, move, goal);
-        boardLvl.getChildren().addAll(header, level, boxBtn);
+        headerPlay.getChildren().addAll(title, numberOfMovesPlayed, goal);
+        boardLvl.getChildren().addAll(headerPlay, level, boxBtn);
+        boardLvl.setAlignment(Pos.CENTER);
 
     }
 
@@ -103,15 +108,18 @@ public class BoardView4play extends BoardView  {
                 ((CellView) child).refresh();
             }
         }
+
     }
 
 
 
-    public void createHeader() {
-        //move.textProperty().bind();
+    public void createHeaderPlay() {
+        //bind move
+        numberOfMovesPlayed.textProperty().bind(Bindings.concat("Number of moves played : ",boardViewModel.moveCountProperty().asString()));
         //goal.textProperty().bind();
     }
 
+    //bouton finish a refaire
     public void actionBtnFinish(BoardViewModel bordvm) {
         button.setOnAction(action -> {
             playStage.close();

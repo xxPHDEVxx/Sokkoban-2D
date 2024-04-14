@@ -13,7 +13,4 @@ public abstract class Cell {
     abstract boolean isGoal();
     abstract ReadOnlyObjectProperty<CellValue> valueProperty();
     public abstract Cell getCell();
-
-
-
 }

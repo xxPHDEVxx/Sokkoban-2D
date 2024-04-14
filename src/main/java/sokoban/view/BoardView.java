@@ -24,7 +24,7 @@ import java.io.File;
 
 public abstract class BoardView extends BorderPane {
 
-    protected final BoardViewModel boardViewModel;
+    protected BoardViewModel boardViewModel;
     private int GRID_WIDTH = BoardViewModel.gridWidth();
     private int GRID_HEIGHT = BoardViewModel.gridHeight();
 

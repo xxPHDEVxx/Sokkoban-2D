@@ -125,4 +125,5 @@ public class Board {
     public boolean isPlayerPlaced() {
         return grid.playerCountProperty().get() > 0;
     }
+
 }

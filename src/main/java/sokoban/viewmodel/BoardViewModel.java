@@ -1,9 +1,9 @@
 package sokoban.viewmodel;
 
+import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.binding.LongBinding;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.*;
 import sokoban.model.Board;
 import sokoban.model.Direction;
 import sokoban.model.Grid;
@@ -14,9 +14,8 @@ import java.io.File;
 public class BoardViewModel {
     private final GridViewModel gridViewModel;
     private final Board board;
-
-    private static int countMove = 0;
-
+    private static BooleanProperty isChanged = new SimpleBooleanProperty(false);
+    private final LongProperty moveCount = new SimpleLongProperty(0);
     public BoardViewModel(Board board) {
         this.board = board;
         gridViewModel = new GridViewModel(board);
@@ -57,7 +56,6 @@ public class BoardViewModel {
     public static void newGridMenu(int width, int height){
         Board.setGrid(new Grid(width, height));
     }
-    private static BooleanProperty isChanged = new SimpleBooleanProperty(false);
     public Grid openBoard(File file){
         Grid grid = board.open(file);
         return grid;
@@ -105,7 +103,8 @@ public class BoardViewModel {
             // Move the player to the new position
             board.getGrid().setValue(newRow, newCol, CellValue.PLAYER);
 
-            updateMoveCount();
+            incrementMoveCount();
+
             return true;
         } else {
             System.out.println("Move invalid.");
@@ -128,8 +127,12 @@ public class BoardViewModel {
         }
     }
 
-    private void updateMoveCount() {
-        countMove++;
+    public void incrementMoveCount() {
+        moveCount.set(moveCount.get() + 1); // Incrémentez la propriété moveCount de 1
+    }
+
+    public LongProperty moveCountProperty() {
+        return moveCount;
     }
 
     private CellViewModel findPlayerCell() {
@@ -160,7 +163,6 @@ public class BoardViewModel {
         // La boîte peut être poussée si la cellule cible est GROUND ou GOAL
         return targetCellValue == CellValue.GROUND || targetCellValue == CellValue.GOAL;
     }
-    public Board getBoard(){
-        return board;
-    }
+    //compteur de mouvement
+
 }

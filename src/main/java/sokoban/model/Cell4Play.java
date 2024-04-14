@@ -16,4 +16,5 @@ public class Cell4Play extends Cell{
     public Cell getCell(){
         return this;
     }
+
 }
