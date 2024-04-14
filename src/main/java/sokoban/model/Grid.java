@@ -107,7 +107,7 @@ public class Grid {
     }
 
     // Vérifie si la position (line, col) est valide dans la grille
-    private boolean isValidPosition ( int line, int col){
+    public boolean isValidPosition ( int line, int col){
         return line >= 0 && line < GRID_HEIGHT && col >= 0 && col < GRID_WIDTH;
     }
 
@@ -123,6 +123,5 @@ public class Grid {
             throw new IllegalArgumentException("Invalid row or column index");
         }
     }
-
 
 }

@@ -15,6 +15,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import sokoban.model.Direction;
 import sokoban.model.Grid;
 import sokoban.viewmodel.BoardViewModel;
 import sokoban.viewmodel.GridViewModel;
@@ -23,7 +24,7 @@ import java.io.File;
 
 public abstract class BoardView extends BorderPane {
 
-    private final BoardViewModel boardViewModel;
+    protected final BoardViewModel boardViewModel;
     private int GRID_WIDTH = BoardViewModel.gridWidth();
     private int GRID_HEIGHT = BoardViewModel.gridHeight();
 
@@ -244,6 +245,5 @@ public abstract class BoardView extends BorderPane {
 
     private void startGame(Stage playStage) {
         new BoardView4play(playStage, gridView, boardViewModel);
-
     }
 }
