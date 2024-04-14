@@ -151,6 +151,10 @@ public class Board {
                 return CellValue.BOX;
             case '@':
                 return CellValue.PLAYER;
+            case '*':
+                return CellValue.BOX_ON_GOAL;
+            case '+':
+                return CellValue.PLAYER_ON_GOAL;
             default:
                 return CellValue.GROUND;
         }

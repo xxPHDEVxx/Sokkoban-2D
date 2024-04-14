@@ -1,0 +1,42 @@
+@startuml
+
+skinparam Shadowing false               /' Désactive l'effet d'ombre sur les éléments '/
+skinparam classAttributeIconSize 0      /' Taille des icônes d'attribut de classe (ici 0 pour les cacher) '/
+skinparam defaultFontName Consolas      /' Utilisation de la police Consolas par défaut '/
+!pragma useIntermediatePackages false   /' Désactive l'utilisation de packages intermédiaires '/
+
+class javafx.scene.layout.BorderPane { }
+class javafx.scene.layout.FlowPane { }
+class javafx.scene.layout.GridPane { }
+
+class Model.Board{}
+enum Model.Direction{}
+enum Model.CellValue{}
+class Model.Grid{}
+abstract class Model.Cell{}
+class Model.Cell4Design{}
+class Model.Cell4Play{}
+
+abstract class View.BoardView {}
+class View.BoardView4Design{}
+class View.BoardView4Play{}
+class View.CellView{}
+class View.GridView{}
+class View.NewGridView{}
+class View.SaveConfirm{}
+class View.ToolView{}
+
+class ViewModel.BoardViewModel {}
+class ViewModel.CellViewModel {}
+class ViewModel.GridViewModel {}
+class ViewModel.ToolViewModel {}
+
+Cell <|.. Cell4Design
+Cell <|.. Cell4Play
+BoardView <|.. BoardView4Design
+BoardView <|.. BoardView4Play
+
+Board "1" *-- "1" Grid: IsComposedBy
+Grid "100" *-- "2500" Cell : contains
+
+@enduml
