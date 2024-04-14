@@ -122,6 +122,7 @@ public class BoardViewModel {
         CellValue originalPlayerCellState = board.getGrid().getValue(playerCell.getLine(), playerCell.getCol());
         board.getGrid().setValue(playerCell.getLine(), playerCell.getCol(), (originalPlayerCellState == CellValue.PLAYER_ON_GOAL) ? CellValue.GOAL : CellValue.GROUND);
 
+        incrementMoveCount();
         return true;
     }
 
