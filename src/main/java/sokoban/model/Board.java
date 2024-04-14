@@ -56,6 +56,9 @@ public class Board {
     public static LongBinding goalCountProperty() {
         return grid.goalCountProperty();
     }
+    public LongBinding boxInTargetCountProperty () {
+        return grid.boxInTargetCountProperty();
+    }
 
     public LongBinding playerCountProperty(){
         return grid.playerCountProperty();

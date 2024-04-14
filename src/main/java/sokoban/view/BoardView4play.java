@@ -114,9 +114,8 @@ public class BoardView4play extends BoardView  {
 
 
     public void createHeaderPlay() {
-        //bind move
         numberOfMovesPlayed.textProperty().bind(Bindings.concat("Number of moves played : ",boardViewModel.moveCountProperty().asString()));
-        goal.textProperty().bind(Bindings.concat("Number of goals reached : ",boardViewModel.goalDoneProperty().asString()," of ", boardViewModel.goalCountProperty().asString()));
+        goal.textProperty().bind(Bindings.concat("Number of goals reached : ",boardViewModel.boxInTargetCountProperty().asString()," of ", boardViewModel.goalCountProperty().asString()));
     }
 
     //bouton finish a refaire

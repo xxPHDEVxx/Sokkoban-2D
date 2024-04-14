@@ -11,6 +11,7 @@ public abstract class Cell {
     abstract boolean isBox();
     abstract boolean isPlayer();
     abstract boolean isGoal();
+    abstract boolean isBoxInTarget();
     abstract ReadOnlyObjectProperty<CellValue> valueProperty();
     public abstract Cell getCell();
 }
