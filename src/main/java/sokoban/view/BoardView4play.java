@@ -73,23 +73,32 @@ public class BoardView4play extends BoardView  {
         sceneLevel.getRoot().setFocusTraversable(true);
 
         sceneLevel.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
-            boolean moved = false;
+            // Traitement des touches de direction
             switch (event.getCode()) {
+                case UP:
+                    boardViewModel.movePlayer(Direction.UP);
+                    break;
                 case Z:
-                    moved = boardViewModel.movePlayer(Direction.UP);
+                    boardViewModel.movePlayer(Direction.UP);
+                    break;
+                case DOWN:
+                    boardViewModel.movePlayer(Direction.DOWN);
                     break;
                 case S:
-                    moved = boardViewModel.movePlayer(Direction.DOWN);
+                    boardViewModel.movePlayer(Direction.DOWN);
+                    break;
+                case LEFT:
+                    boardViewModel.movePlayer(Direction.LEFT);
                     break;
                 case Q:
-                    moved = boardViewModel.movePlayer(Direction.LEFT);
+                    boardViewModel.movePlayer(Direction.LEFT);
+                    break;
+                case RIGHT:
+                    boardViewModel.movePlayer(Direction.RIGHT);
                     break;
                 case D:
-                    moved = boardViewModel.movePlayer(Direction.RIGHT);
+                    boardViewModel.movePlayer(Direction.RIGHT);
                     break;
-            }
-            if (moved) {
-                refreshGrid(); // Rafraîchir la grille après le mouvement
             }
             event.consume();
         });
@@ -102,14 +111,7 @@ public class BoardView4play extends BoardView  {
         });
     }
 
-    public void refreshGrid() {
-        for (Node child : getChildren()) {
-            if (child instanceof CellView) {
-                ((CellView) child).refresh();
-            }
-        }
 
-    }
 
     public void createHeaderPlay() {
         numberOfMovesPlayed.textProperty().bind(Bindings.concat("Number of moves played : ",boardViewModel.moveCountProperty().asString()));
