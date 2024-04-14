@@ -5,7 +5,6 @@ import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 
 public abstract class Cell {
-    private final ObjectProperty<CellValue> value = new SimpleObjectProperty<>(CellValue.GROUND);
     abstract CellValue getValue();
     public abstract void setValue(CellValue value);
     abstract boolean isEmpty();

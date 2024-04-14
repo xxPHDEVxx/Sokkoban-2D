@@ -11,7 +11,6 @@ import sokoban.viewmodel.BoardViewModel;
 
 public class BoardView4play extends BoardView  {
     private GridView gridView;
-    private BoardViewModel boardViewModel;
     private Label title = new Label("Score");
     private Label move = new Label("Number of moves played");
     private Label goal = new Label("Number of goals reached");
@@ -21,18 +20,25 @@ public class BoardView4play extends BoardView  {
     private Button button = new Button("Finish");
     private static final int SCENE_MIN_WIDTH = 1080;
     private static final int SCENE_MIN_HEIGHT = 800;
+    private Stage playStage;
+    private  Stage primaryStage;
 
     public BoardView4play(Stage playStage, GridView gridView, BoardViewModel boardViewModel) {
         super(playStage, boardViewModel);
         this.gridView = gridView;
+        this.playStage = playStage;
+        this.primaryStage = BoardView.getPrimaryStage();
         playStage.setScene(gridView.getScene());
         playStage.show();
         initialize();
         configureScene(playStage);
         createHeader();
+        actionBtnFinish(boardViewModel);
+
     }
 
     public void initialize() {
+        playStage.setTitle("jeu");
         //style
         header.getStyleClass().add("header");
         header.setAlignment(Pos.CENTER);
@@ -48,6 +54,7 @@ public class BoardView4play extends BoardView  {
         gridView.setAlignment(Pos.CENTER);
         header.getChildren().addAll(title, move, goal);
         boardLvl.getChildren().addAll(header, level, boxBtn);
+
     }
 
     public void configureScene(Stage playStage) {
@@ -60,5 +67,11 @@ public class BoardView4play extends BoardView  {
     public void createHeader() {
         //move.textProperty().bind();
         //goal.textProperty().bind();
+    }
+
+    public void actionBtnFinish(BoardViewModel bordvm) {
+        button.setOnAction(action -> {
+            playStage.close();
+       });
     }
 }
