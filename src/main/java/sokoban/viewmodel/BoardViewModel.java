@@ -16,7 +16,9 @@ public class BoardViewModel {
     private final Board board;
     private static BooleanProperty isChanged = new SimpleBooleanProperty(false);
     private final LongProperty moveCount = new SimpleLongProperty(0);
+
     public BoardViewModel(Board board) {
+
         this.board = board;
         gridViewModel = new GridViewModel(board);
     }
@@ -36,6 +38,9 @@ public class BoardViewModel {
     }
     public LongBinding playerCountProperty() {
         return board.playerCountProperty();
+    }
+    public LongBinding boxInTargetCountProperty() {
+        return board.boxInTargetCountProperty();
     }
     public BooleanBinding rulesOKProperty() {
         return board.getRulesOK();
@@ -123,6 +128,8 @@ public class BoardViewModel {
         board.getGrid().setValue(playerCell.getLine(), playerCell.getCol(), (originalPlayerCellState == CellValue.PLAYER_ON_GOAL) ? CellValue.GOAL : CellValue.GROUND);
 
         incrementMoveCount();
+        boxInTargetCountProperty().invalidate();
+
         return true;
     }
 
@@ -152,13 +159,7 @@ public class BoardViewModel {
         }
     }
 
-    public void incrementMoveCount() {
-        moveCount.set(moveCount.get() + 1); // Incrémentez la propriété moveCount de 1
-    }
 
-    public LongProperty moveCountProperty() {
-        return moveCount;
-    }
 
     private CellViewModel findPlayerCell() {
         for (int row = 0; row < gridHeight(); row++) {
@@ -189,6 +190,32 @@ public class BoardViewModel {
         // La boîte peut être poussée si la cellule cible est GROUND ou GOAL
         return targetCellValue == CellValue.GROUND || targetCellValue == CellValue.GOAL;
     }
-    //compteur de mouvement
 
+    //compteur de mouvement
+    public void incrementMoveCount() {
+        moveCount.set(moveCount.get() + 1);
+    }
+
+    public LongProperty moveCountProperty() {
+        return moveCount;
+    }
+    private CellViewModel findTargetDone() {
+        for (int row = 0; row < gridHeight(); row++) {
+            for (int col = 0; col < gridWidth(); col++) {
+                CellViewModel cell = gridViewModel.getCellViewModel(row, col);
+                if (cell.getCellValue().get() == CellValue.BOX_ON_GOAL ) {
+                    //incrementGoalDone();
+                }
+            }
+        }
+        return null;
+    }
+    //compteur de cible fait
+/*    public void incrementGoalDone() {
+        goalDone.set(goalDone.get() + 1);
+    }
+
+    public LongProperty goalDoneProperty() {
+        return goalDone;
+    }*/
 }

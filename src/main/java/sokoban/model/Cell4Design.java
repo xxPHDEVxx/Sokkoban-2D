@@ -14,6 +14,9 @@ public class Cell4Design extends Cell{
     boolean isBox() {return value.get() == CellValue.BOX || value.get() == CellValue.BOX_ON_GOAL;}
     boolean isPlayer() {return value.get() == CellValue.PLAYER || value.get() == CellValue.PLAYER_ON_GOAL;}
     boolean isGoal() {return value.get() == CellValue.GOAL  || value.get() == CellValue.BOX_ON_GOAL || value.get() == CellValue.PLAYER_ON_GOAL;}
+    boolean isBoxInTarget() {
+        return value.get() == CellValue.BOX_ON_GOAL;
+    }
     ReadOnlyObjectProperty<CellValue> valueProperty() {return value;}
     public Cell getCell(){
         return this;

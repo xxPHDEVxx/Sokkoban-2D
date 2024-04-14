@@ -17,6 +17,7 @@ public class Grid {
     private LongBinding boxCount;
     private LongBinding playerCount;
     private LongBinding goalCount;
+    private LongBinding boxInTargetCount;
 
 
     public Grid() {
@@ -43,6 +44,13 @@ public class Grid {
                 .stream(matrix)
                 .flatMap(Arrays::stream)
                 .filter(cell -> !cell.isEmpty())
+                .count());
+    }
+    public void setBoxInTargetCount() {
+        boxInTargetCount = Bindings.createLongBinding(() -> Arrays
+                .stream(matrix)
+                .flatMap(Arrays::stream)
+                .filter(cell -> cell.isBoxInTarget())
                 .count());
     }
     public void setBoxCellsCount() {
@@ -79,6 +87,7 @@ public class Grid {
         boxCount.invalidate();
 
 
+
     }
 
     public LongBinding filledCellsCountProperty() {
@@ -93,12 +102,16 @@ public class Grid {
     public LongBinding playerCountProperty() {
         return playerCount;
     }
+    public LongBinding boxInTargetCountProperty() {
+        return boxInTargetCount;
+    }
 
     public boolean isEmpty(int line, int col) {return matrix[line][col].isEmpty();}
     public void countCell () {
         setBoxCellsCount();
         setPlayerCount();
         setGoalCount();
+        setBoxInTargetCount();
 
     }
 
