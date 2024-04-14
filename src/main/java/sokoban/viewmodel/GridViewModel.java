@@ -30,9 +30,4 @@ public class GridViewModel {
             e.printStackTrace();
         }
     }
-    public Grid getGrid(){
-        Grid grid = board.getGrid();
-        return grid;
-    }
-
 }

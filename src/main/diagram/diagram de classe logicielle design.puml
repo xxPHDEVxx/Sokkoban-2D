@@ -5,38 +5,240 @@ skinparam classAttributeIconSize 0      /' Taille des icônes d'attribut de clas
 skinparam defaultFontName Consolas      /' Utilisation de la police Consolas par défaut '/
 !pragma useIntermediatePackages false   /' Désactive l'utilisation de packages intermédiaires '/
 
-class javafx.scene.layout.BorderPane { }
-class javafx.scene.layout.FlowPane { }
+class javafx.scene.layout.BorderPane {
+    -Label
+    -VBox
+    -HBox
+    -Menu
+    -MenuItem
+    -Button
+    }
+class javafx.scene.layout.FlowPane {
+    -ImageView
+}
 class javafx.scene.layout.GridPane { }
+class javafx.scene.layout.StackPane {
+    -Image
+}
 
-class Model.Board{}
+class Model.Board{
+    -MAX_FILLED_CELLS : int
+    -isFull : BooleanBinding
+    -CountBoxOk = booleanBinding
+    -CountPlayerOk = booleanBinding
+    -CountGoalOk = booleanBinding
+    -CountGoalBoxOK = booleanBinding
+    -grid : Grid
+    -rulesOK : BooleanBinding
+    +maxFilledCells()
+    +play(int, int,cellvalue)
+    +removeExistingPlayer()
+    +valueProperty(int, int) = valuesProperty(line, col)
+    +ConfigureBinding()
+    +getGrid()
+    +getBoard()
+    +setGrid(grid)
+    +open()
+    +getRulesOk()
+    +ConvertSymbolToCellValue(char)
+}
 enum Model.Direction{}
-enum Model.CellValue{}
-class Model.Grid{}
-abstract class Model.Cell{}
-class Model.Cell4Design{}
-class Model.Cell4Play{}
+enum Model.CellValue{
+    -Wall
+    -Player
+    -Ground
+    -Goal
+    -Box
+    -PlayerOnGoal
+    -BoxOnGoal
+}
+class Model.Grid{
+    -GridWidth = int
+    -GridHeight = int
+    -Cell4design = matrix
+    +setBoxInTargetCount()
+    +setItemsCount()
+    +getGridWidth()
+    +getGridHeight()
+    +getValue()
+    +isValidPosition()
+    +setValue()
+}
+class Model.Tool{
+    +value()
+    }
+abstract class Model.Cell{
+    +{abstract} getValue()
+    +{abstract} setValue()
+    +{abstract}isEmpty()
+    +{abstract}isBox()
+    +{abstract}isPlayer()
+    +{abstract}isGoal()
+    +{abstract}isBoxInTarget()
+    +{abstract}valuesProperty()
+    +{abstract}getCell()
+}
+class Model.Cell4Design{
+    +{abstract} getValue()
+}
+class Model.Cell4Play{
+    -value = ObjectProperty
+}
 
-abstract class View.BoardView {}
+abstract class View.BoardView {
+    -boardViewModel = BoardViewModel
+    -Grid_Width = int
+    -Grid_Height = int
+    -CellCountLabel = Label
+    -err = label
+    -menu = menu
+    -GridView = GridView
+    -PlayStage = playStage
+    +start()
+    +configMainComponents(stage)
+    +createGrid(scene)
+    +createMenuBar(stage)
+    +createHeader()
+    +insertHeader()
+    +refresh()
+    +actionBtnPLay()
+    +playGame()
+    +startGame()
+}
 class View.BoardView4Design{}
-class View.BoardView4Play{}
-class View.CellView{}
-class View.GridView{}
-class View.NewGridView{}
-class View.SaveConfirm{}
-class View.ToolView{}
+class View.BoardView4Play{
+    -gridview = GridView
+    -title = Label
+    -Scene_width = int
+    -Scene_height = int
+    +initialize()
+    +configureScene(stage)
+    +refreshGrid()
+    +createHeaderPlay()
+    +actionBtnFinish()
+}
+class View.CellView{
+    -Items = Image
+    -ViewModel = CellViewModel
+    -WidthProperty = DoubleBinding
+    -HeighProperty =DoubleBinding
+    +configureBinding()
+    +setImage()
+    +hoverChange()
+    +refresh()
+}
+class View.GridView{
+    -Padding = int
+    -Width = int
+    -Height = int
+}
+class View.NewGridView{
+    +showDialog()
+}
+class View.SaveConfirm{
+    +showDialog()
+}
+class View.ToolView{
+    -Padding = int
+    -Items = images
+    +LayoutControl()
+    +addHoverHandler(ImageView)
+    +dragAndRoll(ImageView)
+    +setToolEventHandlers(ImageView)
+    +determineTool(ImageView)
+}
 
-class ViewModel.BoardViewModel {}
-class ViewModel.CellViewModel {}
-class ViewModel.GridViewModel {}
-class ViewModel.ToolViewModel {}
+class ViewModel.BoardViewModel {
+    -GridViewModel = GridViewModel
+    -board = Board
+    -isChanged = BooleanProperty
+    -moveCount = LongProperty
+    +getGridViewModel()
+    +filledCellsCountProperty()
+    +ItemsCountProperty()
+    +maxFilledCells()
+    +getGridSize()
+    +exitMenu()
+    +newGridMenu()
+    +openBoard()
+    +isChanged()
+    +movePlayer()
+    +canPushBox()
+    +findPlayerCell()
+    +checkPush()
+    +incrementMoveCount()
+}
+class ViewModel.CellViewModel {
+    -Board = board
+    -line, col = int
+    +play()
+    +valuesProperty()
+    +getCellValue()
+    +getSymbolForElement()
+    +getBoard()
+    +getLine()
+    +getCol()
+}
+class ViewModel.GridViewModel {
+    -Board = Board
+    +getCellViewModel(int,int)
+    +saveMenu(grid, File)
+}
+class ViewModel.ToolViewModel {
+    -ToolView = ToolView
+    -Tool = tool
+    -value = objectProperty
+    -toolSelected = CellValue
+    +getValue()
+    +valuesProperty = ReadONlyObjectProperty
+    +setToolSelected(CellValue)
+    +getToolSelected()
+}
 
 Cell <|.. Cell4Design
 Cell <|.. Cell4Play
 BoardView <|.. BoardView4Design
 BoardView <|.. BoardView4Play
+BoardView o-- SaveConfirm
 
-Board "1" *-- "1" Grid: IsComposedBy
-Grid "100" *-- "2500" Cell : contains
+Board *-- Grid: IsComposedBy
+Board *-- Tool: IsComposedBy
+Grid o-- Cell : use
+
+BoardView *-- GridView : isComposedBy
+BoardView4Design *-- ToolView : isComposedBy
+GridView *-- CellView : contains
+BoardView o-- NewGridView
+
+
+BoardViewModel o-- CellViewModel : use
+CellViewModel o-- GridViewModel : use
+BoardViewModel o-- GridViewModel : use
+
+BorderPane <|.. BoardView
+StackPane <|.. CellView
+GridPane <|.. GridView
+FlowPane <|.. ToolView
+
+Board o-- CellViewModel : use
+Board o-- GridViewModel : use
+Board o-- BoardViewModel : use
+BoardView4Play o-- CellView : use
+BoardView o-- ToolView : use
+
+ToolView o-- ToolViewModel : use
+BoardViewModel o-- BoardView
+BoardViewModel o-- ToolView
+BoardViewModel o-- GridView
+BoardViewModel o-- SaveConfirm
+BoardViewModel o-- NewGridView
+CellViewModel o-- CellView
+CellViewModel o-- GridView
+GridViewModel o-- BoardView
+GridViewModel o-- SaveConfirm
+GridViewModel o-- GridView
+ToolViewModel o-- ToolView
+ToolViewModel o-- GridView
+ToolViewModel o-- CellView
 
 @enduml
