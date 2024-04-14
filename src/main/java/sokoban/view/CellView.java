@@ -26,6 +26,7 @@ public class CellView extends StackPane {
     private final DoubleBinding heightProperty;
 
     private ImageView imageView = new ImageView();
+    private ImageView midImageView = new ImageView();
     private ImageView topImageView = new ImageView();
     CellView(CellViewModel viewModel, DoubleBinding cellWidthProperty, DoubleBinding cellHeightProperty) {
         this.viewModel = viewModel;
@@ -49,7 +50,7 @@ public class CellView extends StackPane {
         topImageView.fitWidthProperty().bind(widthProperty);
 
 
-        getChildren().addAll(imageView, topImageView);
+        getChildren().addAll(imageView, topImageView, midImageView);
 
         // un clic sur la cellule permet de jouer celle-ci
         this.setOnMouseClicked(e -> {
@@ -106,25 +107,36 @@ public class CellView extends StackPane {
 
     //changement d'image au click
     private void setImage(ImageView imageView, CellValue cellValue) {
-        if (cellValue == CellValue.WALL){
-            topImageView.setImage(null);
-            imageView.setImage(wall);
-        } else if (cellValue == CellValue.BOX) {
-            topImageView.setImage(null);
-            imageView.setImage(box);
-        } else if (cellValue == CellValue.GOAL) {
-            topImageView.setImage(goal);
-            imageView.setImage(ground);
-        } else if (cellValue == CellValue.PLAYER) {
-            topImageView.setImage(player);
-            imageView.setImage(ground);
-        } else {
-            topImageView.setImage(null);
-            imageView.setImage(ground);
+        imageView.setImage(ground);
+        midImageView.setImage(null);
+        topImageView.setImage(null);
+
+        switch (cellValue) {
+            case WALL:
+                midImageView.setImage(wall);
+                break;
+            case BOX:
+                midImageView.setImage(box);
+                break;
+            case GOAL:
+                midImageView.setImage(goal);
+                break;
+            case PLAYER:
+                midImageView.setImage(player);
+                break;
+            case PLAYER_ON_GOAL:
+                midImageView.setImage(goal);
+                topImageView.setImage(player);
+                break;
+            case BOX_ON_GOAL:
+                midImageView.setImage(goal);
+                topImageView.setImage(box);
+                break;
+            default:
+                break;
         }
-
-
     }
+
 
     //image grisé au moment du hover
     private void hoverChanged(ObservableValue<? extends Boolean> obs, Boolean oldVal, Boolean newVal) {
