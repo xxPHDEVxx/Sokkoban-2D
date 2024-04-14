@@ -3,6 +3,8 @@ package sokoban.viewmodel;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import sokoban.model.CellValue;
 import sokoban.model.Tool;
 import sokoban.view.ToolView;

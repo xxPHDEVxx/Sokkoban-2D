@@ -9,6 +9,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.StackPane;
+import javafx.scene.input.MouseButton;
 
 
 import sokoban.model.CellValue;
@@ -53,13 +54,18 @@ public class CellView extends StackPane {
         getChildren().addAll(imageView, topImageView, midImageView);
 
         // un clic sur la cellule permet de jouer celle-ci
-        this.setOnMouseClicked(e -> {
-            if (ToolViewModel.getToolSelected() != null && !viewModel.getBoard().isFull()) {
-                viewModel.play();
-            } else if (viewModel.getBoard().isFull()) {
-                System.out.println("Nombre maximal d'outils atteint sur la grille.");
-            } else {
-                System.out.println("Aucun outil n'est sélectionné, action ignorée.");
+        this.setOnMouseClicked(event -> {
+            if (event.getButton() == MouseButton.SECONDARY) {
+                removeTool(viewModel.getLine(), viewModel.getCol());
+                event.consume();
+            } else if (event.getButton() == MouseButton.PRIMARY) {
+                if (ToolViewModel.getToolSelected() != null && !viewModel.getBoard().isFull()) {
+                    viewModel.play();
+                } else if (viewModel.getBoard().isFull()) {
+                    System.out.println("Nombre maximal d'outils atteint sur la grille.");
+                } else {
+                    System.out.println("Aucun outil n'est sélectionné, action ignorée.");
+                }
             }
         });
 
@@ -145,4 +151,20 @@ public class CellView extends StackPane {
 
         configureBindings();
     }
+
+    private void removeTool(int line, int col) {
+        // Déterminez l'état actuel de la cellule avant de la réinitialiser
+        CellValue currentValue = viewModel.getBoard().getGrid().getValue(line, col);
+
+        // Condition pour réinitialiser la cellule à GOAL si elle contient PLAYER_ON_GOAL ou BOX_ON_GOAL
+        if (currentValue == CellValue.PLAYER_ON_GOAL || currentValue == CellValue.BOX_ON_GOAL) {
+            viewModel.getBoard().getGrid().setValue(line, col, CellValue.GOAL);
+        } else {
+            // Réinitialisez à GROUND pour tous les autres états
+            viewModel.getBoard().getGrid().setValue(line, col, CellValue.GROUND);
+        }
+
+        refresh();  // Rafraîchir l'affichage de la cellule
+    }
+
 }

@@ -45,7 +45,6 @@ public class Board {
                 }
                 grid.play(line, col, grid.getValue(line, col) != (CellValue.GOAL) ? CellValue.GOAL : CellValue.PLAYER_ON_GOAL);
             }
-
         } else {
             if (ToolViewModel.getToolSelected() == CellValue.PLAYER) {
                 // Vérifier s'il y a déjà un joueur sur la grille et le supprimer.
@@ -53,7 +52,7 @@ public class Board {
                     removeExistingPlayer();
                 }
             }
-            grid.play(line, col, grid.getValue(line, col) != (CellValue.GROUND) ? CellValue.GROUND : ToolViewModel.getToolSelected());
+            grid.play(line, col, grid.getValue(line, col) != (CellValue.GROUND) ? grid.getValue(line, col) : ToolViewModel.getToolSelected());
         }
     }
 
