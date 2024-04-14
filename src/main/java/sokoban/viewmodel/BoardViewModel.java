@@ -2,6 +2,8 @@ package sokoban.viewmodel;
 
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.binding.LongBinding;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import sokoban.model.Board;
 import sokoban.model.Direction;
 import sokoban.model.Grid;
@@ -55,12 +57,19 @@ public class BoardViewModel {
     public static void newGridMenu(int width, int height){
         Board.setGrid(new Grid(width, height));
     }
+    private static BooleanProperty isChanged = new SimpleBooleanProperty(false);
     public Grid openBoard(File file){
         Grid grid = board.open(file);
         return grid;
     }
-    public static boolean isChanged(){
-        return true;
+    public static BooleanProperty isChangedProperty() {
+        return isChanged;
+    }
+    public static final boolean isChanged() {
+        return isChangedProperty().get();
+    }
+    public static final void setChanged(boolean isChanged) {
+        isChangedProperty().set(isChanged);
     }
     public Grid getGrid(){
         return board.getGrid();
@@ -151,5 +160,7 @@ public class BoardViewModel {
         // La boîte peut être poussée si la cellule cible est GROUND ou GOAL
         return targetCellValue == CellValue.GROUND || targetCellValue == CellValue.GOAL;
     }
-
+    public Board getBoard(){
+        return board;
+    }
 }

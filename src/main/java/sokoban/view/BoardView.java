@@ -134,6 +134,7 @@ public abstract class BoardView extends BorderPane {
 
         menuItemExit.setOnAction(action -> {
             if (BoardViewModel.isChanged()) {
+                BoardViewModel.setChanged(false);
                 SaveConfirm.showDialog();
                 BoardViewModel.exitMenu();
             } else {
@@ -143,18 +144,20 @@ public abstract class BoardView extends BorderPane {
 
         menuItemNew.setOnAction(action -> {
             if (BoardViewModel.isChanged()) {
+                BoardViewModel.setChanged(false);
                 SaveConfirm.showDialog();
+
             }
             NewGridView.showDialog(this);
 
-            //fonction qui doit check si le board a changé
         });
 
         menuItemOpen.setOnAction(action -> {
             if (BoardViewModel.isChanged()) {
+                BoardViewModel.setChanged(false);
                 SaveConfirm.showDialog();
-            }
 
+            }
             FileChooser fileChooser = new FileChooser();
             File selectedFile = fileChooser.showOpenDialog(stage);
             if (selectedFile != null) {
@@ -228,7 +231,10 @@ public abstract class BoardView extends BorderPane {
 
     public void actionBtnPlay() {
         btnPlay.setOnAction(action -> {
-
+            if (BoardViewModel.isChanged()) {
+                BoardViewModel.setChanged(false);
+                SaveConfirm.showDialog();
+            }
             playGame();
         });
     }
