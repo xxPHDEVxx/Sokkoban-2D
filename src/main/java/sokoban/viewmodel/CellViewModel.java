@@ -15,7 +15,7 @@ public class CellViewModel {
     }
 
     public void play(){
-        board.play(line, col);
+        board.play(line, col, this.getCellValue().getValue());
     }
     public ReadOnlyObjectProperty<CellValue> valueProperty() {
         return board.valueProperty(line, col);

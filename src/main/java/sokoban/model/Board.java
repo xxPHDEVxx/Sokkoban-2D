@@ -34,8 +34,39 @@ public class Board {
     }
 
 
-    public void play(int line, int col){
-        grid.play(line, col, grid.getValue(line, col) != (CellValue.GROUND) ? CellValue.GROUND : ToolViewModel.getToolSelected());
+    public void play(int line, int col, CellValue current) {
+        // permet la superposition de box et player sur goal
+        if (current == CellValue.GOAL){
+            if (ToolViewModel.getToolSelected() == CellValue.BOX)
+                grid.play(line, col, grid.getValue(line, col) != (CellValue.GOAL) ? CellValue.GOAL : CellValue.BOX_ON_GOAL);
+            else if(ToolViewModel.getToolSelected() == CellValue.PLAYER){
+                if (isPlayerPlaced()) {
+                    removeExistingPlayer();
+                }
+                grid.play(line, col, grid.getValue(line, col) != (CellValue.GOAL) ? CellValue.GOAL : CellValue.PLAYER_ON_GOAL);
+            }
+
+        } else {
+            if (ToolViewModel.getToolSelected() == CellValue.PLAYER) {
+                // Vérifier s'il y a déjà un joueur sur la grille et le supprimer.
+                if (isPlayerPlaced()) {
+                    removeExistingPlayer();
+                }
+            }
+            grid.play(line, col, grid.getValue(line, col) != (CellValue.GROUND) ? CellValue.GROUND : ToolViewModel.getToolSelected());
+        }
+    }
+
+    private void removeExistingPlayer() {
+        for (int row = 0; row < grid.getGridHeight(); row++) {
+            for (int col = 0; col < grid.getGridWidth(); col++) {
+                CellValue cellValue = grid.getValue(row, col);
+                if (cellValue == CellValue.PLAYER || cellValue == CellValue.PLAYER_ON_GOAL) {
+                    grid.setValue(row, col, cellValue == CellValue.PLAYER_ON_GOAL ? CellValue.GOAL : CellValue.GROUND);
+                    return; // Ajouté pour sortir dès que le joueur est trouvé et supprimé.
+                }
+            }
+        }
     }
 
     public Boolean isFull() {
