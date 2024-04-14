@@ -12,7 +12,7 @@ import java.util.Arrays;
 public class Grid {
     private static int GRID_WIDTH = 15;
     private static int GRID_HEIGHT = 10;
-    private final Cell[][] matrix;
+    private final Cell4Design[][] matrix;
     private LongBinding filledCellsCount;
     private LongBinding boxCount;
     private LongBinding playerCount;
@@ -27,9 +27,9 @@ public class Grid {
     public Grid(int width, int height) {
         GRID_WIDTH = width;
         GRID_HEIGHT = height;
-        matrix = new Cell[GRID_HEIGHT][];
+        matrix = new Cell4Design[GRID_HEIGHT][];
         for (int i = 0; i < GRID_HEIGHT; ++i) {
-            matrix[i] = new Cell[GRID_WIDTH];
+            matrix[i] = new Cell4Design[GRID_WIDTH];
             for (int j = 0; j < GRID_WIDTH; ++j) {
                 matrix[i][j] = new Cell4Design();
             }
@@ -85,7 +85,6 @@ public class Grid {
         playerCount.invalidate();
         goalCount.invalidate();
         boxCount.invalidate();
-
 
 
     }

@@ -6,7 +6,7 @@ import javafx.beans.property.SimpleObjectProperty;
 
 public abstract class Cell {
     abstract CellValue getValue();
-    public abstract void setValue(CellValue value);
+    abstract void setValue(CellValue value);
     abstract boolean isEmpty();
     abstract boolean isBox();
     abstract boolean isPlayer();
@@ -14,4 +14,5 @@ public abstract class Cell {
     abstract boolean isBoxInTarget();
     abstract ReadOnlyObjectProperty<CellValue> valueProperty();
     public abstract Cell getCell();
+
 }

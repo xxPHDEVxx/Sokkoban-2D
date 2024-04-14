@@ -51,6 +51,7 @@ public abstract class BoardView extends BorderPane {
     private Button btnPlay = new Button("Play");
     private static Stage primaryStage;
     private  Stage playStage;
+    private boolean gameInProgress = false;
 
     public BoardView(Stage primaryStage, BoardViewModel boardViewModel) {
         this.primaryStage = primaryStage;
@@ -244,7 +245,6 @@ public abstract class BoardView extends BorderPane {
     public void playGame() {
         if (boardViewModel.rulesOKProperty().get()) {
            playStage = new Stage();
-
             playStage.setTitle("Sokoban");
             primaryStage.hide();
             startGame(playStage);
@@ -258,4 +258,7 @@ public abstract class BoardView extends BorderPane {
     public static Stage getPrimaryStage() {
         return primaryStage;
     }
+
+
+
 }

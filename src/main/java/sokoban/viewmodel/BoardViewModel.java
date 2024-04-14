@@ -199,23 +199,5 @@ public class BoardViewModel {
     public LongProperty moveCountProperty() {
         return moveCount;
     }
-    private CellViewModel findTargetDone() {
-        for (int row = 0; row < gridHeight(); row++) {
-            for (int col = 0; col < gridWidth(); col++) {
-                CellViewModel cell = gridViewModel.getCellViewModel(row, col);
-                if (cell.getCellValue().get() == CellValue.BOX_ON_GOAL ) {
-                    //incrementGoalDone();
-                }
-            }
-        }
-        return null;
-    }
-    //compteur de cible fait
-/*    public void incrementGoalDone() {
-        goalDone.set(goalDone.get() + 1);
-    }
 
-    public LongProperty goalDoneProperty() {
-        return goalDone;
-    }*/
 }
