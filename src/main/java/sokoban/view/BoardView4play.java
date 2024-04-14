@@ -63,6 +63,9 @@ public class BoardView4play extends BoardView  {
         boardLvl.getChildren().addAll(headerPlay, level, boxBtn);
         boardLvl.setAlignment(Pos.CENTER);
 
+        // Rendre les cellules insensibles à la souris
+        gridView.setMouseTransparent(true);
+
     }
 
     public void configureScene(Stage playStage) {
