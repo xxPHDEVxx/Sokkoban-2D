@@ -13,6 +13,7 @@ import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.FlowPane;
 import sokoban.model.Tool;
+import sokoban.viewmodel.BoardViewModel;
 import sokoban.viewmodel.ToolViewModel;
 import sokoban.model.CellValue;
 
@@ -84,6 +85,7 @@ public class ToolView extends FlowPane {
     private void setToolEventHandlers(ImageView imageView) {
         imageView.setOnMouseClicked(event -> {
             ToolViewModel.setToolSelected(determineToolFromImageView(imageView));
+            BoardViewModel.setChanged(true);
         });
     }
 

@@ -24,7 +24,7 @@ import java.io.File;
 
 public abstract class BoardView extends BorderPane {
 
-    protected final BoardViewModel boardViewModel;
+    protected BoardViewModel boardViewModel;
     private int GRID_WIDTH = BoardViewModel.gridWidth();
     private int GRID_HEIGHT = BoardViewModel.gridHeight();
 
@@ -49,7 +49,8 @@ public abstract class BoardView extends BorderPane {
     private Scene scene;
     private GridView gridView;
     private Button btnPlay = new Button("Play");
-    private Stage primaryStage;
+    private static Stage primaryStage;
+    private  Stage playStage;
 
     public BoardView(Stage primaryStage, BoardViewModel boardViewModel) {
         this.primaryStage = primaryStage;
@@ -134,6 +135,7 @@ public abstract class BoardView extends BorderPane {
 
         menuItemExit.setOnAction(action -> {
             if (BoardViewModel.isChanged()) {
+                BoardViewModel.setChanged(false);
                 SaveConfirm.showDialog();
                 BoardViewModel.exitMenu();
             } else {
@@ -143,18 +145,20 @@ public abstract class BoardView extends BorderPane {
 
         menuItemNew.setOnAction(action -> {
             if (BoardViewModel.isChanged()) {
+                BoardViewModel.setChanged(false);
                 SaveConfirm.showDialog();
+
             }
             NewGridView.showDialog(this);
 
-            //fonction qui doit check si le board a changé
         });
 
         menuItemOpen.setOnAction(action -> {
             if (BoardViewModel.isChanged()) {
+                BoardViewModel.setChanged(false);
                 SaveConfirm.showDialog();
-            }
 
+            }
             FileChooser fileChooser = new FileChooser();
             File selectedFile = fileChooser.showOpenDialog(stage);
             if (selectedFile != null) {
@@ -228,7 +232,10 @@ public abstract class BoardView extends BorderPane {
 
     public void actionBtnPlay() {
         btnPlay.setOnAction(action -> {
-
+            if (BoardViewModel.isChanged()) {
+                BoardViewModel.setChanged(false);
+                SaveConfirm.showDialog();
+            }
             playGame();
         });
     }
@@ -236,14 +243,19 @@ public abstract class BoardView extends BorderPane {
     //partie jeu
     public void playGame() {
         if (boardViewModel.rulesOKProperty().get()) {
-            Stage playStage = new Stage();
+           playStage = new Stage();
+
             playStage.setTitle("Sokoban");
-            primaryStage.close();
+            primaryStage.hide();
             startGame(playStage);
         }
     }
 
     private void startGame(Stage playStage) {
         new BoardView4play(playStage, gridView, boardViewModel);
+    }
+
+    public static Stage getPrimaryStage() {
+        return primaryStage;
     }
 }

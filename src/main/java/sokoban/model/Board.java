@@ -89,7 +89,7 @@ public class Board {
         try (Scanner scanner = new Scanner(file)) {
             int row = 0;
             while (scanner.hasNextLine()) {
-                String line = scanner.nextLine().trim();
+                String line = scanner.nextLine();
                 if (!line.isEmpty()) {
                     // Parcourir chaque caractère de la ligne
                     for (int col = 0; col < line.length(); col++) {
@@ -125,4 +125,5 @@ public class Board {
     public boolean isPlayerPlaced() {
         return grid.playerCountProperty().get() > 0;
     }
+
 }

@@ -1,7 +1,9 @@
 package sokoban.viewmodel;
 
+import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.binding.LongBinding;
+import javafx.beans.property.*;
 import sokoban.model.Board;
 import sokoban.model.Direction;
 import sokoban.model.Grid;
@@ -12,9 +14,8 @@ import java.io.File;
 public class BoardViewModel {
     private final GridViewModel gridViewModel;
     private final Board board;
-
-    private static int countMove = 0;
-
+    private static BooleanProperty isChanged = new SimpleBooleanProperty(false);
+    private final LongProperty moveCount = new SimpleLongProperty(0);
     public BoardViewModel(Board board) {
         this.board = board;
         gridViewModel = new GridViewModel(board);
@@ -59,8 +60,14 @@ public class BoardViewModel {
         Grid grid = board.open(file);
         return grid;
     }
-    public static boolean isChanged(){
-        return true;
+    public static BooleanProperty isChangedProperty() {
+        return isChanged;
+    }
+    public static final boolean isChanged() {
+        return isChangedProperty().get();
+    }
+    public static final void setChanged(boolean isChanged) {
+        isChangedProperty().set(isChanged);
     }
     public Grid getGrid(){
         return board.getGrid();
@@ -115,7 +122,6 @@ public class BoardViewModel {
         CellValue originalPlayerCellState = board.getGrid().getValue(playerCell.getLine(), playerCell.getCol());
         board.getGrid().setValue(playerCell.getLine(), playerCell.getCol(), (originalPlayerCellState == CellValue.PLAYER_ON_GOAL) ? CellValue.GOAL : CellValue.GROUND);
 
-        updateMoveCount();
         return true;
     }
 
@@ -145,8 +151,12 @@ public class BoardViewModel {
         }
     }
 
-    private void updateMoveCount() {
-        countMove++;
+    public void incrementMoveCount() {
+        moveCount.set(moveCount.get() + 1); // Incrémentez la propriété moveCount de 1
+    }
+
+    public LongProperty moveCountProperty() {
+        return moveCount;
     }
 
     private CellViewModel findPlayerCell() {
@@ -178,5 +188,6 @@ public class BoardViewModel {
         // La boîte peut être poussée si la cellule cible est GROUND ou GOAL
         return targetCellValue == CellValue.GROUND || targetCellValue == CellValue.GOAL;
     }
+    //compteur de mouvement
 
 }

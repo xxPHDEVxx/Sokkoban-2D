@@ -7,8 +7,15 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import sokoban.model.Board;
+import sokoban.model.Grid;
+import sokoban.viewmodel.BoardViewModel;
+import sokoban.viewmodel.GridViewModel;
+
+import java.io.File;
 
 public class SaveConfirm{
     public static void showDialog() {
@@ -24,11 +31,18 @@ public class SaveConfirm{
 
         yesButton.setOnAction(e -> {
             dialog.close();
-            // Mettez ici le code pour continuer après avoir cliqué sur "Yes"
+            FileChooser fileChooser = new FileChooser();
+            File selectedFile = fileChooser.showSaveDialog(dialog);
+
+            Board board = new Board().getBoard();
+            BoardViewModel boardVM = new BoardViewModel(board);
+            Grid grid = boardVM.getGrid();
+            GridViewModel gvm = boardVM.getGridVM();
+            gvm.saveMenu(grid, selectedFile);
         });
         noButton.setOnAction(e -> {
+            BoardViewModel.setChanged(true);
             dialog.close();
-            // Mettez ici le code pour annuler après avoir cliqué sur "No"
         });
         cancelButton.setOnAction(actionEvent -> {
             dialog.close();
