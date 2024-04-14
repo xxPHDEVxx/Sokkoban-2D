@@ -18,8 +18,8 @@ import sokoban.viewmodel.BoardViewModel;
 public class BoardView4play extends BoardView  {
     private GridView gridView;
     private Label title = new Label("Score");
-    private Label numberOfMovesPlayed = new Label("Number of moves played");
-    private Label goal = new Label("Number of goals reached");
+    private Label numberOfMovesPlayed = new Label("");
+    private Label goal = new Label("");
     private HBox level = new HBox();
     private VBox headerPlay = new VBox();
     private VBox boardLvl = new VBox();
@@ -116,7 +116,7 @@ public class BoardView4play extends BoardView  {
     public void createHeaderPlay() {
         //bind move
         numberOfMovesPlayed.textProperty().bind(Bindings.concat("Number of moves played : ",boardViewModel.moveCountProperty().asString()));
-        //goal.textProperty().bind();
+        goal.textProperty().bind(Bindings.concat("Number of goals reached : ",boardViewModel.goalDoneProperty().asString()," of ", boardViewModel.goalCountProperty().asString()));
     }
 
     //bouton finish a refaire

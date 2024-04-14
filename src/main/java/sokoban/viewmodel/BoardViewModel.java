@@ -16,6 +16,8 @@ public class BoardViewModel {
     private final Board board;
     private static BooleanProperty isChanged = new SimpleBooleanProperty(false);
     private final LongProperty moveCount = new SimpleLongProperty(0);
+    private final LongProperty goalDone = new SimpleLongProperty(0);
+
     public BoardViewModel(Board board) {
         this.board = board;
         gridViewModel = new GridViewModel(board);
@@ -133,6 +135,13 @@ public class BoardViewModel {
 
     public LongProperty moveCountProperty() {
         return moveCount;
+    }
+    public void incrementGoalDone() {
+        goalDone.set(goalDone.get() + 1); // Incrémentez la propriété moveCount de 1
+    }
+
+    public LongProperty goalDoneProperty() {
+        return goalDone;
     }
 
     private CellViewModel findPlayerCell() {
