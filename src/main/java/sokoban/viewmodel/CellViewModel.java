@@ -58,5 +58,4 @@ public class CellViewModel {
     public int getCol() {
         return col;
     }
-
 }
