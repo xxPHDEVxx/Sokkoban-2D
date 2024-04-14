@@ -30,22 +30,15 @@ public class CellViewModel {
 
     protected static char getSymbolForElement(CellValue element) {
 
-        switch (element) {
-            case WALL:
-                return '#';
-            case GOAL:
-                return '.';
-            case BOX:
-                return '$';
-            //case BOX,GOAL: return '*';
-            case PLAYER:
-                return '@';
-            case GROUND:
-                return ' ';
-            //case PLAYER,GOAL: return '+';
-            default:
-                return ' ';
-        }
+        return switch (element) {
+            case WALL -> '#';
+            case GOAL -> '.';
+            case BOX -> '$';
+            case BOX_ON_GOAL -> '*';
+            case PLAYER -> '@';
+            case GROUND -> ' ';
+            case PLAYER_ON_GOAL -> '+';
+        };
     }
     public Board getBoard() {
         return board;
