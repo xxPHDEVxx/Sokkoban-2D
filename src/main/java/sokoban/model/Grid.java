@@ -136,5 +136,4 @@ public class Grid {
             throw new IllegalArgumentException("Invalid row or column index");
         }
     }
-
 }

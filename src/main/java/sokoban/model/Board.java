@@ -86,12 +86,9 @@ public class Board {
         }
     }
 
-
-
     public void removeTool(int line, int col, CellValue ground) {
         // Déterminez l'état actuel de la cellule avant de la réinitialiser
         CellValue currentValue = grid.getValue(line, col);
-
         // Condition pour réinitialiser la cellule à GOAL si elle contient PLAYER_ON_GOAL ou BOX_ON_GOAL
         if (currentValue == CellValue.PLAYER_ON_GOAL || currentValue == CellValue.BOX_ON_GOAL) {
             grid.remove(line, col, ground);
