@@ -16,7 +16,11 @@
 
 ## Notes de version itération 2
 
-...
+	Architecture
+	Condition de placement
+	Boutton finish
+	Ouverture grille différente taille
+	validation a l'ouverture
 
 ## Notes de version itération 3
 
