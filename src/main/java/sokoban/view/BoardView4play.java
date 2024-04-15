@@ -40,6 +40,8 @@ public class BoardView4play extends BoardView  {
         createHeaderPlay();
         actionBtnFinish(boardViewModel);
 
+
+        System.out.println(gridView);
     }
 
     public void initialize() {

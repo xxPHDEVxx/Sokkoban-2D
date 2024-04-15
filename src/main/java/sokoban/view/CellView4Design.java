@@ -7,22 +7,13 @@ import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.Dragboard;
-import javafx.scene.input.TransferMode;
-import javafx.scene.layout.StackPane;
 import javafx.scene.input.MouseButton;
-
-
+import javafx.scene.input.TransferMode;
 import sokoban.model.CellValue;
-import sokoban.model.Grid;
 import sokoban.viewmodel.CellViewModel;
-import sokoban.viewmodel.GridViewModel;
 import sokoban.viewmodel.ToolViewModel;
 
-public abstract class CellView extends StackPane {
-    public CellView() {
-
-    }
-/*
+public class CellView4Design extends CellView{
     private static final Image player = new Image("player.png");
     private static final Image box = new Image("box.png");
     private static final Image ground = new Image("ground.png");
@@ -35,7 +26,7 @@ public abstract class CellView extends StackPane {
     private ImageView imageView = new ImageView();
     private ImageView midImageView = new ImageView();
     private ImageView topImageView = new ImageView();
-    CellView(CellViewModel viewModel, DoubleBinding cellWidthProperty, DoubleBinding cellHeightProperty) {
+    CellView4Design(CellViewModel viewModel, DoubleBinding cellWidthProperty, DoubleBinding cellHeightProperty) {
         this.viewModel = viewModel;
         this.widthProperty = cellWidthProperty;
         this.heightProperty = cellHeightProperty;
@@ -174,5 +165,5 @@ public abstract class CellView extends StackPane {
         refresh();  // Rafraîchir l'affichage de la cellule
     }
 
-*/
+
 }
