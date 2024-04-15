@@ -20,6 +20,7 @@ public class BoardView4play extends BoardView  {
     private Label title = new Label("Score");
     private Label numberOfMovesPlayed = new Label("");
     private Label goal = new Label("");
+    private Label finisher = new Label("");
     private HBox level = new HBox();
     private VBox headerPlay = new VBox();
     private VBox boardLvl = new VBox();
@@ -48,9 +49,12 @@ public class BoardView4play extends BoardView  {
         playStage.setTitle("jeu");
         //style
         headerPlay.getStyleClass().add("header");
-        Font font = Font.font("Verdana", FontWeight.BOLD, 20);
-        title.setFont(font);
+        Font fontTitle = Font.font("Verdana", FontWeight.BOLD, 20);
+        title.setFont(fontTitle);
         headerPlay.setAlignment(Pos.CENTER);
+
+        Font fontFinish = Font.font("Verdana", FontWeight.BOLD, 15);
+        finisher.setFont(fontFinish);
 
         // box button
         HBox boxBtn = new HBox();
@@ -61,7 +65,7 @@ public class BoardView4play extends BoardView  {
         level.getChildren().add(gridView);
         level.setAlignment(Pos.CENTER);
         gridView.setAlignment(Pos.CENTER);
-        headerPlay.getChildren().addAll(title, numberOfMovesPlayed, goal);
+        headerPlay.getChildren().addAll(title, numberOfMovesPlayed, goal, finisher);
         boardLvl.getChildren().addAll(headerPlay, level, boxBtn);
         boardLvl.setAlignment(Pos.CENTER);
 
@@ -118,6 +122,9 @@ public class BoardView4play extends BoardView  {
     public void createHeaderPlay() {
         numberOfMovesPlayed.textProperty().bind(Bindings.concat("Number of moves played : ",boardViewModel.moveCountProperty().asString()));
         goal.textProperty().bind(Bindings.concat("Number of goals reached : ",boardViewModel.boxInTargetCountProperty().asString()," of ", boardViewModel.goalCountProperty().asString()));
+        finisher.textProperty().bind(Bindings.when(boardViewModel.boxInTargetCountProperty().isEqualTo(boardViewModel.goalCountProperty()))
+                .then(Bindings.concat("You won in ", boardViewModel.moveCountProperty().asString(), " moves, congratulations"))
+                .otherwise(""));
     }
 
     //bouton finish a refaire
