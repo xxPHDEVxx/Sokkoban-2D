@@ -37,54 +37,57 @@ public class Board {
         CellValue current = grid.getValue(line, col);
         CellValue selected = ToolViewModel.getToolSelected();
 
-        // Gestion de la superposition sur une cible (Goal)
-        if (current == CellValue.GOAL) {
-            if (selected == CellValue.BOX) {
-                grid.play(line, col, CellValue.BOX_ON_GOAL);
-            } else if (selected == CellValue.PLAYER) {
-                if (isPlayerPlaced()) {
-                    removeExistingPlayer();
+        // Supprimer un joueur existant si un nouveau joueur est sur le point d'être placé
+        if (selected == CellValue.PLAYER && isPlayerPlaced()) {
+            removeExistingPlayer();
+        }
+
+        // Gestion des superpositions et des remplacements
+        switch (current) {
+            case GOAL:
+                switch (selected) {
+                    case BOX:
+                        grid.play(line, col, CellValue.BOX_ON_GOAL);
+                        break;
+                    case PLAYER:
+                        grid.play(line, col, CellValue.PLAYER_ON_GOAL);
+                        break;
+                    default:
+                        // Remplacer une cible par un autre outil si sélectionné
+                        grid.play(line, col, selected);
+                        break;
                 }
-                grid.play(line, col, CellValue.PLAYER_ON_GOAL);
-            }
-        } else if (current == CellValue.GROUND || current == null) {
-            // Placement direct sur le sol
-            if (selected == CellValue.PLAYER) {
-                if (isPlayerPlaced()) {
-                    removeExistingPlayer();
-                }
-                grid.play(line, col, selected);
-            } else {
-                grid.play(line, col, selected);
-            }
-        } else if (current == CellValue.PLAYER) {
-            // Permettre la superposition d'une cible sur un joueur
-            if (selected == CellValue.GOAL) {
-                grid.play(line, col, CellValue.PLAYER_ON_GOAL);
-            }
-        } else if (current == CellValue.BOX) {
-            // Permettre la superposition d'une cible sur une boîte
-            if (selected == CellValue.GOAL) {
-                grid.play(line, col, CellValue.BOX_ON_GOAL);
-            }
-        } else {
-            // Clic sans sélection ou avec une sélection non applicable, efface l'outil actuel
-            if (selected == null) {
-                if (current == CellValue.BOX_ON_GOAL || current == CellValue.PLAYER_ON_GOAL) {
-                    grid.play(line, col, CellValue.GOAL); // Maintenir la cible si on enlève la boîte ou le joueur
+                break;
+            case PLAYER_ON_GOAL:
+            case BOX_ON_GOAL:
+                if (selected == null || selected == CellValue.GROUND) {
+                    grid.play(line, col, CellValue.GOAL); // Restaure la cible si l'outil est désélectionné
                 } else {
-                    grid.play(line, col, CellValue.GROUND); // Sinon, retourner au sol
+                    grid.play(line, col, selected); // Remplace l'outil sur la cible
                 }
-            } else {
-                if (selected == CellValue.PLAYER) {
-                    if (isPlayerPlaced()) {
-                        removeExistingPlayer();
-                    }
+                break;
+            case PLAYER:
+                if (selected == CellValue.GOAL) {
+                    grid.play(line, col, CellValue.PLAYER_ON_GOAL);
+                } else if (selected != null) {
+                    grid.play(line, col, selected);
                 }
-                grid.play(line, col, selected); // Place le nouvel outil sélectionné
-            }
+                break;
+            case BOX:
+                if (selected == CellValue.GOAL) {
+                    grid.play(line, col, CellValue.BOX_ON_GOAL);
+                } else if (selected != null) {
+                    grid.play(line, col, selected);
+                }
+                break;
+            case GROUND:
+            default:
+                grid.play(line, col, selected != null ? selected : CellValue.GROUND);
+                break;
         }
     }
+
+
 
     public void removeTool(int line, int col, CellValue ground) {
         // Déterminez l'état actuel de la cellule avant de la réinitialiser
