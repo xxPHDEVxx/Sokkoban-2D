@@ -51,8 +51,9 @@ public abstract class BoardView extends BorderPane {
     private Button btnPlay = new Button("Play");
     private static Stage primaryStage;
     private  Stage playStage;
-    private boolean gameInProgress = false;
 
+    private DoubleBinding gridWidth ;
+    private DoubleBinding gridHeight ;
     public BoardView(Stage primaryStage, BoardViewModel boardViewModel) {
         this.primaryStage = primaryStage;
         this.boardViewModel = boardViewModel;
@@ -95,7 +96,7 @@ public abstract class BoardView extends BorderPane {
 
 
     public void createGrid(Scene scene) {
-        DoubleBinding gridWidth = Bindings.createDoubleBinding(
+        gridWidth = Bindings.createDoubleBinding(
                 () -> {
                     var size = Math.min(widthProperty().get() - ToolView.widthProperty().get(), heightProperty().get() -
                             (boxCellCount.heightProperty().get() + boxRules.heightProperty().get()));
@@ -105,7 +106,7 @@ public abstract class BoardView extends BorderPane {
                 scene.heightProperty(),
                 boxCellCount.heightProperty());
 
-        DoubleBinding gridHeight = Bindings.createDoubleBinding(
+        gridHeight = Bindings.createDoubleBinding(
                 () -> {
                     var size = Math.min(heightProperty().get() - (boxCellCount.heightProperty().get()+ boxRules.heightProperty().get()) , widthProperty().get() -
                             ToolView.widthProperty().get());
@@ -114,7 +115,7 @@ public abstract class BoardView extends BorderPane {
                 scene.widthProperty(),
                 scene.heightProperty(),
                 boxCellCount.heightProperty());
-        gridView = new GridView(boardViewModel.getGridViewModel(), gridWidth, gridHeight );
+        gridView = new GridView4Design(boardViewModel.getGridViewModel(), gridWidth, gridHeight );
 
         // Définir la largeur et la hauteur de la grid en fonction de la largeur calculée
         gridView.minWidthProperty().bind(gridWidth);
@@ -252,7 +253,8 @@ public abstract class BoardView extends BorderPane {
     }
 
     private void startGame(Stage playStage) {
-        new BoardView4play(playStage, gridView, boardViewModel);
+        GridView4Play gridViewPlay = new GridView4Play(boardViewModel.getGridViewModel(), gridWidth, gridHeight);
+        new BoardView4play(playStage, gridViewPlay, boardViewModel);
     }
 
     public static Stage getPrimaryStage() {
