@@ -45,7 +45,7 @@ public class CellView extends StackPane {
         minHeightProperty().bind(heightProperty);
         //image de base en fond
         imageView.setImage(ground);
-        imageView.setPreserveRatio(true);
+        imageView.setPreserveRatio(true);;
         topImageView.setPreserveRatio(true);
         topImageView.fitHeightProperty().bind(heightProperty);
         topImageView.fitWidthProperty().bind(widthProperty);
@@ -144,27 +144,8 @@ public class CellView extends StackPane {
         }
     }
 
-    public void refresh() {
-        //image de base en fond
-        imageView.setImage(ground);
-        imageView.setPreserveRatio(true);
-
-        configureBindings();
-    }
-
+    // à modifier -> placer méthode remove dans grid, board, ... suivre modèle de play
     private void removeTool(int line, int col) {
-        // Déterminez l'état actuel de la cellule avant de la réinitialiser
-        CellValue currentValue = viewModel.getBoard().getGrid().getValue(line, col);
-
-        // Condition pour réinitialiser la cellule à GOAL si elle contient PLAYER_ON_GOAL ou BOX_ON_GOAL
-        if (currentValue == CellValue.PLAYER_ON_GOAL || currentValue == CellValue.BOX_ON_GOAL) {
-            viewModel.getBoard().getGrid().setValue(line, col, CellValue.GOAL);
-        } else {
-            // Réinitialisez à GROUND pour tous les autres états
-            viewModel.getBoard().getGrid().setValue(line, col, CellValue.GROUND);
-        }
-
-        refresh();  // Rafraîchir l'affichage de la cellule
+        viewModel.removeTool();
     }
-
 }

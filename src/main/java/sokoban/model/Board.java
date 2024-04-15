@@ -10,7 +10,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
-// Classe ajustée pour l'edition des grilles, ne pas oublier de lui faire un viewModel et une view séparées *Jamila
 public class Board {
     public static int MAX_FILLED_CELLS = 75;
     private static Grid grid = new Grid();
@@ -34,25 +33,71 @@ public class Board {
     }
 
 
-    public void play(int line, int col, CellValue current) {
-        // permet la superposition de box et player sur goal
-        if (current == CellValue.GOAL){
-            if (ToolViewModel.getToolSelected() == CellValue.BOX)
-                grid.play(line, col, grid.getValue(line, col) != (CellValue.GOAL) ? CellValue.GOAL : CellValue.BOX_ON_GOAL);
-            else if(ToolViewModel.getToolSelected() == CellValue.PLAYER){
+    public void play(int line, int col) {
+        CellValue current = grid.getValue(line, col);
+        CellValue selected = ToolViewModel.getToolSelected();
+
+        // Gestion de la superposition sur une cible (Goal)
+        if (current == CellValue.GOAL) {
+            if (selected == CellValue.BOX) {
+                grid.play(line, col, CellValue.BOX_ON_GOAL);
+            } else if (selected == CellValue.PLAYER) {
                 if (isPlayerPlaced()) {
                     removeExistingPlayer();
                 }
-                grid.play(line, col, grid.getValue(line, col) != (CellValue.GOAL) ? CellValue.GOAL : CellValue.PLAYER_ON_GOAL);
+                grid.play(line, col, CellValue.PLAYER_ON_GOAL);
+            }
+        } else if (current == CellValue.GROUND || current == null) {
+            // Placement direct sur le sol
+            if (selected == CellValue.PLAYER) {
+                if (isPlayerPlaced()) {
+                    removeExistingPlayer();
+                }
+                grid.play(line, col, selected);
+            } else {
+                grid.play(line, col, selected);
+            }
+        } else if (current == CellValue.PLAYER) {
+            // Permettre la superposition d'une cible sur un joueur
+            if (selected == CellValue.GOAL) {
+                grid.play(line, col, CellValue.PLAYER_ON_GOAL);
+            }
+        } else if (current == CellValue.BOX) {
+            // Permettre la superposition d'une cible sur une boîte
+            if (selected == CellValue.GOAL) {
+                grid.play(line, col, CellValue.BOX_ON_GOAL);
             }
         } else {
-            if (ToolViewModel.getToolSelected() == CellValue.PLAYER) {
-                // Vérifier s'il y a déjà un joueur sur la grille et le supprimer.
-                if (isPlayerPlaced()) {
-                    removeExistingPlayer();
+            // Clic sans sélection ou avec une sélection non applicable, efface l'outil actuel
+            if (selected == null) {
+                if (current == CellValue.BOX_ON_GOAL || current == CellValue.PLAYER_ON_GOAL) {
+                    grid.play(line, col, CellValue.GOAL); // Maintenir la cible si on enlève la boîte ou le joueur
+                } else {
+                    grid.play(line, col, CellValue.GROUND); // Sinon, retourner au sol
                 }
+            } else {
+                if (selected == CellValue.PLAYER) {
+                    if (isPlayerPlaced()) {
+                        removeExistingPlayer();
+                    }
+                }
+                grid.play(line, col, selected); // Place le nouvel outil sélectionné
             }
-            grid.play(line, col, grid.getValue(line, col) != (CellValue.GROUND) ? grid.getValue(line, col) : ToolViewModel.getToolSelected());
+        }
+    }
+
+
+
+    public void removeTool(int line, int col, CellValue ground) {
+        // Déterminez l'état actuel de la cellule avant de la réinitialiser
+        CellValue currentValue = grid.getValue(line, col);
+
+        // Condition pour réinitialiser la cellule à GOAL si elle contient PLAYER_ON_GOAL ou BOX_ON_GOAL
+        if (currentValue == CellValue.PLAYER_ON_GOAL || currentValue == CellValue.BOX_ON_GOAL) {
+            grid.remove(line, col, ground);
+        } else {
+            // Réinitialisez à GROUND pour tous les autres états
+            grid.remove(line, col, ground);
         }
     }
 
@@ -61,7 +106,7 @@ public class Board {
             for (int col = 0; col < grid.getGridWidth(); col++) {
                 CellValue cellValue = grid.getValue(row, col);
                 if (cellValue == CellValue.PLAYER || cellValue == CellValue.PLAYER_ON_GOAL) {
-                    grid.setValue(row, col, cellValue == CellValue.PLAYER_ON_GOAL ? CellValue.GOAL : CellValue.GROUND);
+                    grid.play(row, col, cellValue == CellValue.PLAYER_ON_GOAL ? CellValue.GOAL : CellValue.GROUND);
                     return; // Ajouté pour sortir dès que le joueur est trouvé et supprimé.
                 }
             }

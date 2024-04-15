@@ -85,8 +85,14 @@ public class Grid {
         playerCount.invalidate();
         goalCount.invalidate();
         boxCount.invalidate();
+    }
 
-
+    void remove(int line, int col, CellValue ground){
+        matrix[line][col].setValue(ground);
+        filledCellsCount.invalidate();
+        playerCount.invalidate();
+        goalCount.invalidate();
+        boxCount.invalidate();
     }
 
     public LongBinding filledCellsCountProperty() {
@@ -123,11 +129,6 @@ public class Grid {
         return line >= 0 && line < GRID_HEIGHT && col >= 0 && col < GRID_WIDTH;
     }
 
-    public void placeTool ( int row, int col, CellValue tool){
-        if (isValidPosition(row, col)) {
-            matrix[row][col].setValue(tool);
-        }
-    }
     public void setValue(int row, int col, CellValue value) {
         if (isValidPosition(row, col)) {
             matrix[row][col].getCell().setValue(value);
