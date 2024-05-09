@@ -6,38 +6,40 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import sokoban.model.CellValue;
+import sokoban.model.GameElement;
+import sokoban.model.Ground;
 import sokoban.model.Tool;
 import sokoban.view.ToolView;
 
 public class ToolViewModel {
     private static ToolView toolView;
     private static Tool tool;
-    private static ObjectProperty<CellValue> value = new SimpleObjectProperty<>(CellValue.GROUND);
+    private static ObjectProperty<GameElement> value = new SimpleObjectProperty<>(new Ground());
 
-    private static CellValue toolSelected;
+    private static GameElement toolSelected;
 
     public ToolViewModel(ToolView toolView) {
         this.tool = new Tool();
         this.toolView = toolView;
     }
 
-    public CellValue getValue() {
+    public GameElement getValue() {
         return value.getValue();
     }
 
-    public void setValue(CellValue value) {
+    public void setValue(GameElement value) {
         this.value.setValue(value);
     }
 
-    public ReadOnlyObjectProperty<CellValue> valueProperty() {
+    public ReadOnlyObjectProperty<GameElement> valueProperty() {
         return value;
     }
 
-    public  static void setToolSelected(CellValue toolSelected) {
+    public  static void setToolSelected(GameElement toolSelected) {
         ToolViewModel.toolSelected = toolSelected;
     }
 
-    public static CellValue getToolSelected() {
+    public static GameElement getToolSelected() {
         return toolSelected;
     }
 }

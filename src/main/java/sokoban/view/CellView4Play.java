@@ -6,6 +6,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import sokoban.model.CellValue;
+import sokoban.model.GameElement;
 import sokoban.viewmodel.CellViewModel;
 
 public class CellView4Play extends CellView{
@@ -51,59 +52,18 @@ public class CellView4Play extends CellView{
     }
 
     public void init() {
-        switch (viewModel.getCellValue().get()) {
-            case GROUND:
-                imageView.setImage(ground);
-            break;
-            case PLAYER:
-                imageView.setImage(ground);
-                topImageView.setImage(player);
-                break;
-            case BOX:
-                imageView.setImage(ground);
-                topImageView.setImage(box);
-                break;
-            case WALL:
-                imageView.setImage(ground);
-                topImageView.setImage(wall);
+        GameElement cell = viewModel.getCellValue().get();
 
-                break;
-            case GOAL:
-                imageView.setImage(ground);
-                topImageView.setImage(goal);
-                break;
-        }
-
-    }
-    private void setImage(ImageView imageView, CellValue cellValue) {
+        // Mettre l'image de base pour tous les types de cellules
         imageView.setImage(ground);
-        midImageView.setImage(null);
-        topImageView.setImage(null);
+        midImageView.setImage(cell.getImage());
+        topImageView.setImage(cell.getImage2()); // Réinitialiser l'image du dessus
+    }
 
-        switch (cellValue) {
-            case WALL:
-                midImageView.setImage(wall);
-                break;
-            case BOX:
-                midImageView.setImage(box);
-                break;
-            case GOAL:
-                midImageView.setImage(goal);
-                break;
-            case PLAYER:
-                midImageView.setImage(player);
-                break;
-            case PLAYER_ON_GOAL:
-                midImageView.setImage(goal);
-                topImageView.setImage(player);
-                break;
-            case BOX_ON_GOAL:
-                midImageView.setImage(goal);
-                topImageView.setImage(box);
-                break;
-            default:
-                break;
-        }
+    private void setImage(ImageView imageView, GameElement element) {
+        imageView.setImage(ground);
+        midImageView.setImage(element.getImage());
+        topImageView.setImage(null);
     }
 
 }

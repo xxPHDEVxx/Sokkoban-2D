@@ -1,8 +1,7 @@
 package sokoban.viewmodel;
 
 import javafx.beans.property.ReadOnlyObjectProperty;
-import sokoban.model.Board;
-import sokoban.model.CellValue;
+import sokoban.model.*;
 
 public class CellViewModel {
     private final Board board;
@@ -19,28 +18,40 @@ public class CellViewModel {
     }
 
     public void removeTool(){
-        board.removeTool(line, col, CellValue.GROUND);
+        board.removeTool(line, col, new Ground());
     }
-    public ReadOnlyObjectProperty<CellValue> valueProperty() {
+    public ReadOnlyObjectProperty<GameElement> valueProperty() {
         return board.valueProperty(line, col);
     }
 
-    public ReadOnlyObjectProperty<CellValue> getCellValue(){
+    public ReadOnlyObjectProperty<GameElement> value2Property() {
+        return board.value2Property(line, col);
+    }
+
+    public ReadOnlyObjectProperty<GameElement> getCellValue(){
         return valueProperty();
     }
 
-    protected static char getSymbolForElement(CellValue element) {
-
-        return switch (element) {
-            case WALL -> '#';
-            case GOAL -> '.';
-            case BOX -> '$';
-            case BOX_ON_GOAL -> '*';
-            case PLAYER -> '@';
-            case GROUND -> ' ';
-            case PLAYER_ON_GOAL -> '+';
-        };
+    protected static char getSymbolForElement(GameElement element) {
+        if (element instanceof Wall) {
+            return '#';
+        } else if (element instanceof Goal) {
+            return '.';
+        } else if (element instanceof Box) {
+            return '$';
+        } else if (element instanceof BoxOnGoal) {
+            return '*';
+        } else if (element instanceof Player) {
+            return '@';
+        } else if (element instanceof Ground) {
+            return ' ';
+        } else if (element instanceof PlayerOnGoal) {
+            return '+';
+        } else {
+            return ' ';
+        }
     }
+
     public Board getBoard() {
         return board;
     }
@@ -52,4 +63,8 @@ public class CellViewModel {
     public int getCol() {
         return col;
     }
+    public GameElement getCurrentElement() {
+        return board.getElement(line, col);
+    }
+
 }

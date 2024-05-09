@@ -1,7 +1,15 @@
 package sokoban.model;
 
-public class Box extends Tool2 {
+import javafx.scene.image.Image;
+
+public class Box extends GameElement {
+
+    private static int number;
     public Box() {
-        super("BOX");
+        this.value = CellValue.BOX;
+        image = new Image("box.png");
+    }
+    @Override
+    public void draw() {
     }
 }

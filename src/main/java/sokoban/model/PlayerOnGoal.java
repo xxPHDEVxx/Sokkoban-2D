@@ -1,7 +1,9 @@
 package sokoban.model;
-
-public class PlayerOnGoal extends Tool2 {
+import javafx.scene.image.Image;
+public class PlayerOnGoal extends Goal{
+    private static Image image2;
     public PlayerOnGoal() {
-        super("PLAYER_ON_GOAL");
+        this.value = CellValue.PLAYER_ON_GOAL;
+        image2 = new Image("player.png");
     }
 }

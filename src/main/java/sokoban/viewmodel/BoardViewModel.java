@@ -4,10 +4,7 @@ import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.binding.LongBinding;
 import javafx.beans.property.*;
-import sokoban.model.Board;
-import sokoban.model.Direction;
-import sokoban.model.Grid;
-import sokoban.model.CellValue;
+import sokoban.model.*;
 
 import java.io.File;
 
@@ -100,14 +97,14 @@ public class BoardViewModel {
             return false;
         }
 
-        CellValue targetCellValue = board.getGrid().getValue(newRow, newCol);
-        if (targetCellValue == CellValue.WALL) {
+        GameElement targetCellValue = board.getGrid().getValue(newRow, newCol);
+        if (targetCellValue instanceof Wall) {
             System.out.println("Move invalid: Wall is blocking the way.");
             return false;
         }
 
         // Check if the movement is to push a box
-        if (targetCellValue == CellValue.BOX || targetCellValue == CellValue.BOX_ON_GOAL) {
+        if (targetCellValue instanceof Box || targetCellValue instanceof BoxOnGoal) {
             int nextRow = newRow + direction.getDeltaRow();
             int nextCol = newCol + direction.getDeltaCol();
             if (!canPushBox(targetCellValue, newRow, newCol, nextRow, nextCol)) {
@@ -115,17 +112,17 @@ public class BoardViewModel {
                 return false;
             }
             // Move the box
-            board.getGrid().setValue(newRow, newCol, (targetCellValue == CellValue.BOX_ON_GOAL) ? CellValue.GOAL : CellValue.GROUND);
-            board.getGrid().setValue(nextRow, nextCol, (board.getGrid().getValue(nextRow, nextCol) == CellValue.GOAL) ? CellValue.BOX_ON_GOAL : CellValue.BOX);
+            board.getGrid().setValue(newRow, newCol, (targetCellValue instanceof BoxOnGoal) ? new Goal() : new Ground());
+            board.getGrid().setValue(nextRow, nextCol, (board.getGrid().getValue(nextRow, nextCol) instanceof Goal) ? new BoxOnGoal() : new Box());
         }
 
         // Move the player to the new position
-        CellValue newPlayerCellState = board.getGrid().getValue(newRow, newCol);
-        board.getGrid().setValue(newRow, newCol, (newPlayerCellState == CellValue.GOAL) ? CellValue.PLAYER_ON_GOAL : CellValue.PLAYER);
+        GameElement newPlayerCellState = board.getGrid().getValue(newRow, newCol);
+        board.getGrid().setValue(newRow, newCol, (newPlayerCellState instanceof Goal) ? new PlayerOnGoal() : new Player());
 
         // Restore the original player cell
-        CellValue originalPlayerCellState = board.getGrid().getValue(playerCell.getLine(), playerCell.getCol());
-        board.getGrid().setValue(playerCell.getLine(), playerCell.getCol(), (originalPlayerCellState == CellValue.PLAYER_ON_GOAL) ? CellValue.GOAL : CellValue.GROUND);
+        GameElement originalPlayerCellState = board.getGrid().getValue(playerCell.getLine(), playerCell.getCol());
+        board.getGrid().setValue(playerCell.getLine(), playerCell.getCol(), (originalPlayerCellState instanceof PlayerOnGoal) ? new Goal() : new Ground());
 
         incrementMoveCount();
         boxInTargetCountProperty().invalidate();
@@ -133,12 +130,12 @@ public class BoardViewModel {
         return true;
     }
 
-    private boolean canPushBox(CellValue boxState, int boxRow, int boxCol, int targetRow, int targetCol) {
+    private boolean canPushBox(GameElement boxState, int boxRow, int boxCol, int targetRow, int targetCol) {
         if (!board.getGrid().isValidPosition(targetRow, targetCol)) {
             return false;
         }
-        CellValue targetCellState = board.getGrid().getValue(targetRow, targetCol);
-        return (targetCellState == CellValue.GROUND || targetCellState == CellValue.GOAL);
+        GameElement targetCellState = board.getGrid().getValue(targetRow, targetCol);
+        return (targetCellState instanceof Ground  || targetCellState instanceof Goal );
     }
 
 
@@ -146,17 +143,18 @@ public class BoardViewModel {
 
     private boolean canMove(CellViewModel currentCell, int newRow, int newCol) {
         if (!board.getGrid().isValidPosition(newRow, newCol)) return false;
-        CellValue destinationType = board.valueProperty(newRow, newCol).get();
+        GameElement destinationType = board.valueProperty(newRow, newCol).get();
 
-        switch (destinationType) {
-            case WALL:
-                return false;
-            case BOX:
-                // Ajouter la logique pour pousser la boîte si derrière elle se trouve une case libre ou un but.
-                return checkPush(currentCell, newRow, newCol);
-            default:
-                return true;
+        // On suppose que destinationType est une instance de GameElement
+        if (destinationType instanceof Wall) {
+            return false;  // Un mur bloque le mouvement.
+        } else if (destinationType instanceof Box) {
+            // Ajouter la logique pour pousser la boîte si derrière elle se trouve une case libre ou un but.
+            return checkPush(currentCell, newRow, newCol);
+        } else {
+            return true;  // Pour tous les autres types, le déplacement est permis.
         }
+
     }
 
 
@@ -165,7 +163,7 @@ public class BoardViewModel {
         for (int row = 0; row < gridHeight(); row++) {
             for (int col = 0; col < gridWidth(); col++) {
                 CellViewModel cell = gridViewModel.getCellViewModel(row, col);
-                if (cell.getCellValue().get() == CellValue.PLAYER || cell.getCellValue().get() == CellValue.PLAYER_ON_GOAL) {
+                if (cell.getCellValue().get() instanceof Player || cell.getCellValue().get() instanceof PlayerOnGoal) {
                     return cell;
                 }
             }
@@ -185,10 +183,10 @@ public class BoardViewModel {
         }
 
         // Récupérer l'état de la cellule cible
-        CellValue targetCellValue = board.getGrid().getValue(targetRow, targetCol);
+        GameElement targetCellValue = board.getGrid().getValue(targetRow, targetCol);
 
         // La boîte peut être poussée si la cellule cible est GROUND ou GOAL
-        return targetCellValue == CellValue.GROUND || targetCellValue == CellValue.GOAL;
+        return targetCellValue instanceof Ground || targetCellValue instanceof Goal;
     }
 
     //compteur de mouvement

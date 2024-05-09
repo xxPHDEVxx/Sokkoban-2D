@@ -5,14 +5,14 @@ import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 
 public abstract class Cell {
-    abstract CellValue getValue();
-    abstract void setValue(CellValue value);
+    abstract GameElement getValue();
+    abstract void setValue(GameElement value);
     abstract boolean isEmpty();
     abstract boolean isBox();
     abstract boolean isPlayer();
     abstract boolean isGoal();
     abstract boolean isBoxInTarget();
-    abstract ReadOnlyObjectProperty<CellValue> valueProperty();
+    abstract ReadOnlyObjectProperty<GameElement> valueProperty();
     public abstract Cell getCell();
 
 }

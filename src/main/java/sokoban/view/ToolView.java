@@ -15,7 +15,7 @@ import javafx.scene.layout.FlowPane;
 import sokoban.model.Tool;
 import sokoban.viewmodel.BoardViewModel;
 import sokoban.viewmodel.ToolViewModel;
-import sokoban.model.CellValue;
+import sokoban.model.*;
 
 public class ToolView extends FlowPane {
     private final int PADDING = 20;
@@ -90,19 +90,22 @@ public class ToolView extends FlowPane {
     }
 
     // Méthode pour déterminer l'outil correspondant à l'ImageView
-    public static CellValue determineToolFromImageView(ImageView imageView) {
-        if (imageView.getImage() == player) {
-            return CellValue.PLAYER;
-        } else if (imageView.getImage() == box) {
-            return CellValue.BOX;
-        } else if (imageView.getImage() == ground) {
-            return CellValue.GROUND;
-        } else if (imageView.getImage() == wall) {
-            return CellValue.WALL;
-        } else if (imageView.getImage() == goal) {
-            return CellValue.GOAL;
+    public static GameElement determineToolFromImageView(ImageView imageView) {
+        Image image = imageView.getImage();
+
+        if (image == player) {
+            return new Player();
+        } else if (image == box) {
+            return new Box();
+        } else if (image == ground) {
+            return new Ground();
+        } else if (image == wall) {
+            return new Wall();
+        } else if (image == goal) {
+            return new Goal();
         }
-        return null;
+        return null; // Renvoie null si aucune image ne correspond
     }
+
 }
 

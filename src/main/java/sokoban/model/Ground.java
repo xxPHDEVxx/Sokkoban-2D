@@ -1,7 +1,15 @@
 package sokoban.model;
 
-public class Ground extends Tool2 {
+import javafx.scene.image.Image;
+
+public class Ground extends GameElement {
+
+
     public Ground() {
-        super("GROUND");
+        this.value = CellValue.GROUND;
+        image = new Image("ground.png");
+    }
+    @Override
+    public void draw() {
     }
 }

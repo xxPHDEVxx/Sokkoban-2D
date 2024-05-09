@@ -2,6 +2,7 @@ package sokoban.viewmodel;
 
 import sokoban.model.Board;
 import sokoban.model.CellValue;
+import sokoban.model.GameElement;
 import sokoban.model.Grid;
 
 import java.io.File;
@@ -20,7 +21,7 @@ public class GridViewModel {
         try (PrintWriter writer = new PrintWriter(new FileWriter(selectedFile))) {
             for (int i = 0; i < grid.getGridHeight(); i++) {
                 for (int j = 0; j < grid.getGridWidth(); j++) {
-                    CellValue cellValue = grid.getValue(i, j);
+                    GameElement cellValue = grid.getValue(i, j);
                     char symbol = CellViewModel.getSymbolForElement(cellValue);
                     writer.print(symbol);
                 }

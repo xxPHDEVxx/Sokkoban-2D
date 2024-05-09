@@ -10,6 +10,7 @@ import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.TransferMode;
 import sokoban.model.CellValue;
+import sokoban.model.GameElement;
 import sokoban.viewmodel.CellViewModel;
 import sokoban.viewmodel.ToolViewModel;
 
@@ -98,36 +99,12 @@ public class CellView4Design extends CellView{
     }
 
     //changement d'image au click
-    private void setImage(ImageView imageView, CellValue cellValue) {
-        imageView.setImage(ground);
-        midImageView.setImage(null);
-        topImageView.setImage(null);
-
-        switch (cellValue) {
-            case WALL:
-                midImageView.setImage(wall);
-                break;
-            case BOX:
-                midImageView.setImage(box);
-                break;
-            case GOAL:
-                midImageView.setImage(goal);
-                break;
-            case PLAYER:
-                midImageView.setImage(player);
-                break;
-            case PLAYER_ON_GOAL:
-                midImageView.setImage(goal);
-                topImageView.setImage(player);
-                break;
-            case BOX_ON_GOAL:
-                midImageView.setImage(goal);
-                topImageView.setImage(box);
-                break;
-            default:
-                break;
-        }
+    private void setImage(ImageView imageView, GameElement element) {
+        imageView.setImage(ground); // Image de base pour tous les types de cellules
+        midImageView.setImage(element.getImage());
+        topImageView.setImage(element.getImage2());
     }
+
 
 
     //image grisé au moment du hover

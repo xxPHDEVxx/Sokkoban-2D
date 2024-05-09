@@ -34,66 +34,58 @@ public class Board {
 
 
     public void play(int line, int col) {
-        CellValue current = grid.getValue(line, col);
-        CellValue selected = ToolViewModel.getToolSelected();
+        GameElement current = grid.getElement(line, col);
+        GameElement selected = ToolViewModel.getToolSelected();
 
-        // Supprimer un joueur existant si un nouveau joueur est sur le point d'être placé
-        if (selected == CellValue.PLAYER && isPlayerPlaced()) {
-            removeExistingPlayer();
-        }
+        removePlayerIfNeeded(selected);
 
         // Gestion des superpositions et des remplacements
-        switch (current) {
-            case GOAL:
-                switch (selected) {
-                    case BOX:
-                        grid.play(line, col, CellValue.BOX_ON_GOAL);
-                        break;
-                    case PLAYER:
-                        grid.play(line, col, CellValue.PLAYER_ON_GOAL);
-                        break;
-                    default:
-                        // Remplacer une cible par un autre outil si sélectionné
-                        grid.play(line, col, selected);
-                        break;
-                }
-                break;
-            case PLAYER_ON_GOAL:
-            case BOX_ON_GOAL:
-                if (selected == null || selected == CellValue.GROUND) {
-                    grid.play(line, col, CellValue.GOAL); // Restaure la cible si l'outil est désélectionné
-                } else {
-                    grid.play(line, col, selected); // Remplace l'outil sur la cible
-                }
-                break;
-            case PLAYER:
-                if (selected == CellValue.GOAL) {
-                    grid.play(line, col, CellValue.PLAYER_ON_GOAL);
-                } else if (selected != null) {
-                    grid.play(line, col, selected);
-                }
-                break;
-            case BOX:
-                if (selected == CellValue.GOAL) {
-                    grid.play(line, col, CellValue.BOX_ON_GOAL);
-                } else if (selected != null) {
-                    grid.play(line, col, selected);
-                }
-                break;
-            case GROUND:
-            default:
-                grid.play(line, col, selected != null ? selected : CellValue.GROUND);
-                break;
+        handleElementPlacement(line, col, current, selected);
+    }
+
+    private void removePlayerIfNeeded(GameElement selected) {
+        if (selected instanceof Player && isPlayerPlaced()) {
+            removeExistingPlayer();
+        }
+    }
+
+    private void handleElementPlacement(int line, int col, GameElement current, GameElement selected) {
+        if (current instanceof Goal) {
+            placeOnGoal(line, col, selected);
+        } else if (current instanceof PlayerOnGoal || current instanceof BoxOnGoal) {
+            restoreOrReplaceOnGoal(line, col, selected);
+        } else {
+            grid.play(line, col, selected != null ? selected : new Ground());
+        }
+    }
+
+    private void placeOnGoal(int line, int col, GameElement selected) {
+        if (selected instanceof Box) {
+            grid.play(line, col, new BoxOnGoal());
+        } else if (selected instanceof Player) {
+            grid.play(line, col, new PlayerOnGoal());
+        } else {
+            grid.play(line, col, selected); // Remplace l'élément actuel par le nouvel élément sélectionné
+        }
+    }
+
+    private void restoreOrReplaceOnGoal(int line, int col, GameElement selected) {
+        if (selected == null || selected instanceof Ground) {
+            grid.play(line, col, new Goal()); // Restaure la cible si l'outil est désélectionné
+        } else {
+            grid.play(line, col, selected); // Remplace l'outil sur la cible
         }
     }
 
 
 
-    public void removeTool(int line, int col, CellValue ground) {
+
+
+    public void removeTool(int line, int col, GameElement ground) {
         // Déterminez l'état actuel de la cellule avant de la réinitialiser
-        CellValue currentValue = grid.getValue(line, col);
+        GameElement currentValue = grid.getValue(line, col);
         // Condition pour réinitialiser la cellule à GOAL si elle contient PLAYER_ON_GOAL ou BOX_ON_GOAL
-        if (currentValue == CellValue.PLAYER_ON_GOAL || currentValue == CellValue.BOX_ON_GOAL) {
+        if (currentValue instanceof PlayerOnGoal || currentValue instanceof BoxOnGoal) {
             grid.remove(line, col, ground);
         } else {
             // Réinitialisez à GROUND pour tous les autres états
@@ -104,9 +96,9 @@ public class Board {
     private void removeExistingPlayer() {
         for (int row = 0; row < grid.getGridHeight(); row++) {
             for (int col = 0; col < grid.getGridWidth(); col++) {
-                CellValue cellValue = grid.getValue(row, col);
-                if (cellValue == CellValue.PLAYER || cellValue == CellValue.PLAYER_ON_GOAL) {
-                    grid.play(row, col, cellValue == CellValue.PLAYER_ON_GOAL ? CellValue.GOAL : CellValue.GROUND);
+                GameElement cellValue = grid.getValue(row, col);
+                if (cellValue instanceof Player || cellValue instanceof PlayerOnGoal) {
+                    grid.play(row, col, cellValue instanceof PlayerOnGoal ? new Goal() : new Ground());
                     return; // Ajouté pour sortir dès que le joueur est trouvé et supprimé.
                 }
             }
@@ -117,8 +109,12 @@ public class Board {
         return isFull.get();
     }
 
-    public ReadOnlyObjectProperty<CellValue> valueProperty(int line, int col) {
+    public ReadOnlyObjectProperty<GameElement> valueProperty(int line, int col) {
         return grid.valueProperty(line, col);
+    }
+
+    public ReadOnlyObjectProperty<GameElement> value2Property(int line, int col) {
+        return grid.value2Property(line, col);
     }
 
     public LongBinding filledCellsCountProperty() {
@@ -173,7 +169,7 @@ public class Board {
                     for (int col = 0; col < line.length(); col++) {
                         char symbol = line.charAt(col);
                         // Convertir le caractère en CellValue et ajouter à la grille
-                        CellValue cellValue = convertSymbolToCellValue(symbol);
+                        GameElement cellValue = convertSymbolToCellValue(symbol);
                         grid.setValue(row, col, cellValue);
                     }
                     row++;
@@ -185,22 +181,22 @@ public class Board {
         configureBindings();
         return grid;
     }
-    private static CellValue convertSymbolToCellValue(char symbol) {
+    private static GameElement convertSymbolToCellValue(char symbol) {
         switch (symbol) {
             case '#':
-                return CellValue.WALL;
+                return new Wall();
             case '.':
-                return CellValue.GOAL;
+                return new Ground();
             case '$':
-                return CellValue.BOX;
+                return new Goal();
             case '@':
-                return CellValue.PLAYER;
+                return new Player();
             case '*':
-                return CellValue.BOX_ON_GOAL;
+                return new BoxOnGoal();
             case '+':
-                return CellValue.PLAYER_ON_GOAL;
+                return new PlayerOnGoal();
             default:
-                return CellValue.GROUND;
+                return new Ground();
         }
     }
     // Check le nombre de joueur sur la grille
@@ -208,4 +204,7 @@ public class Board {
         return grid.playerCountProperty().get() > 0;
     }
 
+    public GameElement getElement(int line, int col) {
+        return grid.getElement(line, col);
+    }
 }

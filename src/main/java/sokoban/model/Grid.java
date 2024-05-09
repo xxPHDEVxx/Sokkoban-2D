@@ -77,17 +77,19 @@ public class Grid {
     public static int getGridWidth(){return GRID_WIDTH;}
     public static int getGridHeight(){return GRID_HEIGHT;}
 
-    ReadOnlyObjectProperty<CellValue> valueProperty(int line, int col) {
+    ReadOnlyObjectProperty<GameElement> valueProperty(int line, int col) {
         return matrix[line][col].valueProperty();    }
-    void play(int line, int col, CellValue playerValue) {
-        matrix[line][col].setValue(playerValue);
+    ReadOnlyObjectProperty<GameElement> value2Property(int line, int col) {
+        return matrix[line][col].value2Property();    }
+    void play(int line, int col, GameElement player) {
+        matrix[line][col].setValue(player);
         filledCellsCount.invalidate();
         playerCount.invalidate();
         goalCount.invalidate();
         boxCount.invalidate();
     }
 
-    void remove(int line, int col, CellValue ground){
+    void remove(int line, int col, GameElement ground){
         matrix[line][col].setValue(ground);
         filledCellsCount.invalidate();
         playerCount.invalidate();
@@ -120,7 +122,7 @@ public class Grid {
 
     }
 
-    public CellValue getValue ( int line, int col){
+    public GameElement getValue ( int line, int col){
         return matrix[line][col].getValue();
     }
 
@@ -129,11 +131,15 @@ public class Grid {
         return line >= 0 && line < GRID_HEIGHT && col >= 0 && col < GRID_WIDTH;
     }
 
-    public void setValue(int row, int col, CellValue value) {
+    public void setValue(int row, int col, GameElement value) {
         if (isValidPosition(row, col)) {
             matrix[row][col].getCell().setValue(value);
         } else {
             throw new IllegalArgumentException("Invalid row or column index");
         }
+    }
+
+    public GameElement getElement(int line, int col) {
+        return matrix[line][col].getValue() ;
     }
 }

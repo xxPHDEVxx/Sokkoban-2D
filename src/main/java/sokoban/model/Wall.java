@@ -1,7 +1,15 @@
 package sokoban.model;
 
-public class Wall extends Tool2 {
+import javafx.scene.image.Image;
+
+public class Wall extends GameElement {
+
     public Wall() {
-        super("WALL");
+        this.value = CellValue.WALL;
+        image = new Image("wall.png");
+    }
+    @Override
+    public void draw() {
+
     }
 }
