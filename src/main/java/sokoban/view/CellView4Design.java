@@ -100,7 +100,6 @@ public class CellView4Design extends CellView{
     private void setImage(GameElement element) {
         imageView.setImage(ground); // Image de base pour tous les types de cellules
         midImageView.setImage(element.getImage());
-        System.out.println(element.getImage().getUrl());
         //topImageView.setImage(element.getImage2());
     }
 

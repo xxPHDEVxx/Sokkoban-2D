@@ -24,10 +24,6 @@ public class CellViewModel {
         return board.valueProperty(line, col);
     }
 
-    public ReadOnlyObjectProperty<GameElement> value2Property() {
-        return board.value2Property(line, col);
-    }
-
     public ReadOnlyObjectProperty<GameElement> getCellValue(){
         return valueProperty();
     }

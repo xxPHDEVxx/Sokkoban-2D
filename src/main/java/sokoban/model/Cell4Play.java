@@ -6,12 +6,7 @@ import javafx.beans.property.SimpleObjectProperty;
 
 public class Cell4Play extends Cell{
     private final ObjectProperty<GameElement> value = new SimpleObjectProperty<>(new Ground());
-    private final ObjectProperty<GameElement> value2 = new SimpleObjectProperty<>(new Ground());
     GameElement getValue() {return value.getValue();}
-
-    public GameElement getValue2() {
-        return value2.get();
-    }
     public void setValue(GameElement value) {this.value.setValue(value);}
     boolean isEmpty() {return value.get() instanceof Ground;}
     boolean isBox() {return value.get() instanceof Box /*|| value.get() instanceof BOX_ON_GOAL*/;}
@@ -22,7 +17,6 @@ public class Cell4Play extends Cell{
     }
 
     ReadOnlyObjectProperty<GameElement> valueProperty() {return value;}
-    ReadOnlyObjectProperty<GameElement> value2Property() {return value2;}
     public Cell getCell(){
         return this;
     }

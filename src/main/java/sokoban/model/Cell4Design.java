@@ -6,22 +6,18 @@ import javafx.beans.property.SimpleObjectProperty;
 
 public class Cell4Design extends Cell{
 
-    // mettre ici les valeurs possibles pour le type de cellule (stack)
-    //private final ObjectProperty<GameElement[]> value = new SimpleObjectProperty<>(new Ground());
     private final ObjectProperty<GameElement> value = new SimpleObjectProperty<>(new Ground());
-    private final ObjectProperty<GameElement> value2 = new SimpleObjectProperty<>(new Ground());
     @Override
     GameElement getValue() {return value.getValue();}
     public void setValue(GameElement value) {this.value.setValue(value);}
     boolean isEmpty() {return value.get() instanceof Ground;}
-    boolean isBox() {return value.get() instanceof Box /*|| value.get() instanceof BOX_ON_GOAL*/;}
-    boolean isPlayer() {return value.get() instanceof Player /*|| value.get() == CellValue.PLAYER_ON_GOAL*/;}
-    boolean isGoal() {return value.get() instanceof Goal  /*|| value.get() == CellValue.BOX_ON_GOAL || value.get() == CellValue.PLAYER_ON_GOAL*/;}
+    boolean isBox() {return value.get() instanceof Box || value.get() instanceof BoxOnGoal;}
+    boolean isPlayer() {return value.get() instanceof Player || value.get() instanceof PlayerOnGoal;}
+    boolean isGoal() {return value.get() instanceof Goal  || value.get() instanceof BoxOnGoal || value.get() instanceof PlayerOnGoal;}
     boolean isBoxInTarget() {
-        return false;//return value.get() == CellValue.BOX_ON_GOAL;
+        return value.get() instanceof BoxOnGoal;
     }
     ReadOnlyObjectProperty<GameElement> valueProperty() {return value;}
-    ReadOnlyObjectProperty<GameElement> value2Property() {return value2;}
 
     public Cell getCell(){
         return this;

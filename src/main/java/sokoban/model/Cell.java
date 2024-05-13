@@ -1,10 +1,9 @@
 package sokoban.model;
 
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.ReadOnlyObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.*;
 
 public abstract class Cell {
+    private final ListProperty<GameElement[]> values = new SimpleListProperty<>();
     abstract GameElement getValue();
     abstract void setValue(GameElement value);
     abstract boolean isEmpty();

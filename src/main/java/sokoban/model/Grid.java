@@ -79,8 +79,6 @@ public class Grid {
 
     ReadOnlyObjectProperty<GameElement> valueProperty(int line, int col) {
         return matrix[line][col].valueProperty();    }
-    ReadOnlyObjectProperty<GameElement> value2Property(int line, int col) {
-        return matrix[line][col].value2Property();    }
     void play(int line, int col, GameElement player) {
         matrix[line][col].setValue(player);
         filledCellsCount.invalidate();

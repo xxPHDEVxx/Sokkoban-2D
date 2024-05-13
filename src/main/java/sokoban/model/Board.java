@@ -36,7 +36,6 @@ public class Board {
     public void play(int line, int col) {
         GameElement current = grid.getElement(line, col);
         GameElement selected = ToolViewModel.getToolSelected();
-        System.out.println(selected);
         removePlayerIfNeeded(selected);
 
         // Gestion des superpositions et des remplacements
@@ -50,6 +49,9 @@ public class Board {
     }
 
     private void handleElementPlacement(int line, int col, GameElement current, GameElement selected) {
+        if (selected instanceof Player) {
+            grid.play(line, col, new Player());
+        }
         if (current instanceof Goal) {
             placeOnGoal(line, col, selected);
         } else if (current instanceof PlayerOnGoal || current instanceof BoxOnGoal) {
@@ -111,10 +113,6 @@ public class Board {
 
     public ReadOnlyObjectProperty<GameElement> valueProperty(int line, int col) {
         return grid.valueProperty(line, col);
-    }
-
-    public ReadOnlyObjectProperty<GameElement> value2Property(int line, int col) {
-        return grid.value2Property(line, col);
     }
 
     public LongBinding filledCellsCountProperty() {
