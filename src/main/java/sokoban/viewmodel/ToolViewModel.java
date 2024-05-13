@@ -5,16 +5,13 @@ import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import sokoban.model.CellValue;
-import sokoban.model.GameElement;
-import sokoban.model.Ground;
-import sokoban.model.Tool;
+import sokoban.model.*;
 import sokoban.view.ToolView;
 
 public class ToolViewModel {
     private static ToolView toolView;
     private static Tool tool;
-    private static ObjectProperty<GameElement> value = new SimpleObjectProperty<>(new Ground());
+    private static ObjectProperty<GameElement> value = new SimpleObjectProperty<>();
 
     private static GameElement toolSelected;
 

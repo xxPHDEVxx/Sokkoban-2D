@@ -15,11 +15,9 @@ import sokoban.viewmodel.CellViewModel;
 import sokoban.viewmodel.ToolViewModel;
 
 public class CellView4Design extends CellView{
-    private static final Image player = new Image("player.png");
-    private static final Image box = new Image("box.png");
     private static final Image ground = new Image("ground.png");
-    private static final Image wall = new Image("wall.png");
-    private static final Image goal = new Image("goal.png");
+
+
     private final CellViewModel viewModel;
     private final DoubleBinding widthProperty;
     private final DoubleBinding heightProperty;
@@ -91,7 +89,7 @@ public class CellView4Design extends CellView{
 
 
         // quand la cellule change de valeur, adapter l'image affichée
-        viewModel.valueProperty().addListener((obs, old, newVal) -> setImage(imageView, newVal));
+        viewModel.valueProperty().addListener((obs, old, newVal) -> setImage(newVal));
 
         //image grisé au moment du hover
         hoverProperty().addListener(this::hoverChanged);
@@ -99,10 +97,11 @@ public class CellView4Design extends CellView{
     }
 
     //changement d'image au click
-    private void setImage(ImageView imageView, GameElement element) {
+    private void setImage(GameElement element) {
         imageView.setImage(ground); // Image de base pour tous les types de cellules
         midImageView.setImage(element.getImage());
-        topImageView.setImage(element.getImage2());
+        System.out.println(element.getImage().getUrl());
+        //topImageView.setImage(element.getImage2());
     }
 
 
@@ -117,14 +116,6 @@ public class CellView4Design extends CellView{
             // Remettre l'image normale lorsque le survol est terminé
             imageView.setEffect(null);
         }
-    }
-
-    public void refresh() {
-        //image de base en fond
-        imageView.setImage(ground);
-        imageView.setPreserveRatio(true);
-
-        configureBindings();
     }
 
     private void removeTool(int line, int col) {

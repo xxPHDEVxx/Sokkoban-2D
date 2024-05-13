@@ -6,6 +6,8 @@ import javafx.beans.property.SimpleObjectProperty;
 
 public class Cell4Design extends Cell{
 
+    // mettre ici les valeurs possibles pour le type de cellule (stack)
+    //private final ObjectProperty<GameElement[]> value = new SimpleObjectProperty<>(new Ground());
     private final ObjectProperty<GameElement> value = new SimpleObjectProperty<>(new Ground());
     private final ObjectProperty<GameElement> value2 = new SimpleObjectProperty<>(new Ground());
     @Override
