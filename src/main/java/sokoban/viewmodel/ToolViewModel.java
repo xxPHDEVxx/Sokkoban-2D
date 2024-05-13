@@ -14,7 +14,7 @@ import sokoban.view.ToolView;
 public class ToolViewModel {
     private static ToolView toolView;
     private static Tool tool;
-    private static ObjectProperty<GameElement> value = new SimpleObjectProperty<>(new Ground());
+    private static ObjectProperty<GameElement> value = new SimpleObjectProperty<>();
 
     private static GameElement toolSelected;
 

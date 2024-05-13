@@ -12,7 +12,7 @@ import java.util.Scanner;
 
 public class Board {
     public static int MAX_FILLED_CELLS = 75;
-    private static Grid grid = new Grid();
+    private static Grid4Design grid = new Grid4Design();
     private final BooleanBinding isFull;
 
     private  BooleanBinding countBoxOK;
@@ -28,7 +28,7 @@ public class Board {
     }
 
     public static int maxFilledCells() {
-        MAX_FILLED_CELLS = (Grid.getGridHeight() * Grid.getGridWidth()) / 2;
+        MAX_FILLED_CELLS = (grid.getGridHeight() * grid.getGridWidth()) / 2;
         return Board.MAX_FILLED_CELLS;
     }
 
@@ -150,16 +150,16 @@ public class Board {
         return rulesOK;
     }
 
-    public static void setGrid(Grid newGrid) {
+    public static void setGrid(Grid4Design newGrid) {
         grid = newGrid;
     }
-    public Grid getGrid() {
+    public Grid4Design getGrid() {
         return grid;
     }
     public Board getBoard(){
         return this;
     }
-    public Grid open(File file){
+    public Grid4Design open(File file){
         try (Scanner scanner = new Scanner(file)) {
             int row = 0;
             while (scanner.hasNextLine()) {

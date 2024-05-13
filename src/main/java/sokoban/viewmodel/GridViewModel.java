@@ -1,9 +1,6 @@
 package sokoban.viewmodel;
 
-import sokoban.model.Board;
-import sokoban.model.CellValue;
-import sokoban.model.GameElement;
-import sokoban.model.Grid;
+import sokoban.model.*;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -16,7 +13,7 @@ public class GridViewModel {
     public CellViewModel getCellViewModel(int line, int col) {
         return new CellViewModel(line,col, board);
     }
-    public void saveMenu(Grid grid, File selectedFile){
+    public void saveMenu(Grid4Design grid, File selectedFile){
 
         try (PrintWriter writer = new PrintWriter(new FileWriter(selectedFile))) {
             for (int i = 0; i < grid.getGridHeight(); i++) {

@@ -48,18 +48,18 @@ public class BoardViewModel {
         return Board.maxFilledCells();
     }
     public static int gridWidth() {
-        return Grid.getGridWidth();
+        return Grid4Design.getGridWidth();
     }
     public static int gridHeight() {
-        return Grid.getGridHeight();
+        return Grid4Design.getGridHeight();
     }
 
     public static void exitMenu(){System.exit(0);}
     public static void newGridMenu(int width, int height){
-        Board.setGrid(new Grid(width, height));
+        Board.setGrid(new Grid4Design(width, height));
     }
-    public Grid openBoard(File file){
-        Grid grid = board.open(file);
+    public Grid4Design openBoard(File file){
+        Grid4Design grid = board.open(file);
         return grid;
     }
     public static BooleanProperty isChangedProperty() {
@@ -71,7 +71,7 @@ public class BoardViewModel {
     public static final void setChanged(boolean isChanged) {
         isChangedProperty().set(isChanged);
     }
-    public Grid getGrid(){
+    public Grid4Design getGrid(){
         return board.getGrid();
     }
     public GridViewModel getGridVM(){
