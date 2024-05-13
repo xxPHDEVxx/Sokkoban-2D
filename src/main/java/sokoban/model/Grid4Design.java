@@ -1,26 +1,27 @@
 package sokoban.model;
 
-
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.LongBinding;
-import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
-import javafx.beans.property.SimpleIntegerProperty;
 
 import java.util.Arrays;
 
-public abstract class Grid {
+public class Grid4Design {
+    private static int GRID_WIDTH = 15;
+    private static int GRID_HEIGHT = 10;
+    private final Cell4Design[][] matrix;
+    private LongBinding filledCellsCount;
+    private LongBinding boxCount;
+    private LongBinding playerCount;
+    private LongBinding goalCount;
+    private LongBinding boxInTargetCount;
 
-     static int GRID_WIDTH = 15;
-     static int GRID_HEIGHT = 10;
 
-
-/*
-    public Grid() {
+    public Grid4Design() {
         this(GRID_WIDTH, GRID_HEIGHT);
     }
 
-    public Grid(int width, int height) {
+    public Grid4Design(int width, int height) {
         GRID_WIDTH = width;
         GRID_HEIGHT = height;
         matrix = new Cell4Design[GRID_HEIGHT][];
@@ -75,6 +76,8 @@ public abstract class Grid {
 
     ReadOnlyObjectProperty<GameElement> valueProperty(int line, int col) {
         return matrix[line][col].valueProperty();    }
+    ReadOnlyObjectProperty<GameElement> value2Property(int line, int col) {
+        return matrix[line][col].value2Property();    }
     void play(int line, int col, GameElement player) {
         matrix[line][col].setValue(player);
         filledCellsCount.invalidate();
@@ -136,5 +139,5 @@ public abstract class Grid {
     public GameElement getElement(int line, int col) {
         return matrix[line][col].getValue() ;
     }
-*/
+
 }

@@ -17,6 +17,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import sokoban.model.Direction;
 import sokoban.model.Grid;
+import sokoban.model.Grid4Design;
 import sokoban.viewmodel.BoardViewModel;
 import sokoban.viewmodel.GridViewModel;
 
@@ -171,7 +172,7 @@ public abstract class BoardView extends BorderPane {
             FileChooser fileChooser = new FileChooser();
             File selectedFile = fileChooser.showSaveDialog(stage);
 
-            Grid grid = boardViewModel.getGrid();
+            Grid4Design grid = boardViewModel.getGrid();
             GridViewModel gvm = boardViewModel.getGridVM();
             gvm.saveMenu(grid, selectedFile);
         });
