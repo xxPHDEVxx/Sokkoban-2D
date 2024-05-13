@@ -1,17 +1,23 @@
 package sokoban.model;
 
 import javafx.beans.property.*;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 public abstract class Cell {
-    private final ListProperty<GameElement[]> values = new SimpleListProperty<>();
-    abstract GameElement getValue();
-    abstract void setValue(GameElement value);
+    protected  ListProperty<GameElement> values = new SimpleListProperty<>(FXCollections.observableArrayList());
+    public Cell() {
+        values.add(new Ground());
+    }
+    abstract ObservableList<GameElement> getValues();
+    abstract void setValues(GameElement value);
+
     abstract boolean isEmpty();
     abstract boolean isBox();
     abstract boolean isPlayer();
     abstract boolean isGoal();
     abstract boolean isBoxInTarget();
-    abstract ReadOnlyObjectProperty<GameElement> valueProperty();
+    abstract ReadOnlyListProperty<GameElement> valueProperty();
     public abstract Cell getCell();
 
 }

@@ -89,7 +89,7 @@ public class CellView4Design extends CellView{
 
 
         // quand la cellule change de valeur, adapter l'image affichée
-        viewModel.valueProperty().addListener((obs, old, newVal) -> setImage(newVal));
+        viewModel.valueProperty().addListener((obs, old, newVal) -> setImage(newVal.get(newVal.size()-1)));
 
         //image grisé au moment du hover
         hoverProperty().addListener(this::hoverChanged);
@@ -100,7 +100,7 @@ public class CellView4Design extends CellView{
     private void setImage(GameElement element) {
         imageView.setImage(ground); // Image de base pour tous les types de cellules
         midImageView.setImage(element.getImage());
-        //topImageView.setImage(element.getImage2());
+        topImageView.setImage(element.getImage2());
     }
 
 

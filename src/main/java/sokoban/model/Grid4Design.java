@@ -2,7 +2,9 @@ package sokoban.model;
 
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.LongBinding;
+import javafx.beans.property.ReadOnlyListProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
+import javafx.collections.ObservableList;
 
 import java.util.Arrays;
 
@@ -74,11 +76,11 @@ public class Grid4Design {
     public static int getGridWidth(){return GRID_WIDTH;}
     public static int getGridHeight(){return GRID_HEIGHT;}
 
-    ReadOnlyObjectProperty<GameElement> valueProperty(int line, int col) {
+    ReadOnlyListProperty<GameElement> valueProperty(int line, int col) {
         return matrix[line][col].valueProperty();    }
 
     void play(int line, int col, GameElement player) {
-        matrix[line][col].setValue(player);
+        matrix[line][col].setValues(player);
         filledCellsCount.invalidate();
         playerCount.invalidate();
         goalCount.invalidate();
@@ -86,7 +88,7 @@ public class Grid4Design {
     }
 
     void remove(int line, int col, GameElement ground){
-        matrix[line][col].setValue(ground);
+        matrix[line][col].setValues(ground);
         filledCellsCount.invalidate();
         playerCount.invalidate();
         goalCount.invalidate();
@@ -118,8 +120,8 @@ public class Grid4Design {
 
     }
 
-    public GameElement getValue ( int line, int col){
-        return matrix[line][col].getValue();
+    public ObservableList<GameElement> getValue (int line, int col){
+        return matrix[line][col].getValues();
     }
 
     // Vérifie si la position (line, col) est valide dans la grille
@@ -129,14 +131,14 @@ public class Grid4Design {
 
     public void setValue(int row, int col, GameElement value) {
         if (isValidPosition(row, col)) {
-            matrix[row][col].getCell().setValue(value);
+            matrix[row][col].getCell().setValues(value);
         } else {
             throw new IllegalArgumentException("Invalid row or column index");
         }
     }
 
-    public GameElement getElement(int line, int col) {
-        return matrix[line][col].getValue() ;
+    public ObservableList<GameElement> getElement(int line, int col) {
+        return matrix[line][col].getValues() ;
     }
 
 }

@@ -1,25 +1,49 @@
 package sokoban.model;
 
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.ReadOnlyObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.ListProperty;
+import javafx.beans.property.ReadOnlyListProperty;
+import javafx.beans.property.SimpleListProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import sokoban.model.*;
 
-public class Cell4Design extends Cell{
+public class Cell4Design extends Cell {
 
-    private final ObjectProperty<GameElement> value = new SimpleObjectProperty<>(new Ground());
-    @Override
-    GameElement getValue() {return value.getValue();}
-    public void setValue(GameElement value) {this.value.setValue(value);}
-    boolean isEmpty() {return value.get() instanceof Ground;}
-    boolean isBox() {return value.get() instanceof Box || value.get() instanceof BoxOnGoal;}
-    boolean isPlayer() {return value.get() instanceof Player || value.get() instanceof PlayerOnGoal;}
-    boolean isGoal() {return value.get() instanceof Goal  || value.get() instanceof BoxOnGoal || value.get() instanceof PlayerOnGoal;}
-    boolean isBoxInTarget() {
-        return value.get() instanceof BoxOnGoal;
+    ObservableList<GameElement> getValues() {
+        return values.get();
     }
-    ReadOnlyObjectProperty<GameElement> valueProperty() {return value;}
 
-    public Cell getCell(){
+    public Cell4Design() {
+        super();
+    }
+
+    public void setValues(GameElement value) {
+        this.values.add(value);
+    }
+
+    boolean isEmpty() {
+        return values.isEmpty() || values.stream().allMatch(value -> value instanceof Ground);
+    }
+
+    boolean isBox() {
+        return values.stream().anyMatch(value -> value instanceof Box || value instanceof BoxOnGoal);
+    }
+
+    boolean isPlayer() {
+        return values.stream().anyMatch(value -> value instanceof Player || value instanceof PlayerOnGoal);
+    }
+
+    boolean isGoal() {
+        return values.stream().anyMatch(value -> value instanceof Goal || value instanceof BoxOnGoal || value instanceof PlayerOnGoal);
+    }
+
+    boolean isBoxInTarget() {
+        return values.stream().anyMatch(value -> value instanceof BoxOnGoal);
+    }
+    ReadOnlyListProperty<GameElement> valueProperty() {return values;}
+
+
+    public Cell getCell() {
         return this;
     }
 }

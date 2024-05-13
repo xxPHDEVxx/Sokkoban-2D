@@ -1,13 +1,16 @@
 package sokoban.model;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.binding.LongBinding;
+import javafx.beans.property.ReadOnlyListProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
+import javafx.collections.ObservableList;
 import sokoban.model.CellValue;
 import sokoban.model.Grid;
 import sokoban.viewmodel.ToolViewModel;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.List;
 import java.util.Scanner;
 
 public class Board {
@@ -34,7 +37,8 @@ public class Board {
 
 
     public void play(int line, int col) {
-        GameElement current = grid.getElement(line, col);
+        List<GameElement> cellItems = grid.getElement(line, col);
+        GameElement current = grid.getElement(line, col).get(cellItems.size() - 1);
         GameElement selected = ToolViewModel.getToolSelected();
         removePlayerIfNeeded(selected);
 
@@ -84,8 +88,9 @@ public class Board {
 
 
     public void removeTool(int line, int col, GameElement ground) {
+        List<GameElement> cellItems = grid.getElement(line, col);
         // Déterminez l'état actuel de la cellule avant de la réinitialiser
-        GameElement currentValue = grid.getValue(line, col);
+        GameElement currentValue = grid.getValue(line, col).get(cellItems.size() - 1);
         // Condition pour réinitialiser la cellule à GOAL si elle contient PLAYER_ON_GOAL ou BOX_ON_GOAL
         if (currentValue instanceof PlayerOnGoal || currentValue instanceof BoxOnGoal) {
             grid.remove(line, col, ground);
@@ -98,7 +103,8 @@ public class Board {
     private void removeExistingPlayer() {
         for (int row = 0; row < grid.getGridHeight(); row++) {
             for (int col = 0; col < grid.getGridWidth(); col++) {
-                GameElement cellValue = grid.getValue(row, col);
+                List<GameElement> cellItems = grid.getElement(row, col);
+                GameElement cellValue = cellItems.get(cellItems.size() - 1);
                 if (cellValue instanceof Player || cellValue instanceof PlayerOnGoal) {
                     grid.play(row, col, cellValue instanceof PlayerOnGoal ? new Goal() : new Ground());
                     return; // Ajouté pour sortir dès que le joueur est trouvé et supprimé.
@@ -111,7 +117,7 @@ public class Board {
         return isFull.get();
     }
 
-    public ReadOnlyObjectProperty<GameElement> valueProperty(int line, int col) {
+    public ReadOnlyListProperty<GameElement> valueProperty(int line, int col) {
         return grid.valueProperty(line, col);
     }
 
@@ -202,7 +208,7 @@ public class Board {
         return grid.playerCountProperty().get() > 0;
     }
 
-    public GameElement getElement(int line, int col) {
+    public ObservableList<GameElement> getElement(int line, int col) {
         return grid.getElement(line, col);
     }
 }

@@ -7,6 +7,7 @@ import javafx.beans.property.*;
 import sokoban.model.*;
 
 import java.io.File;
+import java.util.List;
 
 public class BoardViewModel {
     private final GridViewModel gridViewModel;
@@ -97,7 +98,8 @@ public class BoardViewModel {
             return false;
         }
 
-        GameElement targetCellValue = board.getGrid().getValue(newRow, newCol);
+        List<GameElement> cellItems = board.getGrid().getValue(newRow, newCol);
+        GameElement targetCellValue = cellItems.get(cellItems.size() - 1);
         if (targetCellValue instanceof Wall) {
             System.out.println("Move invalid: Wall is blocking the way.");
             return false;
@@ -117,11 +119,12 @@ public class BoardViewModel {
         }
 
         // Move the player to the new position
-        GameElement newPlayerCellState = board.getGrid().getValue(newRow, newCol);
+        GameElement newPlayerCellState = cellItems.get(cellItems.size() - 1);
         board.getGrid().setValue(newRow, newCol, (newPlayerCellState instanceof Goal) ? new PlayerOnGoal() : new Player());
 
         // Restore the original player cell
-        GameElement originalPlayerCellState = board.getGrid().getValue(playerCell.getLine(), playerCell.getCol());
+        List<GameElement> playerCellItems = board.getGrid().getValue(playerCell.getLine(), playerCell.getCol());
+        GameElement originalPlayerCellState = playerCellItems.get(cellItems.size() - 1);
         board.getGrid().setValue(playerCell.getLine(), playerCell.getCol(), (originalPlayerCellState instanceof PlayerOnGoal) ? new Goal() : new Ground());
 
         incrementMoveCount();
@@ -134,7 +137,8 @@ public class BoardViewModel {
         if (!board.getGrid().isValidPosition(targetRow, targetCol)) {
             return false;
         }
-        GameElement targetCellState = board.getGrid().getValue(targetRow, targetCol);
+        List<GameElement> targetCellItems = board.getGrid().getValue(targetRow, targetCol);
+        GameElement targetCellState = targetCellItems.get(targetCellItems.size() - 1);
         return (targetCellState instanceof Ground  || targetCellState instanceof Goal );
     }
 
@@ -143,7 +147,8 @@ public class BoardViewModel {
 
     private boolean canMove(CellViewModel currentCell, int newRow, int newCol) {
         if (!board.getGrid().isValidPosition(newRow, newCol)) return false;
-        GameElement destinationType = board.valueProperty(newRow, newCol).get();
+        List<GameElement> cellItems = board.valueProperty(newRow, newCol).get();
+        GameElement destinationType = cellItems.get(cellItems.size());
 
         // On suppose que destinationType est une instance de GameElement
         if (destinationType instanceof Wall) {
@@ -183,7 +188,8 @@ public class BoardViewModel {
         }
 
         // Récupérer l'état de la cellule cible
-        GameElement targetCellValue = board.getGrid().getValue(targetRow, targetCol);
+        List<GameElement> cellItems = board.valueProperty(targetRow, targetCol);
+        GameElement targetCellValue = cellItems.get(cellItems.size() - 1);
 
         // La boîte peut être poussée si la cellule cible est GROUND ou GOAL
         return targetCellValue instanceof Ground || targetCellValue instanceof Goal;

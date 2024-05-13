@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 
 public class GridViewModel {
     private final Board board;
@@ -18,7 +19,8 @@ public class GridViewModel {
         try (PrintWriter writer = new PrintWriter(new FileWriter(selectedFile))) {
             for (int i = 0; i < grid.getGridHeight(); i++) {
                 for (int j = 0; j < grid.getGridWidth(); j++) {
-                    GameElement cellValue = grid.getValue(i, j);
+                    List<GameElement> cellItems = grid.getValue(i, j);
+                    GameElement cellValue = cellItems.get(cellItems.size() - 1);
                     char symbol = CellViewModel.getSymbolForElement(cellValue);
                     writer.print(symbol);
                 }

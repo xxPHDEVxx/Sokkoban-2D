@@ -1,6 +1,8 @@
 package sokoban.viewmodel;
 
+import javafx.beans.property.ReadOnlyListProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
+import javafx.collections.ObservableList;
 import sokoban.model.*;
 
 public class CellViewModel {
@@ -20,11 +22,11 @@ public class CellViewModel {
     public void removeTool(){
         board.removeTool(line, col, new Ground());
     }
-    public ReadOnlyObjectProperty<GameElement> valueProperty() {
+    public ReadOnlyListProperty<GameElement> valueProperty() {
         return board.valueProperty(line, col);
     }
 
-    public ReadOnlyObjectProperty<GameElement> getCellValue(){
+    public ReadOnlyListProperty<GameElement> getCellValue(){
         return valueProperty();
     }
 
@@ -59,7 +61,7 @@ public class CellViewModel {
     public int getCol() {
         return col;
     }
-    public GameElement getCurrentElement() {
+    public ObservableList<GameElement> getCurrentElement() {
         return board.getElement(line, col);
     }
 

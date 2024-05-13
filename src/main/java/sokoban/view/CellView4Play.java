@@ -9,6 +9,8 @@ import sokoban.model.CellValue;
 import sokoban.model.GameElement;
 import sokoban.viewmodel.CellViewModel;
 
+import java.util.List;
+
 public class CellView4Play extends CellView{
     private static final Image player = new Image("player.png");
     private static final Image box = new Image("box.png");
@@ -47,12 +49,13 @@ public class CellView4Play extends CellView{
 
 
         getChildren().addAll(imageView, topImageView, midImageView);
-        viewModel.valueProperty().addListener((obs, old, newVal) -> setImage(imageView, newVal));
+        viewModel.valueProperty().addListener((obs, old, newVal) -> setImage(imageView, newVal.get(newVal.size()-1)));
 
     }
 
     public void init() {
-        GameElement cell = viewModel.getCellValue().get();
+        List <GameElement> elements = viewModel.getCellValue().get();
+        GameElement cell = elements.get(elements.size() - 1);
         System.out.println("Initializing cell view with cell value: " + viewModel.getCellValue().get());
 
 
