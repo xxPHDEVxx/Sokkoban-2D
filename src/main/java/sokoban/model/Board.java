@@ -36,7 +36,7 @@ public class Board {
     public void play(int line, int col) {
         GameElement current = grid.getElement(line, col);
         GameElement selected = ToolViewModel.getToolSelected();
-
+        System.out.println(selected);
         removePlayerIfNeeded(selected);
 
         // Gestion des superpositions et des remplacements

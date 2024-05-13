@@ -5,10 +5,7 @@ import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import sokoban.model.CellValue;
-import sokoban.model.GameElement;
-import sokoban.model.Ground;
-import sokoban.model.Tool;
+import sokoban.model.*;
 import sokoban.view.ToolView;
 
 public class ToolViewModel {
