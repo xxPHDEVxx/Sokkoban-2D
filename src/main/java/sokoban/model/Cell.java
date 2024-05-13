@@ -9,7 +9,6 @@ public abstract class Cell {
     public Cell() {
         values.add(new Ground());
     }
-    abstract ObservableList<GameElement> getValues();
     abstract void setValues(GameElement value);
 
     abstract boolean isEmpty();

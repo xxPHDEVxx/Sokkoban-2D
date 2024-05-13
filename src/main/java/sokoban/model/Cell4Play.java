@@ -11,10 +11,6 @@ public class Cell4Play extends Cell {
     public Cell4Play() {
         super();
     }
-    @Override
-    ObservableList<GameElement> getValues() {
-        return values.get();
-    }
 
     @Override
     void setValues(GameElement value) {

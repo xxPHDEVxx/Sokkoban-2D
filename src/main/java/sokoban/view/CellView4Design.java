@@ -57,7 +57,7 @@ public class CellView4Design extends CellView{
                 event.consume();
             } else if (event.getButton() == MouseButton.PRIMARY) {
                 if (ToolViewModel.getToolSelected() != null && !viewModel.getBoard().isFull()) {
-                    viewModel.play();
+                    viewModel.put();
                 } else if (viewModel.getBoard().isFull()) {
                     System.out.println("Nombre maximal d'outils atteint sur la grille.");
                 } else {
@@ -79,7 +79,7 @@ public class CellView4Design extends CellView{
             boolean success = false;
             if (db.hasString()) {
                 if (!viewModel.getBoard().isFull()) {
-                    viewModel.play();
+                    viewModel.put();
                     success = true;
                 }
             }

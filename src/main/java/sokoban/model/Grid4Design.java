@@ -3,10 +3,10 @@ package sokoban.model;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.LongBinding;
 import javafx.beans.property.ReadOnlyListProperty;
-import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.collections.ObservableList;
 
 import java.util.Arrays;
+import java.util.List;
 
 public class Grid4Design {
     private static int GRID_WIDTH = 15;
@@ -79,12 +79,23 @@ public class Grid4Design {
     ReadOnlyListProperty<GameElement> valueProperty(int line, int col) {
         return matrix[line][col].valueProperty();    }
 
-    void play(int line, int col, GameElement player) {
-        matrix[line][col].setValues(player);
+    void put(int line, int col, GameElement element) {
+        List<GameElement> cellItems = this.matrix[line][col].valueProperty();
+        if (cellItems.contains(element)) {
+            cellItems.remove(element);
+        }
+        matrix[line][col].setValues(element);
+        for (GameElement cellItem : cellItems) {
+            System.out.print("item : ");
+            System.out.println(cellItem);
+        }
         filledCellsCount.invalidate();
         playerCount.invalidate();
         goalCount.invalidate();
         boxCount.invalidate();
+        System.out.println(boxCount.get());
+        System.out.println(goalCount.get());
+        System.out.println(playerCount);
     }
 
     void remove(int line, int col, GameElement ground){
@@ -121,7 +132,7 @@ public class Grid4Design {
     }
 
     public ObservableList<GameElement> getValue (int line, int col){
-        return matrix[line][col].getValues();
+        return matrix[line][col].valueProperty();
     }
 
     // Vérifie si la position (line, col) est valide dans la grille
@@ -138,7 +149,7 @@ public class Grid4Design {
     }
 
     public ObservableList<GameElement> getElement(int line, int col) {
-        return matrix[line][col].getValues() ;
+        return matrix[line][col].valueProperty() ;
     }
 
 }

@@ -15,8 +15,8 @@ public class CellViewModel {
         this.col = col;
     }
 
-    public void play(){
-        board.play(line, col);
+    public void put(){
+        board.put(line, col);
     }
 
     public void removeTool(){

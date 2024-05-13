@@ -2,10 +2,7 @@ package sokoban.model;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.binding.LongBinding;
 import javafx.beans.property.ReadOnlyListProperty;
-import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.collections.ObservableList;
-import sokoban.model.CellValue;
-import sokoban.model.Grid;
 import sokoban.viewmodel.ToolViewModel;
 
 import java.io.File;
@@ -36,7 +33,7 @@ public class Board {
     }
 
 
-    public void play(int line, int col) {
+    public void put(int line, int col) {
         List<GameElement> cellItems = grid.getElement(line, col);
         GameElement current = grid.getElement(line, col).get(cellItems.size() - 1);
         GameElement selected = ToolViewModel.getToolSelected();
@@ -54,32 +51,32 @@ public class Board {
 
     private void handleElementPlacement(int line, int col, GameElement current, GameElement selected) {
         if (selected instanceof Player) {
-            grid.play(line, col, new Player());
+            grid.put(line, col, new Player());
         }
         if (current instanceof Goal) {
             placeOnGoal(line, col, selected);
         } else if (current instanceof PlayerOnGoal || current instanceof BoxOnGoal) {
             restoreOrReplaceOnGoal(line, col, selected);
         } else {
-            grid.play(line, col, selected != null ? selected : new Ground());
+            grid.put(line, col, selected != null ? selected : new Ground());
         }
     }
 
     private void placeOnGoal(int line, int col, GameElement selected) {
         if (selected instanceof Box) {
-            grid.play(line, col, new BoxOnGoal());
+            grid.put(line, col, new BoxOnGoal());
         } else if (selected instanceof Player) {
-            grid.play(line, col, new PlayerOnGoal());
+            grid.put(line, col, new PlayerOnGoal());
         } else {
-            grid.play(line, col, selected); // Remplace l'élément actuel par le nouvel élément sélectionné
+            grid.put(line, col, selected); // Remplace l'élément actuel par le nouvel élément sélectionné
         }
     }
 
     private void restoreOrReplaceOnGoal(int line, int col, GameElement selected) {
         if (selected == null || selected instanceof Ground) {
-            grid.play(line, col, new Goal()); // Restaure la cible si l'outil est désélectionné
+            grid.put(line, col, new Goal()); // Restaure la cible si l'outil est désélectionné
         } else {
-            grid.play(line, col, selected); // Remplace l'outil sur la cible
+            grid.put(line, col, selected); // Remplace l'outil sur la cible
         }
     }
 
@@ -106,7 +103,7 @@ public class Board {
                 List<GameElement> cellItems = grid.getElement(row, col);
                 GameElement cellValue = cellItems.get(cellItems.size() - 1);
                 if (cellValue instanceof Player || cellValue instanceof PlayerOnGoal) {
-                    grid.play(row, col, cellValue instanceof PlayerOnGoal ? new Goal() : new Ground());
+                    grid.put(row, col, cellValue instanceof PlayerOnGoal ? new Goal() : new Ground());
                     return; // Ajouté pour sortir dès que le joueur est trouvé et supprimé.
                 }
             }
