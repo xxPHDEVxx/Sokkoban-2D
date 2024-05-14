@@ -76,7 +76,7 @@ public class Board {
     private void handleGoalAndOther(int line, int col, List<GameElement> cellItems, GameElement selected) {
         // Remplacer la fin de liste par un joueur ou une box
         if (selected instanceof Box || selected instanceof Player) {
-            grid.remove(line, col, cellItems.get(cellItems.size() - 1));
+            removeCellElement(line, col, cellItems.get(cellItems.size() - 1));
             grid.put(line, col, selected);
         }
     }
@@ -87,7 +87,7 @@ public class Board {
         GameElement currentValue = grid.getValue(line, col).get(cellItems.size() - 1);
         // Condition pour réinitialiser la cellule à GOAL si elle contient PLAYER_ON_GOAL ou BOX_ON_GOAL
         if (cellItems.stream().anyMatch(element -> element instanceof Goal)) {
-            grid.remove(line, col, currentValue);
+            removeCellElement(line, col, currentValue);
         } else {
             // Réinitialisez à GROUND pour tous les autres états
             cellItems.clear();
@@ -101,12 +101,16 @@ public class Board {
                 List<GameElement> cellItems = grid.getElement(row, col);
                 for (int i = 0; i < cellItems.size(); i++) {
                     if (cellItems.get(i) instanceof Player) {
-                        grid.remove(row, col, cellItems.get(i));
+                        removeCellElement(row, col, cellItems.get(i));
                         return; // Ajouté pour sortir dès que le joueur est trouvé et supprimé.
                     }
                 }
             }
         }
+    }
+
+    public void removeCellElement(int line, int col, GameElement element) {
+        grid.remove(line, col, element);
     }
 
 

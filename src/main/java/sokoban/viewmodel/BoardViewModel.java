@@ -98,34 +98,46 @@ public class BoardViewModel {
             return false;
         }
 
-        List<GameElement> cellItems = board.getGrid().getValue(newRow, newCol);
-        GameElement targetCellValue = cellItems.get(cellItems.size() - 1);
-        if (targetCellValue instanceof Wall) {
+        List<GameElement> targetCellItems = board.getGrid().getValue(newRow, newCol);
+        GameElement targetCellValue = targetCellItems.get(targetCellItems.size() - 1);
+        if (targetCellItems.stream().anyMatch(element -> element instanceof Wall)) {
             System.out.println("Move invalid: Wall is blocking the way.");
             return false;
         }
 
         // Check if the movement is to push a box
-        if (targetCellValue instanceof Box || targetCellValue instanceof BoxOnGoal) {
+        if (targetCellItems.stream().anyMatch(element -> element instanceof Box)) {
             int nextRow = newRow + direction.getDeltaRow();
             int nextCol = newCol + direction.getDeltaCol();
             if (!canPushBox(targetCellValue, newRow, newCol, nextRow, nextCol)) {
                 System.out.println("Move invalid: Cannot push the box.");
                 return false;
             }
+            List<GameElement> nextTargetCellItems = board.getGrid().getValue(nextRow, nextCol);
             // Move the box
-            board.getGrid().setValue(newRow, newCol, (targetCellValue instanceof BoxOnGoal) ? new Goal() : new Ground());
-            board.getGrid().setValue(nextRow, nextCol, (board.getGrid().getValue(nextRow, nextCol) instanceof Goal) ? new BoxOnGoal() : new Box());
+
+            // supression de la box sur la case cible
+            for (GameElement element : targetCellItems) {
+                if (element instanceof Box) {
+                    board.removeCellElement(newRow, newCol, element);
+                    break;
+                }
+            }
+            // ajout de la box déplacée sur la case suivant la case cible
+            nextTargetCellItems.add(new Box());
         }
 
         // Move the player to the new position
-        GameElement newPlayerCellState = cellItems.get(cellItems.size() - 1);
-        board.getGrid().setValue(newRow, newCol, (newPlayerCellState instanceof Goal) ? new PlayerOnGoal() : new Player());
+        targetCellItems.add(new Player());
 
         // Restore the original player cell
         List<GameElement> playerCellItems = board.getGrid().getValue(playerCell.getLine(), playerCell.getCol());
-        GameElement originalPlayerCellState = playerCellItems.get(cellItems.size() - 1);
-        board.getGrid().setValue(playerCell.getLine(), playerCell.getCol(), (originalPlayerCellState instanceof PlayerOnGoal) ? new Goal() : new Ground());
+        for (GameElement element : playerCellItems) {
+            if (element instanceof Player) {
+                board.removeCellElement(playerCell.getLine(), playerCell.getCol(), element);
+                break;
+        }
+        }
 
         incrementMoveCount();
         boxInTargetCountProperty().invalidate();
@@ -142,28 +154,6 @@ public class BoardViewModel {
         return (targetCellState instanceof Ground  || targetCellState instanceof Goal );
     }
 
-
-
-
-    private boolean canMove(CellViewModel currentCell, int newRow, int newCol) {
-        if (!board.getGrid().isValidPosition(newRow, newCol)) return false;
-        List<GameElement> cellItems = board.valueProperty(newRow, newCol).get();
-        GameElement destinationType = cellItems.get(cellItems.size());
-
-        // On suppose que destinationType est une instance de GameElement
-        if (destinationType instanceof Wall) {
-            return false;  // Un mur bloque le mouvement.
-        } else if (destinationType instanceof Box) {
-            // Ajouter la logique pour pousser la boîte si derrière elle se trouve une case libre ou un but.
-            return checkPush(currentCell, newRow, newCol);
-        } else {
-            return true;  // Pour tous les autres types, le déplacement est permis.
-        }
-
-    }
-
-
-
     private CellViewModel findPlayerCell() {
         for (int row = 0; row < gridHeight(); row++) {
             for (int col = 0; col < gridWidth(); col++) {
@@ -174,25 +164,6 @@ public class BoardViewModel {
             }
         }
         return null;
-    }
-
-
-    public boolean checkPush(CellViewModel currentCell, int newRow, int newCol) {
-        // Calculer la position cible pour la boîte après le push
-        int targetRow = newRow + (newRow - currentCell.getLine());
-        int targetCol = newCol + (newCol - currentCell.getCol());
-
-        // Vérifier si la position cible est valide
-        if (!board.getGrid().isValidPosition(targetRow, targetCol)) {
-            return false;
-        }
-
-        // Récupérer l'état de la cellule cible
-        List<GameElement> cellItems = board.valueProperty(targetRow, targetCol);
-        GameElement targetCellValue = cellItems.get(cellItems.size() - 1);
-
-        // La boîte peut être poussée si la cellule cible est GROUND ou GOAL
-        return targetCellValue instanceof Ground || targetCellValue instanceof Goal;
     }
 
     //compteur de mouvement
