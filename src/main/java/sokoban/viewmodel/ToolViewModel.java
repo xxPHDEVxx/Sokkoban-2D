@@ -28,7 +28,7 @@ public class ToolViewModel {
         this.value.setValue(value);
     }
 
-    public ReadOnlyObjectProperty<GameElement> valueProperty() {
+    public ReadOnlyObjectProperty<GameElement> valueToolProperty() {
         return value;
     }
 

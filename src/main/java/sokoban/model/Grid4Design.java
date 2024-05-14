@@ -98,8 +98,8 @@ public class Grid4Design {
         System.out.println(playerCount);
     }
 
-    void remove(int line, int col, GameElement ground){
-        matrix[line][col].setValues(ground);
+    void remove(int line, int col, GameElement element){
+        matrix[line][col].remove(element);
         filledCellsCount.invalidate();
         playerCount.invalidate();
         goalCount.invalidate();

@@ -62,13 +62,11 @@ public class CellView4Play extends CellView{
         // Mettre l'image de base pour tous les types de cellules
         imageView.setImage(ground);
         midImageView.setImage(cell.getImage());
-        topImageView.setImage(cell.getImage2());
     }
 
     private void setImage(ImageView imageView, GameElement element) {
         imageView.setImage(ground);
         midImageView.setImage(element.getImage());
-        topImageView.setImage(element.getImage2());
     }
 
 }

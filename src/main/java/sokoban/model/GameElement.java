@@ -6,15 +6,9 @@ public abstract class GameElement {
     protected int x;
     protected int y;
     protected CellValue value;
-    protected static Image image;
-    protected static Image image2 = null;
-
-    public static Image getImage() {
+    protected Image image;
+    public  Image getImage() {
         return image;
-    }
-
-    public static Image getImage2() {
-        return image2;
     }
 
     public GameElement() {

@@ -26,25 +26,20 @@ public class Cell4Design extends Cell {
     }
 
     boolean isBox() {
-        return values.stream().anyMatch(value -> value instanceof Box || value instanceof BoxOnGoal);
+        return values.stream().anyMatch(value -> value instanceof Box);
     }
 
     boolean isPlayer() {
-        for (GameElement element : values) {
-            if (element instanceof Player) {
-                return true; // Si un joueur est trouvé, retourne true
-            }
-        }
-        return false; // Si aucun joueur n'est trouvé, retourne false
+        return values.stream().anyMatch(value -> value instanceof Player);
     }
 
 
     boolean isGoal() {
-        return values.stream().anyMatch(value -> value instanceof Goal || value instanceof BoxOnGoal || value instanceof PlayerOnGoal);
+        return values.stream().anyMatch(value -> value instanceof Goal);
     }
 
     boolean isBoxInTarget() {
-        return values.stream().anyMatch(value -> value instanceof BoxOnGoal);
+        return values.stream().anyMatch(value -> value instanceof Box && value instanceof Goal);
     }
     ReadOnlyListProperty<GameElement> valueProperty() {return values;}
 

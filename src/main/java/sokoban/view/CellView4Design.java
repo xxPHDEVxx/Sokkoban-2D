@@ -11,13 +11,16 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.TransferMode;
 import sokoban.model.CellValue;
 import sokoban.model.GameElement;
+import sokoban.model.Goal;
 import sokoban.viewmodel.CellViewModel;
 import sokoban.viewmodel.ToolViewModel;
 
+import java.util.List;
+
 public class CellView4Design extends CellView{
     private static final Image ground = new Image("ground.png");
-
-
+    private static final Image goal = new Image("goal.png");
+    private static final Image box = new Image("box.png");
     private final CellViewModel viewModel;
     private final DoubleBinding widthProperty;
     private final DoubleBinding heightProperty;
@@ -89,18 +92,27 @@ public class CellView4Design extends CellView{
 
 
         // quand la cellule change de valeur, adapter l'image affichée
-        viewModel.valueProperty().addListener((obs, old, newVal) -> setImage(newVal.get(newVal.size()-1)));
+        viewModel.valueProperty().addListener((obs, old, newVal) -> setImage(newVal));
 
         //image grisé au moment du hover
         hoverProperty().addListener(this::hoverChanged);
 
     }
 
-    //changement d'image au click
-    private void setImage(GameElement element) {
-        imageView.setImage(ground); // Image de base pour tous les types de cellules
-        midImageView.setImage(element.getImage());
-        topImageView.setImage(element.getImage2());
+    //changement d'image au click ( si l'élement goal est présent on inverse les images pour la visibilité)
+    private void setImage(List<GameElement> elements) {
+        midImageView.setImage(null);
+        topImageView.setImage(null);
+
+        if (elements.size() > 2 && elements.get(2) instanceof Goal) {
+            midImageView.setImage(elements.get(2).getImage());
+            topImageView.setImage(elements.get(1).getImage());
+        } else {
+            if (elements.size() > 1)
+                midImageView.setImage(elements.get(1).getImage());
+            if (elements.size() > 2)
+                topImageView.setImage(elements.get(2).getImage());
+        }
     }
 
 
