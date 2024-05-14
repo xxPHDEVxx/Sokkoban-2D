@@ -37,13 +37,13 @@ public class CellViewModel {
             return '.';
         } else if (element instanceof Box) {
             return '$';
-        } else if (element instanceof BoxOnGoal) {
+        } else if (element instanceof Box) { // corriger pour boxOnGoal
             return '*';
         } else if (element instanceof Player) {
             return '@';
         } else if (element instanceof Ground) {
             return ' ';
-        } else if (element instanceof PlayerOnGoal) {
+        } else if (element instanceof Player) { // corriger pour playerOnGoal
             return '+';
         } else {
             return ' ';
