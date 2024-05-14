@@ -85,17 +85,11 @@ public class Grid4Design {
             cellItems.remove(element);
         }
         matrix[line][col].setValues(element);
-        for (GameElement cellItem : cellItems) {
-            System.out.print("item : ");
-            System.out.println(cellItem);
-        }
+
         filledCellsCount.invalidate();
         playerCount.invalidate();
         goalCount.invalidate();
         boxCount.invalidate();
-        System.out.println(boxCount.get());
-        System.out.println(goalCount.get());
-        System.out.println(playerCount);
     }
 
     void remove(int line, int col, GameElement element){

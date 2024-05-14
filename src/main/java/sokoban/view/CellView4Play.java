@@ -53,8 +53,6 @@ public class CellView4Play extends CellView{
 
     public void init() {
         List<GameElement> elements = viewModel.getCellValue().get();
-        System.out.println("Initializing cell view with cell value: " + viewModel.getCellValue().get());
-
 
         // Mettre l'image de base pour tous les types de cellules
         imageView.setImage(ground);
