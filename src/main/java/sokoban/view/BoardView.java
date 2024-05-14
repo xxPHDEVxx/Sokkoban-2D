@@ -257,11 +257,4 @@ public abstract class BoardView extends BorderPane {
         GridView4Play gridViewPlay = new GridView4Play(boardViewModel.getGridViewModel(), gridWidth, gridHeight);
         new BoardView4play(playStage, gridViewPlay, boardViewModel);
     }
-
-    public static Stage getPrimaryStage() {
-        return primaryStage;
-    }
-
-
-
 }

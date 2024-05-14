@@ -9,7 +9,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.TransferMode;
-import sokoban.model.CellValue;
 import sokoban.model.GameElement;
 import sokoban.model.Goal;
 import sokoban.viewmodel.CellViewModel;

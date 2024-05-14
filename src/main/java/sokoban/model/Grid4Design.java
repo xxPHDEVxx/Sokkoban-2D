@@ -122,7 +122,6 @@ public class Grid4Design {
         return boxInTargetCount;
     }
 
-    public boolean isEmpty(int line, int col) {return matrix[line][col].isEmpty();}
     public void countCell () {
         setBoxCellsCount();
         setPlayerCount();

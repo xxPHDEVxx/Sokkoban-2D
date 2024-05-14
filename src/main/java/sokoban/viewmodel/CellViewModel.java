@@ -61,8 +61,4 @@ public class CellViewModel {
     public int getCol() {
         return col;
     }
-    public ObservableList<GameElement> getCurrentElement() {
-        return board.getElement(line, col);
-    }
-
 }

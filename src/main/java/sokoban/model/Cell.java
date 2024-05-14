@@ -2,7 +2,6 @@ package sokoban.model;
 
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 
 public abstract class Cell {
     protected  ListProperty<GameElement> values = new SimpleListProperty<>(FXCollections.observableArrayList());

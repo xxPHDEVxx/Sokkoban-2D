@@ -2,14 +2,10 @@ package sokoban.model;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.binding.LongBinding;
 import javafx.beans.property.ReadOnlyListProperty;
-import javafx.collections.ObservableList;
 import sokoban.viewmodel.ToolViewModel;
-
-import javax.security.auth.login.AccountExpiredException;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
@@ -139,9 +135,6 @@ public class Board {
     public LongBinding playerCountProperty(){
         return grid.playerCountProperty();
     }
-    public boolean isEmpty(int line, int col) {
-        return grid.isEmpty(line, col);
-    }
 
     public void configureBindings() {
         countBoxOK = boxCountProperty().greaterThan(0);
@@ -220,9 +213,5 @@ public class Board {
     // Check le nombre de joueur sur la grille
     public boolean isPlayerPlaced() {
         return grid.playerCountProperty().get() > 0;
-    }
-
-    public ObservableList<GameElement> getElement(int line, int col) {
-        return grid.getElement(line, col);
     }
 }

@@ -167,9 +167,9 @@ public class BoardViewModel {
     private CellViewModel findPlayerCell() {
         for (int row = 0; row < gridHeight(); row++) {
             for (int col = 0; col < gridWidth(); col++) {
-                CellViewModel cell = gridViewModel.getCellViewModel(row, col);
-                if (cell.getCellValue().get() instanceof Player || cell.getCellValue().get() instanceof PlayerOnGoal) {
-                    return cell;
+                List<GameElement> cellItems = this.board.valueProperty(row, col).get();
+                if (cellItems.stream().anyMatch(element -> element instanceof Player)) {
+                    return new CellViewModel(row, col, board);
                 }
             }
         }

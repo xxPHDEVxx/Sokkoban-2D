@@ -3,7 +3,6 @@ import javafx.beans.property.ListProperty;
 import javafx.beans.property.ReadOnlyListProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 
 public class Cell4Play extends Cell {
     private final ListProperty<GameElement> values = new SimpleListProperty<>(FXCollections.observableArrayList());
