@@ -54,12 +54,18 @@ public class CellView4Play extends CellView{
     public void init() {
         List<GameElement> elements = viewModel.getCellValue().get();
 
+
         // Mettre l'image de base pour tous les types de cellules
         imageView.setImage(ground);
-        if (elements.size() > 1)
-            midImageView.setImage(elements.get(1).getImage());
-        if (elements.size() > 2)
-            topImageView.setImage(elements.get(2).getImage());
+        if (elements.size() > 2 && elements.get(2) instanceof Goal) {
+            midImageView.setImage(elements.get(2).getImage());
+            topImageView.setImage(elements.get(1).getImage());
+        } else {
+            if (elements.size() > 1)
+                midImageView.setImage(elements.get(1).getImage());
+            if (elements.size() > 2)
+                topImageView.setImage(elements.get(2).getImage());
+        }
     }
 
     private void setImage(List<GameElement> elements) {

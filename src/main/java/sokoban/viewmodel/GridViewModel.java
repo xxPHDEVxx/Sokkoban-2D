@@ -20,8 +20,7 @@ public class GridViewModel {
             for (int i = 0; i < grid.getGridHeight(); i++) {
                 for (int j = 0; j < grid.getGridWidth(); j++) {
                     List<GameElement> cellItems = grid.getValue(i, j);
-                    GameElement cellValue = cellItems.get(cellItems.size() - 1);
-                    char symbol = CellViewModel.getSymbolForElement(cellValue);
+                    char symbol = CellViewModel.getSymbolForElement(cellItems);
                     writer.print(symbol);
                 }
                 writer.println();

@@ -1,18 +1,18 @@
 package sokoban.view;
 
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.Property;
-import javafx.beans.property.SimpleObjectProperty;
+
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.FlowPane;
-import sokoban.model.Tool;
+import javafx.scene.paint.Color;
 import sokoban.viewmodel.BoardViewModel;
 import sokoban.viewmodel.ToolViewModel;
 import sokoban.model.*;
@@ -86,8 +86,23 @@ public class ToolView extends FlowPane {
         imageView.setOnMouseClicked(event -> {
             ToolViewModel.setToolSelected(determineToolFromImageView(imageView));
             BoardViewModel.setChanged(true);
+
+            // Réinitialisez le style de tous les outils
+            for (Node child : getChildren()) {
+                child.setEffect(null);
+            }
+
+            // Créez un effet de surbrillance avec une intensité personnalisée
+            DropShadow dropShadow = new DropShadow();
+            dropShadow.setColor(Color.GREY); // Couleur de l'ombre
+            dropShadow.setRadius(10); // Taille du flou
+            dropShadow.setSpread(0.7); // Étalement de l'ombre
+
+            // Appliquez l'effet de surbrillance à l'outil sélectionné
+            imageView.setEffect(dropShadow);
         });
     }
+
 
     // Méthode pour déterminer l'outil correspondant à l'ImageView
     public static GameElement determineToolFromImageView(ImageView imageView) {

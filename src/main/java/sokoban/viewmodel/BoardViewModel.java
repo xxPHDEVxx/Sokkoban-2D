@@ -84,68 +84,74 @@ public class BoardViewModel {
 
     // Commentaires dispo pour suivi car longue méthode
     public boolean movePlayer(Direction direction) {
+        // Recherche de la cellule contenant le joueur
         CellViewModel playerCell = findPlayerCell();
         if (playerCell == null) {
             System.out.println("Player not found!");
             return false;
         }
 
+        // Calcul des nouvelles positions du joueur
         int newRow = playerCell.getLine() + direction.getDeltaRow();
         int newCol = playerCell.getCol() + direction.getDeltaCol();
 
-        if (!board.getGrid().isValidPosition(newRow, newCol)) {
-            System.out.println("Move invalid: Position is out of bounds.");
+        // Vérification si la nouvelle position est valide
+        if (!isValidPosition(newRow, newCol)) {
             return false;
         }
 
+        // Obtention des éléments de la cellule cible
         List<GameElement> targetCellItems = board.getGrid().getValue(newRow, newCol);
-        GameElement targetCellValue = targetCellItems.get(targetCellItems.size() - 1);
+
+        // Vérification si un mur bloque le chemin
         if (targetCellItems.stream().anyMatch(element -> element instanceof Wall)) {
             System.out.println("Move invalid: Wall is blocking the way.");
             return false;
         }
 
-        // Check if the movement is to push a box
+        // Vérification si le mouvement est pour pousser une boîte
         if (targetCellItems.stream().anyMatch(element -> element instanceof Box)) {
             int nextRow = newRow + direction.getDeltaRow();
             int nextCol = newCol + direction.getDeltaCol();
-            if (!canPushBox(targetCellValue, newRow, newCol, nextRow, nextCol)) {
+
+            // Vérification si la boîte peut être poussée
+            if (!canPushBox(nextRow, nextCol) || !isValidPosition(nextRow, nextCol)) {
                 System.out.println("Move invalid: Cannot push the box.");
                 return false;
             }
-            List<GameElement> nextTargetCellItems = board.getGrid().getValue(nextRow, nextCol);
-            // Move the box
 
-            // supression de la box sur la case cible
-            for (GameElement element : targetCellItems) {
-                if (element instanceof Box) {
-                    board.removeCellElement(newRow, newCol, element);
-                    break;
-                }
-            }
-            // ajout de la box déplacée sur la case suivant la case cible
-            nextTargetCellItems.add(new Box());
+
+            // Suppression de la boîte sur la case cible
+            targetCellItems.removeIf(element -> element instanceof Box);
+
+            // Ajout de la boîte déplacée sur la case suivante
+            board.getGrid().getValue(nextRow, nextCol).add(new Box());
         }
 
-        // Move the player to the new position
+        // Déplacement du joueur vers la nouvelle position
         targetCellItems.add(new Player());
 
-        // Restore the original player cell
+        // Suppression du joueur de sa cellule d'origine
         List<GameElement> playerCellItems = board.getGrid().getValue(playerCell.getLine(), playerCell.getCol());
-        for (GameElement element : playerCellItems) {
-            if (element instanceof Player) {
-                board.removeCellElement(playerCell.getLine(), playerCell.getCol(), element);
-                break;
-        }
-        }
+        playerCellItems.removeIf(element -> element instanceof Player);
 
+        // Incrémentation du compteur de mouvements
         incrementMoveCount();
         boxInTargetCountProperty().invalidate();
 
         return true;
     }
 
-    private boolean canPushBox(GameElement boxState, int boxRow, int boxCol, int targetRow, int targetCol) {
+    public boolean isValidPosition(int row, int col) {
+        if (!board.getGrid().isValidPosition(row, col)) {
+            System.out.println("Move invalid: Position is out of bounds.");
+            return false;
+        }
+        return true;
+    }
+
+
+    private boolean canPushBox(int targetRow, int targetCol) {
         if (!board.getGrid().isValidPosition(targetRow, targetCol)) {
             return false;
         }

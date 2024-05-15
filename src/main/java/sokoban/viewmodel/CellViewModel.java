@@ -1,9 +1,9 @@
 package sokoban.viewmodel;
 
 import javafx.beans.property.ReadOnlyListProperty;
-import javafx.beans.property.ReadOnlyObjectProperty;
-import javafx.collections.ObservableList;
 import sokoban.model.*;
+
+import java.util.List;
 
 public class CellViewModel {
     private final Board board;
@@ -30,20 +30,20 @@ public class CellViewModel {
         return valueProperty();
     }
 
-    protected static char getSymbolForElement(GameElement element) {
-        if (element instanceof Wall) {
+    protected static char getSymbolForElement(List<GameElement> elements) {
+        if (elements.stream().anyMatch(element -> element instanceof Wall)) {
             return '#';
-        } else if (element instanceof Goal) {
+        } else if (elements.stream().anyMatch(element -> element instanceof Goal) && elements.size() < 3) {
             return '.';
-        } else if (element instanceof Box) {
+        } else if (elements.stream().anyMatch(element -> element instanceof Box) && elements.size() < 3) {
             return '$';
-        } else if (element instanceof Box) { // corriger pour boxOnGoal
+        } else if (elements.stream().anyMatch(element -> element instanceof Box && element instanceof Goal)) {
             return '*';
-        } else if (element instanceof Player) {
+        } else if (elements.stream().anyMatch(element -> element instanceof Player) && elements.size() < 3) {
             return '@';
-        } else if (element instanceof Ground) {
+        } else if (elements.stream().anyMatch(element -> element instanceof Player && element instanceof Goal)) {
             return ' ';
-        } else if (element instanceof Player) { // corriger pour playerOnGoal
+        } else if (elements.stream().anyMatch(element -> element instanceof Ground)) {
             return '+';
         } else {
             return ' ';
