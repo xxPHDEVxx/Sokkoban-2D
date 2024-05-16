@@ -35,51 +35,81 @@ public class Board {
     public void put(int line, int col) {
         List<GameElement> cellItems = grid.getElement(line, col);
         GameElement selected = ToolViewModel.getToolSelected();
+        int size = cellItems.size();
 
+        // Retirer le joueur existant si l'élément sélectionné est un joueur
         if (selected instanceof Player && isPlayerPlaced()) {
             removeExistingPlayer();
         }
 
-        if (cellItems.size() < 3) {
-            // Vérifier s'il y a déjà un mur dans la liste
+        if (size <= 3) {
             if (cellItems.stream().anyMatch(element -> element instanceof Wall)) {
-                return; // Ne rien placer si un mur est présent
-            }
-
-            // Vérifier s'il y a uniquement une cible dans la liste
-            if (cellItems.size() == 2 && cellItems.get(1) instanceof Goal) {
+                handleWall(line, col, cellItems, selected);
+            } else if (size == 2 && cellItems.get(1) instanceof Goal) {
                 handleOnlyGoal(line, col, cellItems, selected);
-                return;
+            } else if (cellItems.stream().anyMatch(element -> element instanceof Goal)) {
+                if ( size > 2 && cellItems.get(1) instanceof Goal) {
+                    handleGoalAndOther(line, col, cellItems, selected);
+                } else {
+                    handleOtherAndGoal(line, col, cellItems, selected);
+                }
+            } else if (size == 2 && (cellItems.get(1) instanceof Box || cellItems.get(1) instanceof Player)) {
+                handleOnlyBoxOrPlayer(line, col, cellItems, selected);
+            } else {
+                putElement(line, col, selected);
             }
+        }
+    }
 
-            // Vérifier s'il y a une cible et autre chose en fin de liste
-            if (cellItems.size() > 1  &&  cellItems.get(1) instanceof Goal) {
-                handleGoalAndOther(line, col, cellItems, selected);
-                return;
-            }
-            if (selected instanceof Goal) {
-                grid.put(line, col, selected != null ? selected : new Ground());
-            } else if (cellItems.size() < 2) {
-                // Dans les autres cas, placer directement dans la liste si les listes sont vides
-                grid.put(line, col, selected != null ? selected : new Wall());
-            }
+    private void handleOnlyBoxOrPlayer(int line, int col, List<GameElement> cellItems, GameElement selected) {
+        if (selected instanceof Goal) {
+            putElement(line, col, selected);
+        } else {
+            removeCellElement(line, col, cellItems.get(cellItems.size() - 1));
+            putElement(line, col, selected);
+        }
+    }
+
+    private void handleOtherAndGoal(int line, int col, List<GameElement> cellItems, GameElement selected) {
+        cellItems.clear();
+        grid.put(line, col, new Ground());
+        grid.put(line, col, selected);
+    }
+
+    private void handleWall(int line, int col, List<GameElement> cellItems, GameElement selected){
+        if (selected instanceof Ground) {
+            removeCellElement(line,col, cellItems.get(cellItems.size()-1));
+        } else {
+            removeCellElement(line,col, cellItems.get(cellItems.size()-1));
+            grid.put(line, col, selected);
         }
     }
 
     private void handleOnlyGoal(int line, int col, List<GameElement> cellItems, GameElement selected) {
-        // On peut placer une box ou un joueur
         if (selected instanceof Box || selected instanceof Player) {
             grid.put(line, col, selected);
+        } else if (selected instanceof Wall) {
+            cellItems.remove(cellItems.get(cellItems.size() - 1));
+            grid.put(line, col, selected);
+        } else if (selected instanceof Ground) {
+            cellItems.remove(cellItems.get(cellItems.size() - 1));
         }
     }
 
     private void handleGoalAndOther(int line, int col, List<GameElement> cellItems, GameElement selected) {
-        // Remplacer la fin de liste par un joueur ou une box
         if (selected instanceof Box || selected instanceof Player) {
             removeCellElement(line, col, cellItems.get(cellItems.size() - 1));
             grid.put(line, col, selected);
+        } else if (selected instanceof Ground) {
+            cellItems.clear();
+            grid.put(line, col, new Ground());
+        } else {
+            cellItems.clear();
+            grid.put(line, col, new Ground());
+            grid.put(line, col, selected);
         }
     }
+
 
     public void removeTool(int line, int col, GameElement ground) {
         List<GameElement> cellItems = grid.getElement(line, col);
@@ -91,7 +121,7 @@ public class Board {
         } else {
             // Réinitialisez à GROUND pour tous les autres états
             cellItems.clear();
-            grid.put(line, col, ground);
+            putElement(line, col, ground);
         }
     }
 
@@ -107,6 +137,10 @@ public class Board {
                 }
             }
         }
+    }
+
+    public void putElement(int line, int col, GameElement element){
+        grid.put(line, col, element);
     }
 
     public void removeCellElement(int line, int col, GameElement element) {
