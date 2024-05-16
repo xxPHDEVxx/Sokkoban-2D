@@ -78,31 +78,19 @@ public class BoardView4play extends BoardView  {
         // Directly request focus
         sceneLevel.getRoot().setFocusTraversable(true);
 
-        sceneLevel.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
+        sceneLevel.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
             // Traitement des touches de direction
             switch (event.getCode()) {
-                case UP:
+                case UP, Z:
                     boardViewModel.movePlayer(Direction.UP);
                     break;
-                case Z:
-                    boardViewModel.movePlayer(Direction.UP);
-                    break;
-                case DOWN:
+                case DOWN, S:
                     boardViewModel.movePlayer(Direction.DOWN);
                     break;
-                case S:
-                    boardViewModel.movePlayer(Direction.DOWN);
-                    break;
-                case LEFT:
+                case LEFT, Q:
                     boardViewModel.movePlayer(Direction.LEFT);
                     break;
-                case Q:
-                    boardViewModel.movePlayer(Direction.LEFT);
-                    break;
-                case RIGHT:
-                    boardViewModel.movePlayer(Direction.RIGHT);
-                    break;
-                case D:
+                case RIGHT, D:
                     boardViewModel.movePlayer(Direction.RIGHT);
                     break;
             }
@@ -116,8 +104,6 @@ public class BoardView4play extends BoardView  {
             }
         });
     }
-
-
 
     public void createHeaderPlay() {
         numberOfMovesPlayed.textProperty().bind(Bindings.concat("Number of moves played : ",boardViewModel.moveCountProperty().asString()));
