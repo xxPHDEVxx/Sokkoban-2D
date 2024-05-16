@@ -155,10 +155,20 @@ public class BoardViewModel {
         if (!board.getGrid().isValidPosition(targetRow, targetCol)) {
             return false;
         }
+
         List<GameElement> targetCellItems = board.getGrid().getValue(targetRow, targetCol);
-        GameElement targetCellState = targetCellItems.get(targetCellItems.size() - 1);
-        return (targetCellState instanceof Ground  || targetCellState instanceof Goal );
+
+        // Vérifie si la cellule cible contient uniquement une cible sans boîte
+        boolean containsOnlyGoal = targetCellItems.size() == 2 && targetCellItems.get(1) instanceof Goal;
+
+        // Vérifie si la cellule cible contient uniquement des sols
+        boolean containsOnlyGround = targetCellItems.stream().allMatch(element -> element instanceof Ground);
+
+        // La boîte peut être poussée si la cellule cible contient soit uniquement une cible
+        // soit uniquement des sols
+        return containsOnlyGoal || containsOnlyGround;
     }
+
 
     private CellViewModel findPlayerCell() {
         for (int row = 0; row < gridHeight(); row++) {
