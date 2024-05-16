@@ -35,8 +35,10 @@ public class Cell4Design extends Cell {
     }
 
     boolean isBoxInTarget() {
-        return values.stream().anyMatch(value -> value instanceof Box && value instanceof Goal);
+        return values.stream().anyMatch(value -> value instanceof Box)
+                && values.stream().anyMatch(value -> value instanceof Goal);
     }
+
     ReadOnlyListProperty<GameElement> valueProperty() {return values;}
 
 

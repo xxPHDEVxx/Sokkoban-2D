@@ -38,8 +38,8 @@ public class Cell4Play extends Cell {
 
     @Override
     boolean isBoxInTarget() {
-        // Non implémenté pour cette classe spécifique
-        return false;
+        return values.stream().anyMatch(value -> value instanceof Box)
+                && values.stream().anyMatch(value -> value instanceof Goal);
     }
     ReadOnlyListProperty<GameElement> valueProperty() {
         return values;
