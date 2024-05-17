@@ -20,12 +20,14 @@ import sokoban.model.Grid;
 import sokoban.model.Grid4Design;
 import sokoban.viewmodel.BoardViewModel;
 import sokoban.viewmodel.GridViewModel;
+import sokoban.viewmodel.ToolViewModel;
 
 import java.io.File;
 
 public abstract class BoardView extends BorderPane {
 
     protected BoardViewModel boardViewModel;
+    protected ToolViewModel toolViewModel;
     private int GRID_WIDTH = BoardViewModel.gridWidth();
     private int GRID_HEIGHT = BoardViewModel.gridHeight();
 
@@ -37,7 +39,7 @@ public abstract class BoardView extends BorderPane {
     private final VBox vbox = new VBox();
     private final HBox boxCellCount = new HBox();
     private final VBox boxRules = new VBox();
-    private final ToolView ToolView = new ToolView();
+    private final ToolView ToolView = new ToolView(toolViewModel);
     private final Menu fileMenu = new Menu("Fichier");
     private final MenuItem menuItemNew = new MenuItem("New...");
     private final MenuItem menuItemOpen = new MenuItem("Open...");

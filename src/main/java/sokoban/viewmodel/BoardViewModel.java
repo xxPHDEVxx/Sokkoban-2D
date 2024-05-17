@@ -120,13 +120,18 @@ public class BoardViewModel {
                 return false;
             }
 
+            // Récupérer la boîte de la cellule cible
+            Box box = getBox(targetCellItems);
 
-            // Suppression de la boîte sur la case cible
-            targetCellItems.removeIf(element -> element instanceof Box);
+            if (box != null) {
+                // Suppression de la boîte de la cellule cible
+                targetCellItems.remove(box);
 
-            // Ajout de la boîte déplacée sur la case suivante
-            board.getGrid().getValue(nextRow, nextCol).add(new Box());
+                // Ajout de la boîte déplacée dans la cellule suivante
+                board.getGrid().getValue(nextRow, nextCol).add(box);
+            }
         }
+
 
         // Déplacement du joueur vers la nouvelle position
         targetCellItems.add(new Player());
@@ -140,6 +145,13 @@ public class BoardViewModel {
         boxInTargetCountProperty().invalidate();
 
         return true;
+    }
+
+    public Box getBox(List<GameElement> targetCellItems){
+        return (Box) targetCellItems.stream()
+                .filter(element -> element instanceof Box)
+                .findFirst()
+                .orElse(null);
     }
 
     public boolean isValidPosition(int row, int col) {

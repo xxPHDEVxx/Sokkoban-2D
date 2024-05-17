@@ -1,5 +1,7 @@
 package sokoban.model;
 
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.scene.image.Image;
 
 public abstract class GameElement {

@@ -32,7 +32,6 @@ public class CellView4Design extends CellView{
         this.widthProperty = cellWidthProperty;
         this.heightProperty = cellHeightProperty;
         setAlignment(Pos.CENTER);
-
         configureBindings();
 
     }

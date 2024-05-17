@@ -115,14 +115,9 @@ public class Board {
         List<GameElement> cellItems = grid.getElement(line, col);
         // Déterminez l'état actuel de la cellule avant de la réinitialiser
         GameElement currentValue = grid.getValue(line, col).get(cellItems.size() - 1);
-        // Condition pour réinitialiser la cellule à GOAL si elle contient PLAYER_ON_GOAL ou BOX_ON_GOAL
-        if (cellItems.stream().anyMatch(element -> element instanceof Goal)) {
-            removeCellElement(line, col, currentValue);
-        } else {
-            // Réinitialisez à GROUND pour tous les autres états
-            cellItems.clear();
-            putElement(line, col, ground);
-        }
+        if (currentValue instanceof Box)
+            Box.reduceGlobalNumber();
+        removeCellElement(line, col, currentValue);
     }
 
     private void removeExistingPlayer() {

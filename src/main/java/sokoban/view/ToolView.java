@@ -16,6 +16,8 @@ import sokoban.viewmodel.ToolViewModel;
 import sokoban.model.*;
 
 public class ToolView extends FlowPane {
+
+    private final ToolViewModel viewModel;
     private static final int PADDING = 20;
     private static final Image[] images = {
             new Image("ground.png"),
@@ -25,7 +27,8 @@ public class ToolView extends FlowPane {
             new Image("box.png")
     };
 
-    public ToolView() {
+    public ToolView(ToolViewModel viewModel) {
+        this.viewModel = viewModel;
         layoutControls();
     }
 
@@ -79,7 +82,7 @@ public class ToolView extends FlowPane {
     private void applyHighlightEffect(ImageView imageView) {
         clearHighlightEffects();
         DropShadow dropShadow = new DropShadow();
-        dropShadow.setColor(Color.GREY);
+        dropShadow.setColor(Color.LIGHTBLUE);
         dropShadow.setRadius(10);
         dropShadow.setSpread(0.7);
         imageView.setEffect(dropShadow);
@@ -93,7 +96,7 @@ public class ToolView extends FlowPane {
         }
     }
 
-    public static GameElement determineToolFromImageView(ImageView imageView) {
+    public  static GameElement determineToolFromImageView(ImageView imageView) {
         Image image = imageView.getImage();
         if (image == images[0]) {
             return new Ground();
@@ -104,7 +107,9 @@ public class ToolView extends FlowPane {
         } else if (image == images[3]) {
             return new Player();
         } else if (image == images[4]) {
-            return new Box();
+            Box box = new Box();
+            ToolViewModel.decreaseGlobalNumber();
+            return box;
         }
         return null;
     }

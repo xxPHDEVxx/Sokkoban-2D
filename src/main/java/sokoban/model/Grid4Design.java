@@ -80,17 +80,36 @@ public class Grid4Design {
         return matrix[line][col].valueProperty();    }
 
     void put(int line, int col, GameElement element) {
-        List<GameElement> cellItems = this.matrix[line][col].valueProperty();
+        Cell cell = matrix[line][col];
+        List<GameElement> cellItems = cell.valueProperty();
+
+        // Si l'élément est déjà présent dans la cellule, le supprimer
         if (cellItems.contains(element)) {
             cellItems.remove(element);
         }
-        matrix[line][col].setValues(element);
 
+        // Insérer une nouvelle instance de la classe de l'élément dans la cellule
+        if (element instanceof Box) {
+            cell.setValues(new Box());
+        } else if (element instanceof Player) {
+            cell.setValues(new Player());
+        } else if (element instanceof Wall) {
+            cell.setValues(new Wall());
+        } else if (element instanceof Goal) {
+            cell.setValues(new Goal());
+        } else {
+            // Si l'élément n'est d'aucune des classes connues, ne rien faire
+            return;
+        }
+
+        // Invalidations des compteurs
         filledCellsCount.invalidate();
         playerCount.invalidate();
         goalCount.invalidate();
         boxCount.invalidate();
     }
+
+
 
     void remove(int line, int col, GameElement element){
         matrix[line][col].remove(element);

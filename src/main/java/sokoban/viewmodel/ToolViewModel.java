@@ -39,6 +39,10 @@ public class ToolViewModel {
     public static GameElement getToolSelected() {
         return toolSelected;
     }
+
+    public static void decreaseGlobalNumber() {
+            Box.reduceGlobalNumber();
+    }
 }
 
 
