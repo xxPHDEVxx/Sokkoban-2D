@@ -247,4 +247,17 @@ public class Board {
     public boolean isPlayerPlaced() {
         return grid.playerCountProperty().get() > 0;
     }
+
+    public Board copy(){
+        Board clonedBoard = new Board();
+        Grid4Design clonedGrid = this.getGrid().copy(this.getGrid());
+
+        // Définir la grille clonée dans le Board cloné
+        clonedBoard.setGrid(clonedGrid);
+
+        // Configurer les bindings
+        clonedBoard.configureBindings();
+
+        return clonedBoard;
+    }
 }

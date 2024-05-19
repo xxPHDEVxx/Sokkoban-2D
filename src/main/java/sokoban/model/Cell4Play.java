@@ -5,7 +5,7 @@ import javafx.beans.property.SimpleListProperty;
 import javafx.collections.FXCollections;
 
 public class Cell4Play extends Cell {
-    private final ListProperty<GameElement> values = new SimpleListProperty<>(FXCollections.observableArrayList());
+    private ListProperty<GameElement> values = new SimpleListProperty<>(FXCollections.observableArrayList());
 
     public Cell4Play() {
         super();
@@ -13,7 +13,7 @@ public class Cell4Play extends Cell {
 
     @Override
     void setValues(GameElement value) {
-        this.values.add(value);
+        values.add(value);
     }
 
     @Override

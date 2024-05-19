@@ -15,6 +15,8 @@ public class GridState {
 
     // Méthode pour ajouter un nouvel état de la grille à l'historique
     public void addBoardState(Board board) {
+        // clonage du board pour éviter de modifier l'objet original
+        Board clonedBoard = board.copy();
         // Lorsqu'un nouvel état est ajouté, tous les états suivants sont supprimés de l'historique.
         boardHistory.subList(currentIndex + 1, boardHistory.size()).clear();
         boardHistory.add(board);
@@ -47,6 +49,10 @@ public class GridState {
     // Méthode pour vérifier si un état suivant est disponible
     public boolean hasNextState() {
         return currentIndex < boardHistory.size() - 1;
+    }
+
+    public List<Board> getBoardHistory() {
+        return boardHistory;
     }
 }
 

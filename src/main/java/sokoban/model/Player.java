@@ -8,4 +8,8 @@ public class Player extends GameElement {
         image = new Image("player.png");
 
     }
+
+    public Player copy() {
+        return new Player();
+    }
 }

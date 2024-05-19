@@ -11,12 +11,15 @@ import java.util.List;
 
 public class BoardViewModel {
     private final GridViewModel gridViewModel;
+    private GridState gridState;
     private final Board board;
     private static BooleanProperty isChanged = new SimpleBooleanProperty(false);
     private final LongProperty moveCount = new SimpleLongProperty(0);
 
     public BoardViewModel(Board board) {
         this.board = board;
+        this.gridState = new GridState();
+        gridState.addBoardState(board);
         gridViewModel = new GridViewModel(board);
     }
 
@@ -143,7 +146,10 @@ public class BoardViewModel {
         incrementMoveCount();
         boxInTargetCountProperty().invalidate();
 
-
+        gridState.addBoardState(board);
+        for (Board board : gridState.getBoardHistory())
+            System.out.println( "state :" + board);
+        System.out.println("***********");
         return true;
     }
 

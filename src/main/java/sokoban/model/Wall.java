@@ -7,4 +7,8 @@ public class Wall extends GameElement {
     public Wall() {
         image = new Image("wall.png");
     }
+
+    public Wall copy() {
+        return new Wall();
+    }
 }

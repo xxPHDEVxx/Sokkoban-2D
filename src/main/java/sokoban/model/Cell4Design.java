@@ -1,6 +1,9 @@
 package sokoban.model;
 
+import javafx.beans.property.ListProperty;
 import javafx.beans.property.ReadOnlyListProperty;
+
+import java.util.List;
 
 
 public class Cell4Design extends Cell {
@@ -9,10 +12,10 @@ public class Cell4Design extends Cell {
         super();
     }
 
-    public void setValues(GameElement value) {
-        this.values.add(value);
+    @Override
+    void setValues(GameElement value) {
+        values.add(value);
     }
-
     public void remove(GameElement value) {
         this.values.remove(value);
     }

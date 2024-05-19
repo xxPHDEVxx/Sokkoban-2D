@@ -5,6 +5,7 @@ import javafx.beans.binding.LongBinding;
 import javafx.beans.property.ReadOnlyListProperty;
 import javafx.collections.ObservableList;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -36,6 +37,21 @@ public class Grid4Design {
         setFilledCellsCount();
         countCell();
 
+    }
+
+    public Grid4Design copy(Grid4Design original) {
+        Grid4Design copy = new Grid4Design(this.GRID_WIDTH, this.GRID_HEIGHT);
+        for (int i = 0; i < original.getGridHeight(); i++) {
+            for (int j = 0; j < original.getGridWidth(); j++) {
+                List<GameElement> originalElements = original.getValue(i, j);
+                List<GameElement> copyElements = new ArrayList<>();
+                for (GameElement element : originalElements) {
+                    copyElements.add(element.copy());
+                }
+                //copy.setValue(i, j, copyElements);
+            }
+        }
+        return copy;
     }
 
     public void setFilledCellsCount() {

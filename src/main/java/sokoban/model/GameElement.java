@@ -13,4 +13,7 @@ public abstract class GameElement {
 
     public GameElement() {
     }
+
+    abstract GameElement copy();
+
 }

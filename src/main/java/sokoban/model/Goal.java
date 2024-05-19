@@ -8,4 +8,8 @@ public class Goal extends GameElement {
         image = new Image("goal.png");
 
     }
+
+    public Goal copy() {
+        return new Goal();
+    }
 }

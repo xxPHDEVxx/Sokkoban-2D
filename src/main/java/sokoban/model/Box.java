@@ -20,6 +20,12 @@ public class Box extends GameElement {
 
     }
 
+    public Box copy() {
+        globalNumber--;
+        Box copy = new Box();
+        return copy;
+    }
+
     public Label getNumberLabel() {
         return numberLabel;
     }
