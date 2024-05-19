@@ -28,6 +28,7 @@ public abstract class BoardView extends BorderPane {
 
     protected BoardViewModel boardViewModel;
     protected ToolViewModel toolViewModel;
+    NewGridView newGridView;
     private int GRID_WIDTH = BoardViewModel.gridWidth();
     private int GRID_HEIGHT = BoardViewModel.gridHeight();
 
@@ -154,7 +155,7 @@ public abstract class BoardView extends BorderPane {
                 SaveConfirm.showDialog();
 
             }
-            NewGridView.showDialog(this);
+            newGridView.showDialog(this);
 
         });
 

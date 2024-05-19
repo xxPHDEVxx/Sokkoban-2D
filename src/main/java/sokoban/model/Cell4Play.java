@@ -12,10 +12,14 @@ public class Cell4Play extends Cell {
     }
 
     @Override
-    void setValues(GameElement value) {
+    void addElement(GameElement value) {
         values.add(value);
     }
 
+    @Override
+    void setValues(ListProperty<GameElement> values) {
+        this.values = values;
+    }
     @Override
     boolean isEmpty() {
         return values.isEmpty() || values.stream().allMatch(value -> value instanceof Ground);

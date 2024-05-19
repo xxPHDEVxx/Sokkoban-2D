@@ -11,7 +11,7 @@ import java.util.Scanner;
 
 public class Board {
     public static int MAX_FILLED_CELLS = 75;
-    private static Grid4Design grid = new Grid4Design();
+    private Grid4Design grid = new Grid4Design();
     private final BooleanBinding isFull;
 
     private  BooleanBinding countBoxOK;
@@ -26,7 +26,7 @@ public class Board {
         configureBindings();
     }
 
-    public static int maxFilledCells() {
+    public  int maxFilledCells() {
         MAX_FILLED_CELLS = (grid.getGridHeight() * grid.getGridWidth()) / 2;
         return Board.MAX_FILLED_CELLS;
     }
@@ -155,10 +155,10 @@ public class Board {
         return grid.filledCellsCountProperty();
     }
 
-    public static LongBinding boxCountProperty() {
+    public  LongBinding boxCountProperty() {
         return grid.boxCountProperty();
     }
-    public static LongBinding goalCountProperty() {
+    public  LongBinding goalCountProperty() {
         return grid.goalCountProperty();
     }
     public LongBinding boxInTargetCountProperty () {
@@ -181,7 +181,7 @@ public class Board {
         return rulesOK;
     }
 
-    public static void setGrid(Grid4Design newGrid) {
+    public  void setGrid(Grid4Design newGrid) {
         grid = newGrid;
     }
     public Grid4Design getGrid() {
@@ -250,12 +250,12 @@ public class Board {
 
     public Board copy(){
         Board clonedBoard = new Board();
-        Grid4Design clonedGrid = this.getGrid().copy(this.getGrid());
+        Grid4Design clonedGrid = this.getGrid().copy();
 
         // Définir la grille clonée dans le Board cloné
-        clonedBoard.setGrid(clonedGrid);
+        clonedBoard.grid = clonedGrid;
 
-        // Configurer les bindings
+        // Configurer les liaisons
         clonedBoard.configureBindings();
 
         return clonedBoard;

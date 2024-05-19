@@ -39,16 +39,14 @@ public class Grid4Design {
 
     }
 
-    public Grid4Design copy(Grid4Design original) {
+    public Grid4Design copy() {
         Grid4Design copy = new Grid4Design(this.GRID_WIDTH, this.GRID_HEIGHT);
-        for (int i = 0; i < original.getGridHeight(); i++) {
-            for (int j = 0; j < original.getGridWidth(); j++) {
-                List<GameElement> originalElements = original.getValue(i, j);
-                List<GameElement> copyElements = new ArrayList<>();
+        for (int i = 0; i < this.getGridHeight(); i++) {
+            for (int j = 0; j < this.getGridWidth(); j++) {
+                List<GameElement> originalElements = this.getValue(i, j);
                 for (GameElement element : originalElements) {
-                    copyElements.add(element.copy());
+                    copy.setValue(i, j, element.copy());
                 }
-                //copy.setValue(i, j, copyElements);
             }
         }
         return copy;
@@ -106,13 +104,13 @@ public class Grid4Design {
 
         // Insérer une nouvelle instance de la classe de l'élément dans la cellule
         if (element instanceof Box) {
-            cell.setValues(new Box());
+            cell.addElement(new Box());
         } else if (element instanceof Player) {
-            cell.setValues(new Player());
+            cell.addElement(new Player());
         } else if (element instanceof Wall) {
-            cell.setValues(new Wall());
+            cell.addElement(new Wall());
         } else if (element instanceof Goal) {
-            cell.setValues(new Goal());
+            cell.addElement(new Goal());
         } else {
             // Si l'élément n'est d'aucune des classes connues, ne rien faire
             return;
@@ -170,7 +168,7 @@ public class Grid4Design {
 
     public void setValue(int row, int col, GameElement value) {
         if (isValidPosition(row, col)) {
-            matrix[row][col].getCell().setValues(value);
+            matrix[row][col].addElement(value);
         } else {
             throw new IllegalArgumentException("Invalid row or column index");
         }

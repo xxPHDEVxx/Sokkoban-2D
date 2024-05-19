@@ -8,7 +8,8 @@ public abstract class Cell {
     public Cell() {
         values.add(new Ground());
     }
-    abstract void setValues(GameElement value);;
+    abstract void setValues(ListProperty<GameElement> values);
+    abstract void addElement(GameElement value);;
 
     abstract boolean isEmpty();
     abstract boolean isBox();

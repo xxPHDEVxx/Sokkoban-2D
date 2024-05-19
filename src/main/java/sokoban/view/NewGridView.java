@@ -16,7 +16,9 @@ import java.util.function.UnaryOperator;
 import java.util.regex.Pattern;
 
 public class NewGridView {
-    public static void showDialog(BoardView boardView){
+
+    BoardViewModel bordViewModel;
+    public void showDialog(BoardView boardView){
         Stage dialog = new Stage();
         dialog.initModality(Modality.APPLICATION_MODAL);
         dialog.setTitle("Sokoban");
@@ -34,7 +36,7 @@ public class NewGridView {
             int width = Integer.parseInt(txtWidth.getText());
             int height = Integer.parseInt(txtHeight.getText());
 
-            BoardViewModel.newGridMenu(width, height);
+            bordViewModel.newGridMenu(width, height);
             dialog.close();
             boardView.refresh();
          });

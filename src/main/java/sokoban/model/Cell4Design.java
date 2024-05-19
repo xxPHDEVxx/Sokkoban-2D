@@ -13,9 +13,15 @@ public class Cell4Design extends Cell {
     }
 
     @Override
-    void setValues(GameElement value) {
+    void addElement(GameElement value) {
         values.add(value);
     }
+
+    @Override
+    void setValues(ListProperty<GameElement> values) {
+        this.values = values;
+    }
+
     public void remove(GameElement value) {
         this.values.remove(value);
     }

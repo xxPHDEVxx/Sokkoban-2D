@@ -47,8 +47,8 @@ public class BoardViewModel {
     }
 
 
-    public static int maxFilledCells() {
-        return Board.maxFilledCells();
+    public  int maxFilledCells() {
+        return board.maxFilledCells();
     }
     public static int gridWidth() {
         return Grid4Design.getGridWidth();
@@ -58,8 +58,8 @@ public class BoardViewModel {
     }
 
     public static void exitMenu(){System.exit(0);}
-    public static void newGridMenu(int width, int height){
-        Board.setGrid(new Grid4Design(width, height));
+    public void newGridMenu(int width, int height){
+        board.setGrid(new Grid4Design(width, height));
     }
     public Grid4Design openBoard(File file){
         Grid4Design grid = board.open(file);
@@ -146,10 +146,7 @@ public class BoardViewModel {
         incrementMoveCount();
         boxInTargetCountProperty().invalidate();
 
-        gridState.addBoardState(board);
-        for (Board board : gridState.getBoardHistory())
-            System.out.println( "state :" + board);
-        System.out.println("***********");
+        gridState.addBoardState(board.copy());
         return true;
     }
 
