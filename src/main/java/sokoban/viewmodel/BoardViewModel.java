@@ -16,7 +16,6 @@ public class BoardViewModel {
     private final LongProperty moveCount = new SimpleLongProperty(0);
 
     public BoardViewModel(Board board) {
-
         this.board = board;
         gridViewModel = new GridViewModel(board);
     }
@@ -143,6 +142,7 @@ public class BoardViewModel {
         // Incrémentation du compteur de mouvements
         incrementMoveCount();
         boxInTargetCountProperty().invalidate();
+
 
         return true;
     }
