@@ -6,6 +6,9 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -92,6 +95,14 @@ public class BoardView4play extends BoardView  {
                     break;
                 case RIGHT, D:
                     boardViewModel.movePlayer(Direction.RIGHT);
+                    break;
+                default:
+                    // Ajout des raccourcis pour Undo et Redo
+                    if (new KeyCodeCombination(KeyCode.Z, KeyCombination.CONTROL_DOWN).match(event)) {
+                        boardViewModel.undo();
+                    } else if (new KeyCodeCombination(KeyCode.Y, KeyCombination.CONTROL_DOWN).match(event)) {
+                        boardViewModel.redo();
+                    }
                     break;
             }
             event.consume();
