@@ -35,10 +35,6 @@ public class Box extends GameElement {
         return numberLabel;
     }
 
-    public void setNumberLabel(Label numberLabel) {
-        this.numberLabel = numberLabel;
-    }
-
     public IntegerProperty numberProperty() {
         return number;
     }

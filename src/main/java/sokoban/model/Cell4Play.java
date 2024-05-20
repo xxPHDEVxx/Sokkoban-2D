@@ -17,10 +17,6 @@ public class Cell4Play extends Cell {
     }
 
     @Override
-    void setValues(ListProperty<GameElement> values) {
-        this.values = values;
-    }
-    @Override
     boolean isEmpty() {
         return values.isEmpty() || values.stream().allMatch(value -> value instanceof Ground);
     }
@@ -47,10 +43,5 @@ public class Cell4Play extends Cell {
     }
     ReadOnlyListProperty<GameElement> valueProperty() {
         return values;
-    }
-
-    @Override
-    public Cell getCell() {
-        return this;
     }
 }

@@ -19,7 +19,7 @@ public class GridViewModel {
         try (PrintWriter writer = new PrintWriter(new FileWriter(selectedFile))) {
             for (int i = 0; i < grid.getGridHeight(); i++) {
                 for (int j = 0; j < grid.getGridWidth(); j++) {
-                    List<GameElement> cellItems = grid.getValue(i, j);
+                    List<GameElement> cellItems = grid.getValues(i, j);
                     char symbol = CellViewModel.getSymbolForElement(cellItems);
                     writer.print(symbol);
                 }

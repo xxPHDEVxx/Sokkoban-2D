@@ -17,11 +17,6 @@ public class Cell4Design extends Cell {
         values.add(value);
     }
 
-    @Override
-    void setValues(ListProperty<GameElement> values) {
-        this.values = values;
-    }
-
     public void remove(GameElement value) {
         this.values.remove(value);
     }
@@ -49,9 +44,4 @@ public class Cell4Design extends Cell {
     }
 
     ReadOnlyListProperty<GameElement> valueProperty() {return values;}
-
-
-    public Cell getCell() {
-        return this;
-    }
 }

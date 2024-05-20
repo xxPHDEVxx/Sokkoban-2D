@@ -1,6 +1,5 @@
 package sokoban.viewmodel;
 
-import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.binding.LongBinding;
 import javafx.beans.property.*;
@@ -107,7 +106,7 @@ public class BoardViewModel {
         }
 
         // Obtention des éléments de la cellule cible
-        List<GameElement> targetCellItems = board.getGrid().getValue(newRow, newCol);
+        List<GameElement> targetCellItems = board.getGrid().getValues(newRow, newCol);
 
         // Vérification si un mur bloque le chemin
         if (targetCellItems.stream().anyMatch(element -> element instanceof Wall)) {
@@ -134,7 +133,7 @@ public class BoardViewModel {
                 targetCellItems.remove(box);
 
                 // Ajout de la boîte déplacée dans la cellule suivante
-                board.getGrid().getValue(nextRow, nextCol).add(box);
+                board.getGrid().getValues(nextRow, nextCol).add(box);
             }
         }
 
@@ -143,7 +142,7 @@ public class BoardViewModel {
         targetCellItems.add(new Player());
 
         // Suppression du joueur de sa cellule d'origine
-        List<GameElement> playerCellItems = board.getGrid().getValue(playerCell.getLine(), playerCell.getCol());
+        List<GameElement> playerCellItems = board.getGrid().getValues(playerCell.getLine(), playerCell.getCol());
         playerCellItems.removeIf(element -> element instanceof Player);
 
         // Incrémentation du compteur de mouvements
@@ -175,7 +174,7 @@ public class BoardViewModel {
             return false;
         }
 
-        List<GameElement> targetCellItems = board.getGrid().getValue(targetRow, targetCol);
+        List<GameElement> targetCellItems = board.getGrid().getValues(targetRow, targetCol);
 
         // Vérifie si la cellule cible contient uniquement une cible sans boîte
         boolean containsOnlyGoal = targetCellItems.size() == 2 && targetCellItems.get(1) instanceof Goal;

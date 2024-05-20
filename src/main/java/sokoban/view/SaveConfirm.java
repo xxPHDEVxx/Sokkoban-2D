@@ -35,7 +35,7 @@ public class SaveConfirm{
             FileChooser fileChooser = new FileChooser();
             File selectedFile = fileChooser.showSaveDialog(dialog);
 
-            Board board = new Board().getBoard();
+            Board board = new Board();
             BoardViewModel boardVM = new BoardViewModel(board);
             Grid4Design grid = boardVM.getGrid();
             GridViewModel gvm = boardVM.getGridVM();

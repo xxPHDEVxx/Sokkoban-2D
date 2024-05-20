@@ -6,15 +6,12 @@ import javafx.collections.FXCollections;
 public abstract class Cell {
     protected  ListProperty<GameElement> values = new SimpleListProperty<>(FXCollections.observableArrayList());
     public Cell() {}
-    abstract void setValues(ListProperty<GameElement> values);
     abstract void addElement(GameElement value);;
-
     abstract boolean isEmpty();
     abstract boolean isBox();
     abstract boolean isPlayer();
     abstract boolean isGoal();
     abstract boolean isBoxInTarget();
     abstract ReadOnlyListProperty<GameElement> valueProperty();
-    public abstract Cell getCell();
 
 }
