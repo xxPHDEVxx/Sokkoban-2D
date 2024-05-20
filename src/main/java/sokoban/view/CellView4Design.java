@@ -18,8 +18,6 @@ import java.util.List;
 
 public class CellView4Design extends CellView{
     private static final Image ground = new Image("ground.png");
-    private static final Image goal = new Image("goal.png");
-    private static final Image box = new Image("box.png");
     private final CellViewModel viewModel;
     private final DoubleBinding widthProperty;
     private final DoubleBinding heightProperty;

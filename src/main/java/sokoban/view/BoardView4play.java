@@ -84,10 +84,13 @@ public class BoardView4play extends BoardView  {
 
             if (new KeyCodeCombination(KeyCode.Z, KeyCombination.CONTROL_DOWN).match(event)) {
                 boardViewModel.undo();
+                //refresh visuel
                 gridView.fillGrid(boardViewModel.getGridViewModel(), gridWidth, gridHeight);
                 return;
             } else if (new KeyCodeCombination(KeyCode.Y, KeyCombination.CONTROL_DOWN).match(event)) {
                 boardViewModel.redo();
+                // refresh visuel
+                gridView.fillGrid(boardViewModel.getGridViewModel(), gridWidth, gridHeight);
                 return;
             }
 

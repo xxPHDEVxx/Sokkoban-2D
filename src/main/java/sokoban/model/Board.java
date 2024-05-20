@@ -250,7 +250,8 @@ public class Board {
 
     public Board copy(){
         Board clonedBoard = new Board();
-        Grid4Design clonedGrid = this.getGrid().copy();
+        Grid4Design clonedGrid = new Grid4Design();
+        clonedGrid.copyFill(this.getGrid());
 
         // Définir la grille clonée dans le Board cloné
         clonedBoard.grid = clonedGrid;

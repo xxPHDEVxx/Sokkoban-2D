@@ -17,21 +17,34 @@ public class Box extends GameElement {
         image = new Image("box.png");
         globalNumber++;
         numberLabel = new Label(String.valueOf(number.get())); // Création du label avec le numéro
-
     }
 
     public Box copy() {
         globalNumber--;
         Box copy = new Box();
+        copy.setNumber(this.getNumber());
+        copy.numberLabel = new Label(String.valueOf(number.get()));
         return copy;
+    }
+
+    private int getNumber() {
+        return number.get();
     }
 
     public Label getNumberLabel() {
         return numberLabel;
     }
 
+    public void setNumberLabel(Label numberLabel) {
+        this.numberLabel = numberLabel;
+    }
+
     public IntegerProperty numberProperty() {
         return number;
+    }
+
+    public void setNumber(int number) {
+        this.number.set(number);
     }
 
     public static void reduceGlobalNumber() {
