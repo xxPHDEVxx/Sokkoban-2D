@@ -33,7 +33,6 @@ public class BoardView4play extends BoardView  {
     private static final int SCENE_MIN_WIDTH = 1080;
     private static final int SCENE_MIN_HEIGHT = 800;
     private Stage playStage;
-    private  Stage primaryStage;
 
     public BoardView4play(Stage playStage, GridView4Play gridView, BoardViewModel boardViewModel) {
         super(playStage, boardViewModel);
