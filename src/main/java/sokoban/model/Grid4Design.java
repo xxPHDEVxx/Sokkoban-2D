@@ -52,6 +52,31 @@ public class Grid4Design {
         return copy;
     }
 
+    public void copyFill(Grid4Design copy) {
+        // Vérifiez que les dimensions de la grille source et de la grille cible sont les mêmes
+        if (this.getGridHeight() != copy.getGridHeight() || this.getGridWidth() != copy.getGridWidth()) {
+            throw new IllegalArgumentException("Grid dimensions do not match.");
+        }
+
+        // Effacer tous les éléments actuels de la grille
+        for (int i = 0; i < this.getGridHeight(); i++) {
+            for (int j = 0; j < this.getGridWidth(); j++) {
+                this.getValue(i, j).clear();
+            }
+        }
+
+        // Copier les éléments de la grille source vers la grille cible
+        for (int i = 0; i < copy.getGridHeight(); i++) {
+            for (int j = 0; j < copy.getGridWidth(); j++) {
+                List<GameElement> copyElements = copy.getValue(i, j);
+                for (GameElement element : copyElements) {
+                    this.setValue(i, j, element.copy()); // Assurez-vous de copier les éléments pour éviter des références croisées
+                }
+            }
+        }
+    }
+
+
     public void setFilledCellsCount() {
         filledCellsCount = Bindings.createLongBinding(() -> Arrays
                 .stream(matrix)

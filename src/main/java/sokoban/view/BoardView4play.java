@@ -18,8 +18,10 @@ import javafx.stage.Stage;
 import sokoban.model.Direction;
 import sokoban.viewmodel.BoardViewModel;
 
+import javax.crypto.spec.PSource;
+
 public class BoardView4play extends BoardView  {
-    private GridView gridView;
+    private GridView4Play gridView;
     private Label title = new Label("Score");
     private Label numberOfMovesPlayed = new Label("");
     private Label goal = new Label("");
@@ -33,7 +35,7 @@ public class BoardView4play extends BoardView  {
     private Stage playStage;
     private  Stage primaryStage;
 
-    public BoardView4play(Stage playStage, GridView gridView, BoardViewModel boardViewModel) {
+    public BoardView4play(Stage playStage, GridView4Play gridView, BoardViewModel boardViewModel) {
         super(playStage, boardViewModel);
         this.gridView = gridView;
         this.playStage = playStage;
@@ -43,9 +45,6 @@ public class BoardView4play extends BoardView  {
         configureScene(playStage);
         createHeaderPlay();
         actionBtnFinish(boardViewModel);
-
-
-        System.out.println(gridView);
     }
 
     public void initialize() {
@@ -82,6 +81,16 @@ public class BoardView4play extends BoardView  {
         sceneLevel.getRoot().setFocusTraversable(true);
 
         sceneLevel.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+
+            if (new KeyCodeCombination(KeyCode.Z, KeyCombination.CONTROL_DOWN).match(event)) {
+                boardViewModel.undo();
+                gridView.fillGrid(boardViewModel.getGridViewModel(), gridWidth, gridHeight);
+                return;
+            } else if (new KeyCodeCombination(KeyCode.Y, KeyCombination.CONTROL_DOWN).match(event)) {
+                boardViewModel.redo();
+                return;
+            }
+
             // Traitement des touches de direction
             switch (event.getCode()) {
                 case UP, Z:
@@ -95,14 +104,6 @@ public class BoardView4play extends BoardView  {
                     break;
                 case RIGHT, D:
                     boardViewModel.movePlayer(Direction.RIGHT);
-                    break;
-                default:
-                    // Ajout des raccourcis pour Undo et Redo
-                    if (new KeyCodeCombination(KeyCode.Z, KeyCombination.CONTROL_DOWN).match(event)) {
-                        boardViewModel.undo();
-                    } else if (new KeyCodeCombination(KeyCode.Y, KeyCombination.CONTROL_DOWN).match(event)) {
-                        boardViewModel.redo();
-                    }
                     break;
             }
             event.consume();

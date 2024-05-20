@@ -56,8 +56,8 @@ public abstract class BoardView extends BorderPane {
     private static Stage primaryStage;
     private  Stage playStage;
 
-    private DoubleBinding gridWidth ;
-    private DoubleBinding gridHeight ;
+    protected DoubleBinding gridWidth ;
+    protected DoubleBinding gridHeight ;
     public BoardView(Stage primaryStage, BoardViewModel boardViewModel) {
         this.primaryStage = primaryStage;
         this.boardViewModel = boardViewModel;

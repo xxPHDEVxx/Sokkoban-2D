@@ -12,7 +12,7 @@ import java.util.List;
 public class BoardViewModel {
     private final GridViewModel gridViewModel;
     private GridState gridState;
-    private final Board board;
+    private  Board board;
     private static BooleanProperty isChanged = new SimpleBooleanProperty(false);
     private final LongProperty moveCount = new SimpleLongProperty(0);
 
@@ -206,4 +206,30 @@ public class BoardViewModel {
         return moveCount;
     }
 
+    public void setBoard(Board board) {
+        this.board = board;
+    }
+
+    public void undo() {
+        if (gridState.hasPreviousState()) {
+            Board previousBoard = gridState.getPreviousState();
+            board.getGrid().copyFill(previousBoard.getGrid());
+
+            // Décrémenter le compteur de mouvements (ou mettre à jour en conséquence)
+            if (moveCount.get() > 0) {
+                moveCount.set(moveCount.get() - 1);
+            }
+        }
+    }
+
+
+    public void redo() {
+        if (gridState.hasNextState()){
+            Board nextBoard = gridState.getNextState();
+            board.getGrid().copyFill(nextBoard.getGrid());
+
+            // Incrémenter le compteur de mouvements (ou mettre à jour en conséquence)
+            moveCount.set(moveCount.get() + 1);
+        }
+    }
 }

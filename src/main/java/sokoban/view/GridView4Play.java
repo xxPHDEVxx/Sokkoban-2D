@@ -7,7 +7,10 @@ import sokoban.viewmodel.GridViewModel;
 public class GridView4Play extends GridView{
     public GridView4Play(GridViewModel gridViewModel, DoubleBinding gridWidth, DoubleBinding gridHeight) {
         setPadding(new Insets(PADDING));
+        fillGrid(gridViewModel, gridWidth, gridHeight);
+}
 
+    public void fillGrid(GridViewModel gridViewModel, DoubleBinding gridWidth, DoubleBinding gridHeight) {
         //taille de chaque cellule
         DoubleBinding cellWidth = gridWidth
                 .subtract(PADDING * 2)
@@ -23,6 +26,7 @@ public class GridView4Play extends GridView{
                 CellView4Play cellView = new CellView4Play(gridViewModel.getCellViewModel(i, j), cellWidth, cellHeight);
                 add(cellView, j, i); // lignes/colonnes inversées dans gridpane
             }
-        }}
+        }
+    }
 
 }
