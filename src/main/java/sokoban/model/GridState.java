@@ -2,10 +2,9 @@ package sokoban.model;
 
 import java.util.ArrayList;
 import java.util.List;
-import sokoban.model.Board;
 
 public class GridState {
-    private List<Board> boardHistory;
+    private final List<Board> boardHistory;
     private int currentIndex;
 
     public GridState() {
@@ -15,17 +14,19 @@ public class GridState {
 
     // Méthode pour ajouter un nouvel état de la grille à l'historique
     public void addBoardState(Board board) {
-        // clonage du board pour éviter de modifier l'objet original
-        //Board clonedBoard = board.copy();
+        // Clonage du board pour éviter de modifier l'objet original
+        Board clonedBoard = board.copy();
         // Lorsqu'un nouvel état est ajouté, tous les états suivants sont supprimés de l'historique.
-        boardHistory.subList(currentIndex + 1, boardHistory.size()).clear();
-        boardHistory.add(board);
+        if (currentIndex < boardHistory.size() - 1) {
+            boardHistory.subList(currentIndex + 1, boardHistory.size()).clear();
+        }
+        boardHistory.add(clonedBoard);
         currentIndex = boardHistory.size() - 1; // L'indice actuel est mis à jour pour pointer vers le nouvel état ajouté.
     }
 
     // Méthode pour obtenir l'état précédent de la grille
     public Board getPreviousState() {
-        if (currentIndex > 0) {
+        if (currentIndex >= 1) {
             currentIndex--;
             return boardHistory.get(currentIndex);
         }
@@ -59,4 +60,3 @@ public class GridState {
         return currentIndex;
     }
 }
-

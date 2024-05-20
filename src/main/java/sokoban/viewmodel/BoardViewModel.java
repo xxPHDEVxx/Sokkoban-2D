@@ -19,7 +19,6 @@ public class BoardViewModel {
     public BoardViewModel(Board board) {
         this.board = board;
         this.gridState = new GridState();
-        gridState.addBoardState(board);
         gridViewModel = new GridViewModel(board);
     }
 
@@ -86,6 +85,11 @@ public class BoardViewModel {
 
     // Commentaires dispo pour suivi car longue méthode
     public boolean movePlayer(Direction direction) {
+        // solution temporaire pour save etat initial
+        if (gridState.getBoardHistory().size() == 0) {
+            gridState.addBoardState(board);
+        }
+
         // Recherche de la cellule contenant le joueur
         CellViewModel playerCell = findPlayerCell();
         if (playerCell == null) {
@@ -146,7 +150,7 @@ public class BoardViewModel {
         incrementMoveCount();
         boxInTargetCountProperty().invalidate();
 
-        gridState.addBoardState(board.copy());
+        gridState.addBoardState(board);
         return true;
     }
 
@@ -213,6 +217,10 @@ public class BoardViewModel {
     public void undo() {
         if (gridState.hasPreviousState()) {
             Board previousBoard = gridState.getPreviousState();
+            if (previousBoard == null) {
+                System.out.println("empty grid");
+                return;
+            }
             board.getGrid().copyFill(previousBoard.getGrid());
 
             // Décrémenter le compteur de mouvements (ou mettre à jour en conséquence)
@@ -226,6 +234,10 @@ public class BoardViewModel {
     public void redo() {
         if (gridState.hasNextState()){
             Board nextBoard = gridState.getNextState();
+            if (nextBoard == null) {
+                System.out.println("empty grid");
+                return;
+            }
             board.getGrid().copyFill(nextBoard.getGrid());
 
             // Incrémenter le compteur de mouvements (ou mettre à jour en conséquence)

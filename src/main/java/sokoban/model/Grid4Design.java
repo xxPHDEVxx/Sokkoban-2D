@@ -32,6 +32,7 @@ public class Grid4Design {
             matrix[i] = new Cell4Design[GRID_WIDTH];
             for (int j = 0; j < GRID_WIDTH; ++j) {
                 matrix[i][j] = new Cell4Design();
+                matrix[i][j].addElement(new Ground());
             }
         }
         setFilledCellsCount();
@@ -40,7 +41,17 @@ public class Grid4Design {
     }
 
     public Grid4Design copy() {
+
         Grid4Design copy = new Grid4Design(this.GRID_WIDTH, this.GRID_HEIGHT);
+
+        // Effacer tous les éléments actuels de la grille
+        for (int i = 0; i < copy.getGridHeight(); i++) {
+            for (int j = 0; j < copy.getGridWidth(); j++) {
+                copy.getValue(i, j).clear();
+            }
+        }
+
+        // copier les éléments de la grille source vers la grille cible
         for (int i = 0; i < this.getGridHeight(); i++) {
             for (int j = 0; j < this.getGridWidth(); j++) {
                 List<GameElement> originalElements = this.getValue(i, j);
