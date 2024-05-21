@@ -2,7 +2,6 @@ package sokoban.view;
 
 import javafx.beans.binding.Bindings;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -18,9 +17,7 @@ import javafx.stage.Stage;
 import sokoban.model.Direction;
 import sokoban.viewmodel.BoardViewModel;
 
-import javax.crypto.spec.PSource;
-
-public class BoardView4play extends BoardView  {
+public class BoardView4Play extends BoardView  {
     private GridView4Play gridView;
     private Label title = new Label("Score");
     private Label numberOfMovesPlayed = new Label("");
@@ -34,7 +31,7 @@ public class BoardView4play extends BoardView  {
     private static final int SCENE_MIN_HEIGHT = 800;
     private Stage playStage;
 
-    public BoardView4play(Stage playStage, GridView4Play gridView, BoardViewModel boardViewModel) {
+    public BoardView4Play(Stage playStage, GridView4Play gridView, BoardViewModel boardViewModel) {
         super(playStage, boardViewModel);
         this.gridView = gridView;
         this.playStage = playStage;

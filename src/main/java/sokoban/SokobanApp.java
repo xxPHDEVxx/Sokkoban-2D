@@ -3,9 +3,7 @@ package sokoban;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import sokoban.model.Board;
-import sokoban.view.BoardView;
 import sokoban.view.BoardView4Design;
-import sokoban.view.BoardView4play;
 import sokoban.viewmodel.BoardViewModel;
 
 public class
