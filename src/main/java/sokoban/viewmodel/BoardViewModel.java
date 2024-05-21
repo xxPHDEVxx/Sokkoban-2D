@@ -14,6 +14,7 @@ public class BoardViewModel {
     private  Board board;
     private static BooleanProperty isChanged = new SimpleBooleanProperty(false);
     private final LongProperty moveCount = new SimpleLongProperty(0);
+    private Grid4Design saveGridDesign;
 
     public BoardViewModel(Board board) {
         this.board = board;
@@ -79,6 +80,9 @@ public class BoardViewModel {
         return gridViewModel;
     }
 
+    public Board getBoard() {
+        return board;
+    }
 
     // Déplacements joueur
 
@@ -242,5 +246,20 @@ public class BoardViewModel {
             // Incrémenter le compteur de mouvements (ou mettre à jour en conséquence)
             moveCount.set(moveCount.get() + 1);
         }
+    }
+
+    public Grid4Play gridGame(){
+        Grid4Play gridGame = new Grid4Play(gridWidth(),gridHeight());
+        gridGame.copyFill(board.getGrid());
+        return gridGame;
+    }
+
+    public void saveGridDesign(){
+        saveGridDesign = new Grid4Design(gridWidth(),gridHeight());
+        saveGridDesign.copyFill(board.getGrid());
+    }
+
+    public Grid4Design getSaveGridDesign() {
+        return saveGridDesign;
     }
 }

@@ -1,7 +1,6 @@
 package sokoban.view;
 
 import javafx.beans.binding.Bindings;
-import javafx.beans.binding.BooleanBinding;
 import javafx.beans.binding.DoubleBinding;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -51,7 +50,7 @@ public abstract class BoardView extends BorderPane {
     private Scene scene;
     private GridView gridView;
     private Button btnPlay = new Button("Play");
-    private static Stage primaryStage;
+    protected static Stage primaryStage;
     private  Stage playStage;
 
     protected DoubleBinding gridWidth ;
@@ -255,6 +254,8 @@ public abstract class BoardView extends BorderPane {
     }
 
     private void startGame(Stage playStage) {
+        boardViewModel.saveGridDesign();// sauvegarde état actuel de la grille avant de lancer le jeu
+        boardViewModel.getBoard().setGrid(boardViewModel.gridGame()); // création et attribution grille de jeu
         GridView4Play gridViewPlay = new GridView4Play(boardViewModel.getGridViewModel(), gridWidth, gridHeight);
         new BoardView4play(playStage, gridViewPlay, boardViewModel);
     }

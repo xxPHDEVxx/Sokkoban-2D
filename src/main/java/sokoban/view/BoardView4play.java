@@ -43,7 +43,7 @@ public class BoardView4play extends BoardView  {
         initialize();
         configureScene(playStage);
         createHeaderPlay();
-        actionBtnFinish(boardViewModel);
+        actionBtnFinish(boardViewModel, primaryStage);
     }
 
     public void initialize() {
@@ -128,9 +128,11 @@ public class BoardView4play extends BoardView  {
     }
 
     //bouton finish a refaire
-    public void actionBtnFinish(BoardViewModel bordvm) {
+    public void actionBtnFinish(BoardViewModel bordvm, Stage primaryStage) {
         button.setOnAction(action -> {
             playStage.close();
-       });
+            boardViewModel.getBoard().setGrid(boardViewModel.getSaveGridDesign());
+            new BoardView4Design(primaryStage, boardViewModel);
+        });
     }
 }
