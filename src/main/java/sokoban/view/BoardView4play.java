@@ -30,8 +30,8 @@ public class BoardView4play extends BoardView  {
     private VBox headerPlay = new VBox();
     private VBox boardLvl = new VBox();
     private Button button = new Button("Finish");
-    private static final int SCENE_MIN_WIDTH = 1080;
-    private static final int SCENE_MIN_HEIGHT = 800;
+    private  final int SCENE_MIN_WIDTH = 1080;
+    private  final int SCENE_MIN_HEIGHT = 800;
     private Stage playStage;
 
     public BoardView4play(Stage playStage, GridView4Play gridView, BoardViewModel boardViewModel) {
@@ -131,8 +131,8 @@ public class BoardView4play extends BoardView  {
     public void actionBtnFinish(BoardViewModel bordvm, Stage primaryStage) {
         button.setOnAction(action -> {
             playStage.close();
-            boardViewModel.getBoard().setGrid(boardViewModel.getSaveGridDesign());
-            new BoardView4Design(primaryStage,boardViewModel);
+            // plus nécessaire car on ne ferme plus la fenêtre
+            //boardViewModel.getBoard().setGrid(boardViewModel.getSaveGridDesign());
         });
     }
 }

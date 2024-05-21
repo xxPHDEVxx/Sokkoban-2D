@@ -247,7 +247,6 @@ public abstract class BoardView extends BorderPane {
         if (boardViewModel.rulesOKProperty().get()) {
            playStage = new Stage();
             playStage.setTitle("Sokoban");
-            primaryStage.hide();
             startGame(playStage);
         }
     }
