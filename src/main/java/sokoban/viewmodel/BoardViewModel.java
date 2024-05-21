@@ -3,6 +3,7 @@ package sokoban.viewmodel;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.binding.LongBinding;
 import javafx.beans.property.*;
+import javafx.scene.control.Label;
 import sokoban.model.*;
 
 import java.io.File;
@@ -269,7 +270,23 @@ public class BoardViewModel {
     public Grid4Play gridGame(){
         Grid4Play gridGame = new Grid4Play(gridWidth(),gridHeight());
         gridGame.copyFill(board.getGrid());
+        boxNumber(gridGame);
         return gridGame;
+    }
+
+    public void boxNumber(Grid grid){
+        int number = 0;
+        for (int i = 0; i < Grid.getGridHeight(); ++i) {
+            for (int j = 0; j < Grid.getGridWidth(); ++j) {
+                List<GameElement> targetCellItems = grid.getValues(i, j);
+                for (GameElement element : targetCellItems){
+                    if (element instanceof Box){
+                        number++;
+                        ((Box) element).setNumberLabel(new Label(String.valueOf(number)));
+                    }
+                }
+            }
+        }
     }
 
     public void saveGridDesign(){

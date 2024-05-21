@@ -5,8 +5,6 @@ import javafx.beans.property.SimpleListProperty;
 import javafx.collections.FXCollections;
 
 public class Cell4Play extends Cell {
-    private ListProperty<GameElement> values = new SimpleListProperty<>(FXCollections.observableArrayList());
-
     public Cell4Play() {
         super();
     }
