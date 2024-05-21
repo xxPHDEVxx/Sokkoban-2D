@@ -52,7 +52,6 @@ public abstract class BoardView extends BorderPane {
     private Button btnPlay = new Button("Play");
     protected static Stage primaryStage;
     private  Stage playStage;
-
     protected DoubleBinding gridWidth ;
     protected DoubleBinding gridHeight ;
     public BoardView(Stage primaryStage, BoardViewModel boardViewModel) {

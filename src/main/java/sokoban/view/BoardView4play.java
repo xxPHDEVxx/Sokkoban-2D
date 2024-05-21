@@ -132,7 +132,7 @@ public class BoardView4play extends BoardView  {
         button.setOnAction(action -> {
             playStage.close();
             boardViewModel.getBoard().setGrid(boardViewModel.getSaveGridDesign());
-            new BoardView4Design(primaryStage, boardViewModel);
+            new BoardView4Design(primaryStage,boardViewModel);
         });
     }
 }

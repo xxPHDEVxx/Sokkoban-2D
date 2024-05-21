@@ -88,6 +88,12 @@ public class BoardViewModel {
 
     // Commentaires dispo pour suivi car longue méthode
     public boolean movePlayer(Direction direction) {
+
+        // check fin de partie
+        if (this.boxInTargetCountProperty().get() == this.goalCountProperty().get()){
+            return false;
+        }
+
         // solution temporaire pour save etat initial
         if (gridState.getBoardHistory().size() == 0) {
             gridState.addBoardState(board);
@@ -218,6 +224,12 @@ public class BoardViewModel {
     }
 
     public void undo() {
+
+        // check fin de partie
+        if (this.boxInTargetCountProperty().get() == this.goalCountProperty().get()){
+            return;
+        }
+
         if (gridState.hasPreviousState()) {
             Board previousBoard = gridState.getPreviousState();
             if (previousBoard == null) {
@@ -235,6 +247,12 @@ public class BoardViewModel {
 
 
     public void redo() {
+
+        // check fin de partie
+        if (this.boxInTargetCountProperty().get() == this.goalCountProperty().get()){
+            return;
+        }
+
         if (gridState.hasNextState()){
             Board nextBoard = gridState.getNextState();
             if (nextBoard == null) {
