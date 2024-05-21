@@ -1,5 +1,6 @@
 package sokoban.viewmodel;
 
+import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.binding.LongBinding;
 import javafx.beans.property.*;
@@ -91,7 +92,7 @@ public class BoardViewModel {
     public boolean movePlayer(Direction direction) {
 
         // check fin de partie
-        if (this.boxInTargetCountProperty().get() == this.goalCountProperty().get()){
+        if (endGame()){
             return false;
         }
 
@@ -227,7 +228,7 @@ public class BoardViewModel {
     public void undo() {
 
         // check fin de partie
-        if (this.boxInTargetCountProperty().get() == this.goalCountProperty().get()){
+        if (endGame()){
             return;
         }
 
@@ -250,7 +251,7 @@ public class BoardViewModel {
     public void redo() {
 
         // check fin de partie
-        if (this.boxInTargetCountProperty().get() == this.goalCountProperty().get()){
+        if (endGame()){
             return;
         }
 
@@ -296,5 +297,16 @@ public class BoardViewModel {
 
     public Grid4Design getSaveGridDesign() {
         return saveGridDesign;
+    }
+
+    public boolean endGame(){
+        if (this.boxInTargetCountProperty().get() == this.goalCountProperty().get()){
+            if (gridState.getBoardHistory() != null) {
+                gridState.getBoardHistory().clear();
+                gridState.setCurrentIndex(0);
+                return true;
+            }
+        }
+        return false;
     }
 }
