@@ -2,7 +2,6 @@ package sokoban.view;
 
 import javafx.beans.binding.Bindings;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -18,120 +17,106 @@ import javafx.stage.Stage;
 import sokoban.model.Direction;
 import sokoban.viewmodel.BoardViewModel;
 
-import javax.crypto.spec.PSource;
+public class BoardView4play extends BoardView {
 
-public class BoardView4play extends BoardView  {
-    private GridView4Play gridView;
     private Label title = new Label("Score");
     private Label numberOfMovesPlayed = new Label("");
     private Label goal = new Label("");
     private Label finisher = new Label("");
     private HBox level = new HBox();
     private VBox headerPlay = new VBox();
-    private VBox boardLvl = new VBox();
     private Button button = new Button("Finish");
-    private  final int SCENE_MIN_WIDTH = 1080;
-    private  final int SCENE_MIN_HEIGHT = 800;
-    private Stage playStage;
+    private GridView4Play gridView;
 
-    public BoardView4play(Stage playStage, GridView4Play gridView, BoardViewModel boardViewModel) {
-        super(playStage, boardViewModel);
+    // Constructeur de la vue de jeu
+    public BoardView4play(Stage primaryStage, GridView4Play gridView, BoardViewModel boardViewModel) {
+        super(primaryStage, boardViewModel);
         this.gridView = gridView;
-        this.playStage = playStage;
-        playStage.setScene(gridView.getScene());
-        playStage.show();
+        this.primaryStage = primaryStage;
+        primaryStage.setScene(gridView.getScene());
+        primaryStage.show();
         initialize();
-        configureScene(playStage);
+        configureScene(primaryStage);
         createHeaderPlay();
-        actionBtnFinish(boardViewModel, primaryStage);
+        setupFinishButton(boardViewModel, primaryStage);
     }
 
-    public void initialize() {
-        playStage.setTitle("jeu");
-        //style
+    // Initialisation des composants de la vue
+    private void initialize() {
+        primaryStage.setTitle("Jeu");
+
+        // Style pour les composants
         headerPlay.getStyleClass().add("header");
-        Font fontTitle = Font.font("Verdana", FontWeight.BOLD, 20);
-        title.setFont(fontTitle);
+        title.setFont(Font.font("Verdana", FontWeight.BOLD, 20));
+        finisher.setFont(Font.font("Verdana", FontWeight.BOLD, 15));
+
+        // Organisation des composants
         headerPlay.setAlignment(Pos.CENTER);
-
-        Font fontFinish = Font.font("Verdana", FontWeight.BOLD, 15);
-        finisher.setFont(fontFinish);
-
-        // box button
-        HBox boxBtn = new HBox();
-        boxBtn.getChildren().addAll(button);
-        boxBtn.setAlignment(Pos.CENTER);
-
-        //insert sur la vue
-        level.getChildren().add(gridView);
         level.setAlignment(Pos.CENTER);
         gridView.setAlignment(Pos.CENTER);
-        headerPlay.getChildren().addAll(title, numberOfMovesPlayed, goal, finisher);
-        boardLvl.getChildren().addAll(headerPlay, level, boxBtn);
         boardLvl.setAlignment(Pos.CENTER);
 
+        // Ajout des composants à leurs conteneurs
+        HBox boxBtn = new HBox(button);
+        boxBtn.setAlignment(Pos.CENTER);
+
+        headerPlay.getChildren().addAll(title, numberOfMovesPlayed, goal, finisher);
+        level.getChildren().add(gridView);
+        boardLvl.getChildren().addAll(headerPlay, level, boxBtn);
     }
 
-    public void configureScene(Stage playStage) {
+    // Configuration de la scène et des événements clavier
+    private void configureScene(Stage playStage) {
         Scene sceneLevel = new Scene(boardLvl, SCENE_MIN_WIDTH, SCENE_MIN_HEIGHT);
         playStage.setScene(sceneLevel);
 
-        // Directly request focus
-        sceneLevel.getRoot().setFocusTraversable(true);
-
-        sceneLevel.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
-
-            if (new KeyCodeCombination(KeyCode.Z, KeyCombination.CONTROL_DOWN).match(event)) {
-                boardViewModel.undo();
-                //refresh visuel
-                gridView.fillGrid(boardViewModel.getGridViewModel(), gridWidth, gridHeight);
-                return;
-            } else if (new KeyCodeCombination(KeyCode.Y, KeyCombination.CONTROL_DOWN).match(event)) {
-                boardViewModel.redo();
-                // refresh visuel
-                gridView.fillGrid(boardViewModel.getGridViewModel(), gridWidth, gridHeight);
-                return;
-            }
-
-            // Traitement des touches de direction
-            switch (event.getCode()) {
-                case UP, Z:
-                    boardViewModel.movePlayer(Direction.UP);
-                    break;
-                case DOWN, S:
-                    boardViewModel.movePlayer(Direction.DOWN);
-                    break;
-                case LEFT, Q:
-                    boardViewModel.movePlayer(Direction.LEFT);
-                    break;
-                case RIGHT, D:
-                    boardViewModel.movePlayer(Direction.RIGHT);
-                    break;
-            }
-            event.consume();
-        });
-
         // Assurer que le composant prend le focus lors de l'affichage
+        sceneLevel.getRoot().setFocusTraversable(true);
         playStage.showingProperty().addListener((obs, wasShowing, isNowShowing) -> {
             if (isNowShowing) {
                 sceneLevel.getRoot().requestFocus();
             }
         });
+
+        // Gestion des événements clavier
+        sceneLevel.addEventFilter(KeyEvent.KEY_PRESSED, event -> handleKeyPress(event));
     }
 
-    public void createHeaderPlay() {
-        numberOfMovesPlayed.textProperty().bind(Bindings.concat("Number of moves played : ",boardViewModel.moveCountProperty().asString()));
-        goal.textProperty().bind(Bindings.concat("Number of goals reached : ",boardViewModel.boxInTargetCountProperty().asString()," of ", boardViewModel.goalCountProperty().asString()));
+    // Méthode pour gérer les pressions des touches
+    private void handleKeyPress(KeyEvent event) {
+        if (new KeyCodeCombination(KeyCode.Z, KeyCombination.CONTROL_DOWN).match(event)) {
+            boardViewModel.undo();
+            gridView.fillGrid(boardViewModel.getGridViewModel(), gridWidth, gridHeight);
+            return;
+        } else if (new KeyCodeCombination(KeyCode.Y, KeyCombination.CONTROL_DOWN).match(event)) {
+            boardViewModel.redo();
+            gridView.fillGrid(boardViewModel.getGridViewModel(), gridWidth, gridHeight);
+            return;
+        }
+
+        switch (event.getCode()) {
+            case UP, Z -> boardViewModel.movePlayer(Direction.UP);
+            case DOWN, S -> boardViewModel.movePlayer(Direction.DOWN);
+            case LEFT, Q -> boardViewModel.movePlayer(Direction.LEFT);
+            case RIGHT, D -> boardViewModel.movePlayer(Direction.RIGHT);
+        }
+        event.consume();
+    }
+
+    // Création de l'en-tête pour le jeu
+    private void createHeaderPlay() {
+        numberOfMovesPlayed.textProperty().bind(Bindings.concat("Number of moves played: ", boardViewModel.moveCountProperty().asString()));
+        goal.textProperty().bind(Bindings.concat("Number of goals reached: ", boardViewModel.boxInTargetCountProperty().asString(), " of ", boardViewModel.goalCountProperty().asString()));
         finisher.textProperty().bind(Bindings.when(boardViewModel.boxInTargetCountProperty().isEqualTo(boardViewModel.goalCountProperty()))
                 .then(Bindings.concat("You won in ", boardViewModel.moveCountProperty().asString(), " moves, congratulations"))
                 .otherwise(""));
     }
 
-    //bouton finish a refaire
-    public void actionBtnFinish(BoardViewModel bordvm, Stage primaryStage) {
+    // Configuration du bouton "Finish"
+    private void setupFinishButton(BoardViewModel boardViewModel, Stage primaryStage) {
         button.setOnAction(action -> {
             boardViewModel.getBoard().setGrid(boardViewModel.getSaveGridDesign());
-            new BoardView4Design(primaryStage,boardViewModel);
+            new BoardView4Design(primaryStage, boardViewModel);
         });
     }
 }
