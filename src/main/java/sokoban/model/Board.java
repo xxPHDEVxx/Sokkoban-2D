@@ -144,8 +144,6 @@ public class Board {
     public void removeTool(int line, int col, GameElement ground) {
         List<GameElement> cellItems = valueProperty(line, col);
         GameElement currentValue = valueProperty(line, col).get(cellItems.size() - 1);
-        if (currentValue instanceof Box)
-            Box.reduceGlobalNumber();
         removeCellElement(line, col, currentValue);
     }
 

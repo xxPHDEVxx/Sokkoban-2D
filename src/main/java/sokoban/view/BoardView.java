@@ -43,15 +43,14 @@ public abstract class BoardView extends BorderPane {
     private final MenuItem menuItemOpen = new MenuItem("Open...");
     private final MenuItem menuItemSave = new MenuItem("Save As...");
     private final MenuItem menuItemExit = new MenuItem("Exit...");
-    private static HBox boardGame = new HBox();
-    private static final int SCENE_MIN_WIDTH = 1080;
-    private static final int SCENE_MIN_HEIGHT = 800;
-    private static HBox box = new HBox();
+    private  HBox boardGame = new HBox();
+    private  final int SCENE_MIN_WIDTH = 1080;
+    private  final int SCENE_MIN_HEIGHT = 800;
+    private  HBox box = new HBox();
     private Scene scene;
     private GridView gridView;
     private Button btnPlay = new Button("Play");
-    protected static Stage primaryStage;
-    private  Stage playStage;
+    protected Stage primaryStage;
     protected DoubleBinding gridWidth ;
     protected DoubleBinding gridHeight ;
     public BoardView(Stage primaryStage, BoardViewModel boardViewModel) {
@@ -234,10 +233,8 @@ public abstract class BoardView extends BorderPane {
 
     public void actionBtnPlay() {
         btnPlay.setOnAction(action -> {
-            if (BoardViewModel.isChanged()) {
-                BoardViewModel.setChanged(false);
-                SaveConfirm.showDialog();
-            }
+            if (SaveConfirm.showDialog() == SaveConfirm.Response.CANCEL)
+                return;
             playGame();
         });
     }
@@ -245,10 +242,8 @@ public abstract class BoardView extends BorderPane {
     //partie jeu
     public void playGame() {
         if (boardViewModel.rulesOKProperty().get()) {
-           playStage = new Stage();
-            playStage.setTitle("Sokoban");
-            primaryStage.hide();
-            startGame(playStage);
+            primaryStage.setTitle("Sokoban");
+            startGame(primaryStage);
         }
     }
 

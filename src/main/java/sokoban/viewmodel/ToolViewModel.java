@@ -25,9 +25,6 @@ public class ToolViewModel {
         return toolSelected;
     }
 
-    public static void decreaseGlobalNumber() {
-            Box.reduceGlobalNumber();
-    }
 }
 
 

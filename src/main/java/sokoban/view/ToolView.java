@@ -108,7 +108,6 @@ public class ToolView extends FlowPane {
             return new Player();
         } else if (image == images[4]) {
             Box box = new Box();
-            ToolViewModel.decreaseGlobalNumber();
             return box;
         }
         return null;
