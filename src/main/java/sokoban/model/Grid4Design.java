@@ -131,8 +131,7 @@ public class Grid4Design extends Grid{
         } else if (element instanceof Goal) {
             cell.addElement(new Goal());
         } else {
-            // Do nothing if the element is unknown
-            return;
+            cell.addElement(new Ground());
         }
 
         // Invalidate counters
