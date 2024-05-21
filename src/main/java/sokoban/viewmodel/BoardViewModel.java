@@ -49,18 +49,18 @@ public class BoardViewModel {
         return board.maxFilledCells();
     }
     public static int gridWidth() {
-        return Grid4Design.getGridWidth();
+        return Grid.getGridWidth();
     }
     public static int gridHeight() {
-        return Grid4Design.getGridHeight();
+        return Grid.getGridHeight();
     }
 
     public static void exitMenu(){System.exit(0);}
     public void newGridMenu(int width, int height){
         board.setGrid(new Grid4Design(width, height));
     }
-    public Grid4Design openBoard(File file){
-        Grid4Design grid = board.open(file);
+    public Grid openBoard(File file){
+        Grid grid = board.open(file);
         return grid;
     }
     public static BooleanProperty isChangedProperty() {
@@ -72,7 +72,7 @@ public class BoardViewModel {
     public static final void setChanged(boolean isChanged) {
         isChangedProperty().set(isChanged);
     }
-    public Grid4Design getGrid(){
+    public Grid getGrid(){
         return board.getGrid();
     }
     public GridViewModel getGridVM(){
@@ -224,7 +224,7 @@ public class BoardViewModel {
 
             // Décrémenter le compteur de mouvements (ou mettre à jour en conséquence)
             if (moveCount.get() > 0) {
-                moveCount.set(moveCount.get() - 1);
+                moveCount.set(moveCount.get() + 5);
             }
         }
     }

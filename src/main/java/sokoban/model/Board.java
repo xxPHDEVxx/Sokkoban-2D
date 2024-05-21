@@ -22,7 +22,7 @@ public class Board {
     public static int MAX_FILLED_CELLS = 75;
 
     // The grid representing the game board
-    private Grid4Design grid = new Grid4Design();
+    private Grid grid = new Grid4Design();
 
     // Boolean binding indicating if the board is full
     private final BooleanBinding isFull;
@@ -232,11 +232,11 @@ public class Board {
     }
 
     // Setter and getter for the grid
-    public void setGrid(Grid4Design newGrid) {
+    public void setGrid(Grid newGrid) {
         grid = newGrid;
     }
 
-    public Grid4Design getGrid() {
+    public Grid getGrid() {
         return grid;
     }
 
@@ -245,7 +245,7 @@ public class Board {
      * @param file The file to open.
      * @return The loaded grid.
      */
-    public Grid4Design open(File file) {
+    public Grid open(File file) {
         try (Scanner scanner = new Scanner(file)) {
             int row = 0;
             while (scanner.hasNextLine()) {
@@ -319,7 +319,7 @@ public class Board {
      */
     public Board copy() {
         Board clonedBoard = new Board();
-        Grid4Design clonedGrid = new Grid4Design();
+        Grid clonedGrid = new Grid4Design();
         clonedGrid.copyFill(this.getGrid());
 
         // Set the cloned grid in the cloned board

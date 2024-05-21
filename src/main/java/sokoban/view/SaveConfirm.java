@@ -12,7 +12,6 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import sokoban.model.Board;
 import sokoban.model.Grid;
-import sokoban.model.Grid4Design;
 import sokoban.viewmodel.BoardViewModel;
 import sokoban.viewmodel.GridViewModel;
 
@@ -37,7 +36,7 @@ public class SaveConfirm{
 
             Board board = new Board();
             BoardViewModel boardVM = new BoardViewModel(board);
-            Grid4Design grid = boardVM.getGrid();
+            Grid grid = boardVM.getGrid();
             GridViewModel gvm = boardVM.getGridVM();
             gvm.saveMenu(grid, selectedFile);
         });

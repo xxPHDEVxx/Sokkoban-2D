@@ -12,13 +12,10 @@ import java.util.List;
  * The Grid4Design class represents the game grid for the Sokoban game.
  * It holds a matrix of Cell4Design objects and manages the game elements within the grid.
  */
-public class Grid4Design {
+public class Grid4Design extends Grid{
     // Grid dimensions
     private static int GRID_WIDTH = 15;
     private static int GRID_HEIGHT = 10;
-
-    // Matrix holding the cells of the grid
-    private final Cell4Design[][] matrix;
 
     // Bindings for counting various elements in the grid
     private LongBinding filledCellsCount;
@@ -52,34 +49,6 @@ public class Grid4Design {
         }
         setFilledCellsCount();
         countCell();
-    }
-
-    /**
-     * Copies the contents of another Grid4Design object into this one.
-     * @param copy The grid to copy from.
-     */
-    public void copyFill(Grid4Design copy) {
-        // Check if dimensions match
-        if (this.getGridHeight() != copy.getGridHeight() || this.getGridWidth() != copy.getGridWidth()) {
-            throw new IllegalArgumentException("Grid dimensions do not match.");
-        }
-
-        // Clear current elements
-        for (int i = 0; i < this.getGridHeight(); i++) {
-            for (int j = 0; j < this.getGridWidth(); j++) {
-                this.getValues(i, j).clear();
-            }
-        }
-
-        // Copy elements from source grid
-        for (int i = 0; i < copy.getGridHeight(); i++) {
-            for (int j = 0; j < copy.getGridWidth(); j++) {
-                List<GameElement> copyElements = copy.getValues(i, j);
-                for (GameElement element : copyElements) {
-                    this.addElement(i, j, element.copy()); // Ensure to copy elements to avoid cross-references
-                }
-            }
-        }
     }
 
     /**
@@ -135,20 +104,6 @@ public class Grid4Design {
                 .flatMap(Arrays::stream)
                 .filter(cell -> cell.isGoal())
                 .count());
-    }
-
-    // Getters for grid dimensions
-    public static int getGridWidth() { return GRID_WIDTH; }
-    public static int getGridHeight() { return GRID_HEIGHT; }
-
-    /**
-     * Returns the value property of the cell at the specified position.
-     * @param line The row index.
-     * @param col The column index.
-     * @return The value property of the cell.
-     */
-    ReadOnlyListProperty<GameElement> valueProperty(int line, int col) {
-        return matrix[line][col].valueProperty();
     }
 
     /**
@@ -216,26 +171,6 @@ public class Grid4Design {
         setPlayerCount();
         setGoalCount();
         setBoxInTargetCount();
-    }
-
-    /**
-     * Returns the list of game elements at the specified position.
-     * @param line The row index.
-     * @param col The column index.
-     * @return The list of game elements at the specified position.
-     */
-    public ObservableList<GameElement> getValues(int line, int col) {
-        return matrix[line][col].valueProperty();
-    }
-
-    /**
-     * Checks if the specified position is valid within the grid.
-     * @param line The row index.
-     * @param col The column index.
-     * @return True if the position is valid, false otherwise.
-     */
-    public boolean isValidPosition(int line, int col) {
-        return line >= 0 && line < GRID_HEIGHT && col >= 0 && col < GRID_WIDTH;
     }
 
     /**

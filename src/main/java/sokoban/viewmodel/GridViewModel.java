@@ -14,7 +14,7 @@ public class GridViewModel {
     public CellViewModel getCellViewModel(int line, int col) {
         return new CellViewModel(line,col, board);
     }
-    public void saveMenu(Grid4Design grid, File selectedFile){
+    public void saveMenu(Grid grid, File selectedFile){
 
         try (PrintWriter writer = new PrintWriter(new FileWriter(selectedFile))) {
             for (int i = 0; i < grid.getGridHeight(); i++) {

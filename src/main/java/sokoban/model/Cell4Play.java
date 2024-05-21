@@ -44,4 +44,9 @@ public class Cell4Play extends Cell {
     ReadOnlyListProperty<GameElement> valueProperty() {
         return values;
     }
+
+    @Override
+    void remove(GameElement element) {
+        values.remove(element);
+    }
 }

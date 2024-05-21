@@ -14,4 +14,6 @@ public abstract class Cell {
     abstract boolean isBoxInTarget();
     abstract ReadOnlyListProperty<GameElement> valueProperty();
 
+    abstract void remove(GameElement element);
+
 }

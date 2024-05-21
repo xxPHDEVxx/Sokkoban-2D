@@ -3,36 +3,93 @@ package sokoban.model;
 
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.LongBinding;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.ReadOnlyObjectProperty;
-import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.ReadOnlyListProperty;
+import javafx.collections.ObservableList;
 
 import java.util.Arrays;
+import java.util.List;
 
 public abstract class Grid {
+     // Grid dimensions
+     protected static int GRID_WIDTH = 15;
+     protected static int GRID_HEIGHT = 10;
 
-     static int GRID_WIDTH = 15;
-     static int GRID_HEIGHT = 10;
+     // Matrix holding the cells of the grid
+     protected  Cell[][] matrix;
 
+     // Bindings for counting various elements in the grid
+     protected LongBinding filledCellsCount;
+     protected LongBinding boxCount;
+     protected LongBinding playerCount;
+     protected LongBinding goalCount;
+     protected LongBinding boxInTargetCount;
+     public Grid() {
+     }
 
-/*
-    public Grid() {
-        this(GRID_WIDTH, GRID_HEIGHT);
+     /**
+      * Copies the contents of another Grid4Design object into this one.
+      * @param copy The grid to copy from.
+      */
+     public void copyFill(Grid copy) {
+          // Check if dimensions match
+          if (this.getGridHeight() != copy.getGridHeight() || this.getGridWidth() != copy.getGridWidth()) {
+               throw new IllegalArgumentException("Grid dimensions do not match.");
+          }
+
+          // Clear current elements
+          for (int i = 0; i < this.getGridHeight(); i++) {
+               for (int j = 0; j < this.getGridWidth(); j++) {
+                    this.valueProperty(i, j).clear();
+               }
+          }
+
+          // Copy elements from source grid
+          for (int i = 0; i < copy.getGridHeight(); i++) {
+               for (int j = 0; j < copy.getGridWidth(); j++) {
+                    List<GameElement> copyElements = copy.valueProperty(i, j);
+                    for (GameElement element : copyElements) {
+                         this.valueProperty(i, j).add(element.copy()); // Ensure to copy elements to avoid cross-references
+                    }
+               }
+          }
+     }
+
+     // Getters for grid dimensions
+     public static int getGridWidth() { return GRID_WIDTH; }
+     public static int getGridHeight() { return GRID_HEIGHT; }
+
+     /**
+      * Returns the value property of the cell at the specified position.
+      * @param line The row index.
+      * @param col The column index.
+      * @return The value property of the cell.
+      */
+     ReadOnlyListProperty<GameElement> valueProperty(int line, int col) {
+          return matrix[line][col].valueProperty();
+     }
+
+     abstract void put(int line, int col, GameElement element);
+
+     abstract void remove(int line, int col, GameElement element);
+
+    /**
+     * Returns the list of game elements at the specified position.
+     * @param line The row index.
+     * @param col The column index.
+     * @return The list of game elements at the specified position.
+     */
+    public ObservableList<GameElement> getValues(int line, int col) {
+        return matrix[line][col].valueProperty();
     }
 
-    public Grid(int width, int height) {
-        GRID_WIDTH = width;
-        GRID_HEIGHT = height;
-        matrix = new Cell4Design[GRID_HEIGHT][];
-        for (int i = 0; i < GRID_HEIGHT; ++i) {
-            matrix[i] = new Cell4Design[GRID_WIDTH];
-            for (int j = 0; j < GRID_WIDTH; ++j) {
-                matrix[i][j] = new Cell4Design();
-            }
-        }
-        setFilledCellsCount();
-        countCell();
-
+    /**
+     * Checks if the specified position is valid within the grid.
+     * @param line The row index.
+     * @param col The column index.
+     * @return True if the position is valid, false otherwise.
+     */
+    public boolean isValidPosition(int line, int col) {
+        return line >= 0 && line < GRID_HEIGHT && col >= 0 && col < GRID_WIDTH;
     }
 
     public void setFilledCellsCount() {
@@ -70,26 +127,6 @@ public abstract class Grid {
                 .filter(cell -> cell.isGoal())
                 .count());
     }
-    public static int getGridWidth(){return GRID_WIDTH;}
-    public static int getGridHeight(){return GRID_HEIGHT;}
-
-    ReadOnlyObjectProperty<GameElement> valueProperty(int line, int col) {
-        return matrix[line][col].valueProperty();    }
-    void play(int line, int col, GameElement player) {
-        matrix[line][col].setValue(player);
-        filledCellsCount.invalidate();
-        playerCount.invalidate();
-        goalCount.invalidate();
-        boxCount.invalidate();
-    }
-
-    void remove(int line, int col, GameElement ground){
-        matrix[line][col].setValue(ground);
-        filledCellsCount.invalidate();
-        playerCount.invalidate();
-        goalCount.invalidate();
-        boxCount.invalidate();
-    }
 
     public LongBinding filledCellsCountProperty() {
         return filledCellsCount;
@@ -107,7 +144,6 @@ public abstract class Grid {
         return boxInTargetCount;
     }
 
-    public boolean isEmpty(int line, int col) {return matrix[line][col].isEmpty();}
     public void countCell () {
         setBoxCellsCount();
         setPlayerCount();
@@ -116,25 +152,6 @@ public abstract class Grid {
 
     }
 
-    public GameElement getValue ( int line, int col){
-        return matrix[line][col].getValue();
-    }
+    abstract public void addElement(int row, int col, GameElement gameElement);
 
-    // Vérifie si la position (line, col) est valide dans la grille
-    public boolean isValidPosition ( int line, int col){
-        return line >= 0 && line < GRID_HEIGHT && col >= 0 && col < GRID_WIDTH;
-    }
-
-    public void setValue(int row, int col, GameElement value) {
-        if (isValidPosition(row, col)) {
-            matrix[row][col].getCell().setValue(value);
-        } else {
-            throw new IllegalArgumentException("Invalid row or column index");
-        }
-    }
-
-    public GameElement getElement(int line, int col) {
-        return matrix[line][col].getValue() ;
-    }
-*/
 }
