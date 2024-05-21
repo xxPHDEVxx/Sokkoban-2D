@@ -51,7 +51,6 @@ public abstract class BoardView extends BorderPane {
     private GridView gridView;
     private Button btnPlay = new Button("Play");
     protected Stage primaryStage;
-    private  Stage playStage;
     protected DoubleBinding gridWidth ;
     protected DoubleBinding gridHeight ;
     public BoardView(Stage primaryStage, BoardViewModel boardViewModel) {
@@ -234,10 +233,8 @@ public abstract class BoardView extends BorderPane {
 
     public void actionBtnPlay() {
         btnPlay.setOnAction(action -> {
-            if (BoardViewModel.isChanged()) {
-                BoardViewModel.setChanged(false);
-                SaveConfirm.showDialog();
-            }
+            if (SaveConfirm.showDialog() == SaveConfirm.Response.CANCEL)
+                return;
             playGame();
         });
     }
@@ -245,9 +242,8 @@ public abstract class BoardView extends BorderPane {
     //partie jeu
     public void playGame() {
         if (boardViewModel.rulesOKProperty().get()) {
-           playStage = new Stage();
-            playStage.setTitle("Sokoban");
-            startGame(playStage);
+            primaryStage.setTitle("Sokoban");
+            startGame(primaryStage);
         }
     }
 

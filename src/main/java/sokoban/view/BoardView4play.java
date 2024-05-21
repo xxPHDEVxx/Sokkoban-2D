@@ -130,9 +130,8 @@ public class BoardView4play extends BoardView  {
     //bouton finish a refaire
     public void actionBtnFinish(BoardViewModel bordvm, Stage primaryStage) {
         button.setOnAction(action -> {
-            playStage.close();
-            // plus nécessaire car on ne ferme plus la fenêtre
-            //boardViewModel.getBoard().setGrid(boardViewModel.getSaveGridDesign());
+            boardViewModel.getBoard().setGrid(boardViewModel.getSaveGridDesign());
+            new BoardView4Design(primaryStage,boardViewModel);
         });
     }
 }
