@@ -74,7 +74,6 @@ public abstract class CellView extends StackPane {
             midImageView.setImage(elements.get(2).getImage());
             topImageView.setImage(elements.get(1).getImage());
             handleBoxNumber();
-            System.out.println("init yu");
         } else {
             if (elements.size() > 1) {
                 midImageView.setImage(elements.get(1).getImage());
@@ -84,7 +83,6 @@ public abstract class CellView extends StackPane {
             }
             if (viewModel.isBox()) {
                 handleBoxNumber();
-                System.out.println("init ya");
             }
         }
     }
@@ -99,7 +97,6 @@ public abstract class CellView extends StackPane {
             midImageView.setImage(elements.get(2).getImage());
             topImageView.setImage(elements.get(1).getImage());
             handleBoxNumber();
-            System.out.println("set yu");
         } else {
             if (elements.size() > 1) {
                 midImageView.setImage(elements.get(1).getImage());
@@ -109,7 +106,6 @@ public abstract class CellView extends StackPane {
             }
             if (viewModel.isBox()) {
                 handleBoxNumber();
-                System.out.println("set ya");
             }
         }
     }
