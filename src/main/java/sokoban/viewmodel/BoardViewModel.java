@@ -300,16 +300,16 @@ public class BoardViewModel {
      */
     public void mushroom(Grid grid){
         Random random = new Random();
-        Cell cell = null;
+        Boolean free = false;
 
-        while (cell == null) {
+        while (!free) {
             int i = random.nextInt(Grid.getGridHeight());
             int j = random.nextInt(Grid.getGridWidth());
             List<GameElement> cellItems = grid.valueProperty(i,j);
             if (cellItems.stream().allMatch(element -> element instanceof Ground) && cellItems.size() == 1) {
                 cellItems.add(new Mushroom());
                 cellItems.add(new Ground());
-                cell = grid.getCell(i,j);
+                free = true;
             }
         }
     }
@@ -337,6 +337,44 @@ public class BoardViewModel {
         }
         return visible;
     }
+
+    /**
+     * Replace randomly boxes of the grid
+     */
+    public void mushroomEffect(){
+        Grid grid = board.getGrid();
+        Random random = new Random();
+        int boxNumber = 0;
+
+        // Clear current box(es)
+        for (int i = 0; i < grid.getGridHeight(); i++) {
+            for (int j = 0; j < grid.getGridWidth(); j++) {
+                List<GameElement> cellItems = board.valueProperty(i,j);
+                    for (GameElement item : cellItems){
+                        if (item instanceof Box){
+                            cellItems.remove(item);
+                            boxNumber++;
+                            break;
+                        }
+                    }
+            }
+        }
+
+        // Place boxes randomly anywhere except on sides
+        while (boxNumber > 0) {
+            int i = random.nextInt(Grid.getGridHeight());
+            int j = random.nextInt(Grid.getGridWidth());
+            List<GameElement> cellItems = grid.valueProperty(i,j);
+            if (!(i == 0 || j == 0 || i == 8 || j == 14)) {
+                if ((cellItems.size() == 1) ||
+                        (cellItems.size() == 2 && cellItems.stream().anyMatch(element -> element instanceof Goal))){
+                    cellItems.add(new Box());
+                    boxNumber--;
+                }
+            }
+        }
+    }
+
 
     public boolean mushVisible(){
         boolean visible = true;
