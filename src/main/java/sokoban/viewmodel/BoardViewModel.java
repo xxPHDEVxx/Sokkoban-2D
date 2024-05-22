@@ -319,7 +319,7 @@ public class BoardViewModel {
      * @return boolean to know if it's visible or not
      */
     public boolean hideOrShow(){
-        boolean visible = mushVisible();
+        boolean visible = false;
         for (int i = 0; i < this.getGrid().getGridHeight(); i++) {
             for (int j = 0; j < this.getGrid().getGridWidth(); j++) {
                 List<GameElement> cellItems = board.valueProperty(i,j);
@@ -327,7 +327,7 @@ public class BoardViewModel {
                 if (cellItems.stream().anyMatch(element -> element instanceof Mushroom)) {
                     if (cellItems.get(last) instanceof Ground) {
                         cellItems.remove(last);
-                        visible = mushVisible();
+                        visible = true;
                     }
                     else {
                         cellItems.add(new Ground());
@@ -336,43 +336,6 @@ public class BoardViewModel {
             }
         }
         return visible;
-    }
-
-    /**
-     * Replace randomly boxes of the grid
-     */
-    public void mushroomEffect(){
-        Grid grid = board.getGrid();
-        Random random = new Random();
-        int boxNumber = 0;
-
-        // Clear current box(es)
-        for (int i = 0; i < grid.getGridHeight(); i++) {
-            for (int j = 0; j < grid.getGridWidth(); j++) {
-                List<GameElement> cellItems = board.valueProperty(i,j);
-                    for (GameElement item : cellItems){
-                        if (item instanceof Box){
-                            cellItems.remove(item);
-                            boxNumber++;
-                            break;
-                        }
-                    }
-            }
-        }
-
-        // Place boxes randomly anywhere except on sides
-        while (boxNumber > 0) {
-            int i = random.nextInt(Grid.getGridHeight());
-            int j = random.nextInt(Grid.getGridWidth());
-            List<GameElement> cellItems = grid.valueProperty(i,j);
-            if (!(i == 0 || j == 0 || i == 8 || j == 14)) {
-                if ((cellItems.size() == 1) ||
-                        (cellItems.size() == 2 && cellItems.stream().anyMatch(element -> element instanceof Goal))){
-                    cellItems.add(new Box());
-                    boxNumber--;
-                }
-            }
-        }
     }
 
 

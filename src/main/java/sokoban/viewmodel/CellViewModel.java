@@ -80,4 +80,12 @@ public class CellViewModel {
         }
         return null;
     }
+
+    /**
+     * Replace boxes of the grid if there is a mushroom on this cell
+     */
+    public void isMushroom(){
+        if (board.getGrid().getValues(line,col).stream().anyMatch(element -> element instanceof Mushroom))
+            this.board.mushroomEffect();
+    }
 }
