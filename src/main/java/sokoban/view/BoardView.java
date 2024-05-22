@@ -263,6 +263,7 @@ public abstract class BoardView extends BorderPane {
         boardViewModel.getBoard().setGrid(boardViewModel.gridGame()); // création et attribution grille de jeu
         GridView4Play gridViewPlay = new GridView4Play(boardViewModel.getGridViewModel(), gridWidth, gridHeight);
         new BoardView4play(playStage, gridViewPlay, boardViewModel);
+        // refresh des cellules
         gridViewPlay.fillGrid(boardViewModel.getGridViewModel(), gridWidth, gridHeight);
     }
 }

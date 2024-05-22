@@ -58,11 +58,13 @@ public class BoardView4play extends BoardView {
 
         // Ajout des composants à leurs conteneurs
         HBox boxBtn = new HBox(btnFinish, btnMushroom);
+        boxBtn.setSpacing(15);
         boxBtn.setAlignment(Pos.CENTER);
 
         headerPlay.getChildren().addAll(title, numberOfMovesPlayed, goal, finisher);
         level.getChildren().add(gridView);
         boardLvl.getChildren().addAll(headerPlay, level, boxBtn);
+        bindings();
     }
 
     // Configuration de la scène et des événements clavier
@@ -86,11 +88,9 @@ public class BoardView4play extends BoardView {
     private void handleKeyPress(KeyEvent event) {
         if (new KeyCodeCombination(KeyCode.Z, KeyCombination.CONTROL_DOWN).match(event)) {
             boardViewModel.undo();
-            gridView.fillGrid(boardViewModel.getGridViewModel(), gridWidth, gridHeight);
             return;
         } else if (new KeyCodeCombination(KeyCode.Y, KeyCombination.CONTROL_DOWN).match(event)) {
             boardViewModel.redo();
-            gridView.fillGrid(boardViewModel.getGridViewModel(), gridWidth, gridHeight);
             return;
         }
 
@@ -110,7 +110,21 @@ public class BoardView4play extends BoardView {
         finisher.textProperty().bind(Bindings.when(boardViewModel.boxInTargetCountProperty().isEqualTo(boardViewModel.goalCountProperty()))
                 .then(Bindings.concat("You won in ", boardViewModel.moveCountProperty().asString(), " moves, congratulations"))
                 .otherwise(""));
+    }
+
+    private void bindings(){
         btnFinish.disableProperty().bind(boardViewModel.boxInTargetCountProperty().isEqualTo(boardViewModel.goalCountProperty()).not());
+        btnMushroom.disableProperty().bind(boardViewModel.boxInTargetCountProperty().isEqualTo(boardViewModel.goalCountProperty()));
+
+        // Ajoute ou retire le filtre d'événements en fonction de la valeur de la liaison
+        boardViewModel.boxInTargetCountProperty().isEqualTo(boardViewModel.goalCountProperty()).not()
+                .addListener((observable, oldValue, newValue) -> {
+                    if (newValue) {
+                        btnMushroom.getScene().addEventFilter(MouseEvent.MOUSE_CLICKED, mouseEventFilter);
+                    } else {
+                        btnMushroom.getScene().removeEventFilter(MouseEvent.MOUSE_CLICKED, mouseEventFilter);
+                    }
+                });
     }
 
     // Configuration du bouton "Finish"
@@ -127,12 +141,18 @@ public class BoardView4play extends BoardView {
             if(boardViewModel.hideOrShow()){
                 btnMushroom.setText("Hide mushroom");
                 // annuler clic si mushroom visible
-                this.addEventFilter(MouseEvent.MOUSE_CLICKED, event -> {
-                    // Consomme l'événement de clic de la souris
-                    event.consume();
-                });
-            } else
+                btnMushroom.getScene().addEventFilter(MouseEvent.MOUSE_CLICKED, mouseEventFilter);
+            } else {
                 btnMushroom.setText("Show mushroom");
+                // Retirer le filtre de clic lorsque le mushroom est caché
+                btnMushroom.getScene().removeEventFilter(MouseEvent.MOUSE_CLICKED, mouseEventFilter);
+            }
         });
     }
+
+    // Filtre d'événements pour annuler les clics de souris
+    private final javafx.event.EventHandler<MouseEvent> mouseEventFilter = event -> {
+        // Consomme l'événement de clic de la souris
+        event.consume();
+    };
 }

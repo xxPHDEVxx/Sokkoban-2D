@@ -1,13 +1,11 @@
 package sokoban.view;
 
 import javafx.beans.binding.DoubleBinding;
-import javafx.scene.input.MouseButton;
+import sokoban.model.Grid;
 import sokoban.viewmodel.CellViewModel;
-import sokoban.viewmodel.ToolViewModel;
-
-import java.util.List;
 
 public class CellView4Play extends CellView{
+
     CellView4Play(CellViewModel viewModel, DoubleBinding cellWidthProperty, DoubleBinding cellHeightProperty) {
         super(viewModel, cellWidthProperty, cellHeightProperty);
         configureBindings();
@@ -28,6 +26,8 @@ public class CellView4Play extends CellView{
         // un clic sur la cellule permet de jouer celle-ci
         this.setOnMouseClicked(event -> {
             viewModel.isMushroom();
+            viewModel.placeMushroom();
+            viewModel.addBoardHistory();
         });
 
         // Écoutez les changements dans les cellules
