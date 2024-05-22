@@ -5,10 +5,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyCodeCombination;
-import javafx.scene.input.KeyCombination;
-import javafx.scene.input.KeyEvent;
+import javafx.scene.input.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
@@ -129,6 +126,11 @@ public class BoardView4play extends BoardView {
         btnMushroom.setOnAction(action ->{
             if(boardViewModel.hideOrShow()){
                 btnMushroom.setText("Hide mushroom");
+                // annuler clic si mushroom visible
+                this.addEventFilter(MouseEvent.MOUSE_CLICKED, event -> {
+                    // Consomme l'événement de clic de la souris
+                    event.consume();
+                });
             } else
                 btnMushroom.setText("Show mushroom");
         });

@@ -1,14 +1,6 @@
 package sokoban.view;
 
 import javafx.beans.binding.DoubleBinding;
-import javafx.geometry.Pos;
-import javafx.scene.control.Label;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.StackPane;
-import sokoban.model.Box;
-import sokoban.model.GameElement;
-import sokoban.model.Goal;
 import sokoban.viewmodel.CellViewModel;
 
 import java.util.List;
