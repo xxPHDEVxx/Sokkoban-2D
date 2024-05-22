@@ -64,7 +64,7 @@ public abstract class Grid {
       * @param col The column index.
       * @return The value property of the cell.
       */
-     ReadOnlyListProperty<GameElement> valueProperty(int line, int col) {
+     public ReadOnlyListProperty<GameElement> valueProperty(int line, int col) {
           return matrix[line][col].valueProperty();
      }
 
@@ -80,6 +80,9 @@ public abstract class Grid {
      */
     public ObservableList<GameElement> getValues(int line, int col) {
         return matrix[line][col].valueProperty();
+    }
+    public Cell getCell(int i, int j){
+        return matrix[i][j];
     }
 
     /**
@@ -151,9 +154,4 @@ public abstract class Grid {
         setBoxInTargetCount();
 
     }
-
-    abstract public void addElement(int row, int col, GameElement gameElement);
-
-
-
 }

@@ -254,9 +254,9 @@ public class Board {
                         char symbol = line.charAt(col);
                         // Convert character to GameElement and add to the grid
                         List<GameElement> items = convertSymbolToCellValue(symbol);
-                        grid.addElement(row, col, items.get(0));
+                        grid.put(row, col, items.get(0));
                         if (items.size() > 1) {
-                            grid.addElement(row, col, items.get(1));
+                            grid.put(row, col, items.get(1));
                         }
                     }
                     row++;

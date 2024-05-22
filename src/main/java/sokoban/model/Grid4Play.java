@@ -1,22 +1,12 @@
 package sokoban.model;
 
+import java.util.List;
+
 public class Grid4Play extends Grid{
 
     public Grid4Play() {
         this(GRID_WIDTH, GRID_HEIGHT);
 
-    }
-
-    @Override
-    void put(int line, int col, GameElement element){
-    }
-
-    @Override
-    void remove(int line, int col, GameElement element) {
-    }
-
-    @Override
-    public void addElement(int row, int col, GameElement gameElement) {
     }
 
     public Grid4Play(int width, int height) {
@@ -32,5 +22,31 @@ public class Grid4Play extends Grid{
         }
         setFilledCellsCount();
         countCell();
+    }
+
+    @Override
+    void put(int line, int col, GameElement element) {
+        Cell cell = matrix[line][col];
+        List<GameElement> cellItems = cell.valueProperty();
+
+        // Remove existing element if present
+        if (cellItems.contains(element)) {
+            cellItems.remove(element);
+        }
+
+        // Insert a new instance of the element
+        if (element instanceof Mushroom) {
+            cell.addElement(new Mushroom());
+        }
+
+        // Invalidate counters
+        filledCellsCount.invalidate();
+        playerCount.invalidate();
+        goalCount.invalidate();
+        boxCount.invalidate();
+    }
+
+    @Override
+    void remove(int line, int col, GameElement element) {
     }
 }

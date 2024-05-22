@@ -2,8 +2,8 @@ package sokoban.model;
 
 import javafx.scene.image.Image;
 
-public class mushroom extends GameElement{
-    public mushroom(){
+public class Mushroom extends GameElement{
+    public Mushroom(){
         super();
         image = new Image("mushroom.png");
     }
@@ -15,6 +15,6 @@ public class mushroom extends GameElement{
 
     @Override
     public GameElement copy() {
-        return new mushroom();
+        return new Mushroom();
     }
 }

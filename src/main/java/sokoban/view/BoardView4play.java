@@ -25,7 +25,9 @@ public class BoardView4play extends BoardView {
     private Label finisher = new Label("");
     private HBox level = new HBox();
     private VBox headerPlay = new VBox();
-    private Button button = new Button("Finish");
+    private Button btnFinish = new Button("Finish");
+    private Button btnMushroom = new Button("Show mushroom");
+    private Button btnHideMushroom = new Button("Hide mushroom");
     private GridView4Play gridView;
 
     // Constructeur de la vue de jeu
@@ -39,6 +41,7 @@ public class BoardView4play extends BoardView {
         configureScene(primaryStage);
         createHeaderPlay();
         setupFinishButton(boardViewModel, primaryStage);
+        showMushroom();
     }
 
     // Initialisation des composants de la vue
@@ -57,7 +60,7 @@ public class BoardView4play extends BoardView {
         boardLvl.setAlignment(Pos.CENTER);
 
         // Ajout des composants à leurs conteneurs
-        HBox boxBtn = new HBox(button);
+        HBox boxBtn = new HBox(btnFinish, btnMushroom);
         boxBtn.setAlignment(Pos.CENTER);
 
         headerPlay.getChildren().addAll(title, numberOfMovesPlayed, goal, finisher);
@@ -110,14 +113,24 @@ public class BoardView4play extends BoardView {
         finisher.textProperty().bind(Bindings.when(boardViewModel.boxInTargetCountProperty().isEqualTo(boardViewModel.goalCountProperty()))
                 .then(Bindings.concat("You won in ", boardViewModel.moveCountProperty().asString(), " moves, congratulations"))
                 .otherwise(""));
-        button.disableProperty().bind(boardViewModel.boxInTargetCountProperty().isEqualTo(boardViewModel.goalCountProperty()).not());
+        btnFinish.disableProperty().bind(boardViewModel.boxInTargetCountProperty().isEqualTo(boardViewModel.goalCountProperty()).not());
     }
 
     // Configuration du bouton "Finish"
     private void setupFinishButton(BoardViewModel boardViewModel, Stage primaryStage) {
-        button.setOnAction(action -> {
+        btnFinish.setOnAction(action -> {
             boardViewModel.getBoard().setGrid(boardViewModel.getSaveGridDesign());
             new BoardView4Design(primaryStage, boardViewModel);
+        });
+    }
+
+    // Configuration bouton "show mushroom"
+    private void showMushroom(){
+        btnMushroom.setOnAction(action ->{
+            if(boardViewModel.hideOrShow()){
+                btnMushroom.setText("Hide mushroom");
+            } else
+                btnMushroom.setText("Show mushroom");
         });
     }
 }

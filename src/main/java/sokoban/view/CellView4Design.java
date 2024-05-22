@@ -36,7 +36,7 @@ public class CellView4Design extends CellView{
         topImageView.fitWidthProperty().bind(widthProperty);
 
 
-        getChildren().addAll(imageView, topImageView, stackPane, midImageView);
+        getChildren().addAll(imageView, midImageView, stackPane, topImageView);
 
         // un clic sur la cellule permet de jouer celle-ci
         this.setOnMouseClicked(event -> {

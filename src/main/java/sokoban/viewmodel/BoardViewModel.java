@@ -1,6 +1,5 @@
 package sokoban.viewmodel;
 
-import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.binding.LongBinding;
 import javafx.beans.property.*;
@@ -9,6 +8,7 @@ import sokoban.model.*;
 
 import java.io.File;
 import java.util.List;
+import java.util.Random;
 
 public class BoardViewModel {
     private final GridViewModel gridViewModel;
@@ -272,6 +272,7 @@ public class BoardViewModel {
         Grid4Play gridGame = new Grid4Play(gridWidth(),gridHeight());
         gridGame.copyFill(board.getGrid());
         boxNumber(gridGame);
+        mushroom(gridGame);
         return gridGame;
     }
 
@@ -289,6 +290,54 @@ public class BoardViewModel {
             }
         }
     }
+
+    // Mushroom feat
+
+    /**
+     * To place mushroom on the grid
+     * @param grid
+     * @return
+     */
+    public void mushroom(Grid grid){
+        Random random = new Random();
+        Cell cell = null;
+
+        while (cell == null) {
+            int i = random.nextInt(Grid.getGridHeight());
+            int j = random.nextInt(Grid.getGridWidth());
+            List<GameElement> cellItems = grid.valueProperty(i,j);
+            if (cellItems.stream().allMatch(element -> element instanceof Ground) && cellItems.size() == 1) {
+                cellItems.add(new Mushroom());
+                cellItems.add(new Ground());
+                cell = grid.getCell(i,j);
+            }
+        }
+    }
+
+    /**
+     * To hide the mushroom
+     * @return boolean to know if it's visible or not
+     */
+    public boolean hideOrShow(){
+        boolean visible = false;
+        for (int i = 0; i < this.getGrid().getGridHeight(); i++) {
+            for (int j = 0; j < this.getGrid().getGridWidth(); j++) {
+                List<GameElement> cellItems = board.valueProperty(i,j);
+                int last = cellItems.size() - 1;
+                if (cellItems.stream().anyMatch(element -> element instanceof Mushroom)) {
+                    if (cellItems.get(last) instanceof Ground) {
+                        cellItems.remove(last);
+                        visible = true;
+                    }
+                    else {
+                        cellItems.add(new Ground());
+                    }
+                }
+            }
+        }
+        return visible;
+    }
+
 
     public void saveGridDesign(){
         saveGridDesign = new Grid4Design(gridWidth(),gridHeight());
