@@ -319,7 +319,7 @@ public class BoardViewModel {
      * @return boolean to know if it's visible or not
      */
     public boolean hideOrShow(){
-        boolean visible = false;
+        boolean visible = mushVisible();
         for (int i = 0; i < this.getGrid().getGridHeight(); i++) {
             for (int j = 0; j < this.getGrid().getGridWidth(); j++) {
                 List<GameElement> cellItems = board.valueProperty(i,j);
@@ -327,10 +327,26 @@ public class BoardViewModel {
                 if (cellItems.stream().anyMatch(element -> element instanceof Mushroom)) {
                     if (cellItems.get(last) instanceof Ground) {
                         cellItems.remove(last);
-                        visible = true;
+                        visible = mushVisible();
                     }
                     else {
                         cellItems.add(new Ground());
+                    }
+                }
+            }
+        }
+        return visible;
+    }
+
+    public boolean mushVisible(){
+        boolean visible = true;
+        for (int i = 0; i < this.getGrid().getGridHeight(); i++) {
+            for (int j = 0; j < this.getGrid().getGridWidth(); j++) {
+                List<GameElement> cellItems = board.valueProperty(i,j);
+                int last = cellItems.size() - 1;
+                if (cellItems.stream().anyMatch(element -> element instanceof Mushroom)) {
+                    if (cellItems.get(last) instanceof Ground) {
+                        visible = false;
                     }
                 }
             }
@@ -356,6 +372,8 @@ public class BoardViewModel {
                 return true;
             }
         }
+        if (mushVisible())
+            return true;
         return false;
     }
 }
