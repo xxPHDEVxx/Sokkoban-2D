@@ -352,8 +352,9 @@ public class Board {
     public void mushroomEffect(){
         Grid grid = this.getGrid();
         Random random = new Random();
+        int boxCount = 1;
         int boxNumber = 0;
-        List<GameElement> boxes = new ArrayList<>();
+        //List<GameElement> boxes = new ArrayList<>();
         // save etat initial
         if (gridState.getBoardHistory().size() == 0) {
             gridState.addBoardState(this);
@@ -365,7 +366,6 @@ public class Board {
                 List<GameElement> cellItems = this.valueProperty(i,j);
                 for (GameElement item : cellItems){
                     if (item instanceof Box){
-                        boxes.add(item);
                         cellItems.remove(item);
                         boxNumber++;
                         break;
@@ -382,8 +382,11 @@ public class Board {
             if (!(i == 0 || j == 0 || i == 9 || j == 14)) {
                 if ((cellItems.size() == 1) ||
                         (cellItems.size() == 2 && cellItems.stream().anyMatch(element -> element instanceof Goal))){
+                    Box box = new Box();
+                    box.setNumberLabel(new Label(String.valueOf(boxCount)));
+                    cellItems.add(box);
                     boxNumber--;
-                    cellItems.add(boxes.get(boxNumber));
+                    boxCount++;
                 }
             }
         }

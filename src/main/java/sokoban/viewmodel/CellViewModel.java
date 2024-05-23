@@ -86,7 +86,6 @@ public class CellViewModel {
     public void isMushroom(){
         if (board.getGrid().getValues(line,col).stream().anyMatch(element -> element instanceof Mushroom))
             this.board.mushroomEffect();
-        board.boxNumber(board.getGrid());
     }
 
     public void placeMushroom(){

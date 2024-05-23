@@ -18,6 +18,7 @@ public class Grid4Play extends Grid{
             matrix[i] = new Cell4Play[GRID_WIDTH];
             for (int j = 0; j < GRID_WIDTH; ++j) {
                 matrix[i][j] = new Cell4Play();
+                //matrix[i][j].addElement(new Ground());
             }
         }
         setFilledCellsCount();
