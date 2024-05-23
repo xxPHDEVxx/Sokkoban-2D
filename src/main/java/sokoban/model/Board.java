@@ -374,8 +374,8 @@ public class Board {
 
         // Place boxes randomly anywhere except on sides
         while (boxNumber > 0) {
-            int i = random.nextInt(Grid.getGridHeight());
-            int j = random.nextInt(Grid.getGridWidth());
+            int i = random.nextInt(grid.getGridHeight());
+            int j = random.nextInt(grid.getGridWidth());
             List<GameElement> cellItems = grid.valueProperty(i,j);
             if (!(i == 0 || j == 0 || i == 9 || j == 14)) {
                 if ((cellItems.size() == 1) ||
@@ -411,8 +411,8 @@ public class Board {
             }
 
         while (!free) {
-            int i = random.nextInt(Grid.getGridHeight());
-            int j = random.nextInt(Grid.getGridWidth());
+            int i = random.nextInt(grid.getGridHeight());
+            int j = random.nextInt(grid.getGridWidth());
             List<GameElement> cellItems = grid.valueProperty(i,j);
             if (cellItems.stream().allMatch(element -> element instanceof Ground) && cellItems.size() == 1) {
                 cellItems.add(new Mushroom());
@@ -489,8 +489,8 @@ public class Board {
      */
     public void boxNumber(Grid grid) {
         int number = 0;  // Counter for numbering the boxes
-        for (int i = 0; i < Grid.getGridHeight(); ++i) {  // Loop through all rows
-            for (int j = 0; j < Grid.getGridWidth(); ++j) {  // Loop through all columns
+        for (int i = 0; i < grid.getGridHeight(); ++i) {  // Loop through all rows
+            for (int j = 0; j < grid.getGridWidth(); ++j) {  // Loop through all columns
                 List<GameElement> targetCellItems = grid.getValues(i, j);  // Get the list of game elements at the current cell
                 for (GameElement element : targetCellItems) {  // Iterate over each element in the cell
                     if (element instanceof Box) {  // Check if the element is a Box

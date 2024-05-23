@@ -11,8 +11,8 @@ import java.util.List;
 
 public abstract class Grid {
      // Grid dimensions
-     protected static int GRID_WIDTH = 15;
-     protected static int GRID_HEIGHT = 10;
+     protected int GRID_WIDTH = 15;
+     protected int GRID_HEIGHT = 10;
 
      // Matrix holding the cells of the grid
      protected  Cell[][] matrix;
@@ -55,8 +55,8 @@ public abstract class Grid {
      }
 
      // Getters for grid dimensions
-     public static int getGridWidth() { return GRID_WIDTH; }
-     public static int getGridHeight() { return GRID_HEIGHT; }
+     public int getGridWidth() { return GRID_WIDTH; }
+     public int getGridHeight() { return GRID_HEIGHT; }
 
      /**
       * Returns the value property of the cell at the specified position.

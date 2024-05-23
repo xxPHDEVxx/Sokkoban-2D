@@ -26,8 +26,8 @@ public abstract class BoardView extends BorderPane {
     protected BoardViewModel boardViewModel;
     protected ToolViewModel toolViewModel;
     NewGridView newGridView;
-    private int GRID_WIDTH = BoardViewModel.gridWidth();
-    private int GRID_HEIGHT = BoardViewModel.gridHeight();
+    private int GRID_WIDTH;
+    private int GRID_HEIGHT;
 
     // Labels to display various status messages
     private final Label cellCountLabel = new Label("");
@@ -55,12 +55,13 @@ public abstract class BoardView extends BorderPane {
     protected DoubleBinding gridWidth;
     protected DoubleBinding gridHeight;
     protected VBox boardLvl = new VBox();
-    protected HBox level = new HBox();
 
     // Constructor to initialize the BoardView
     public BoardView(Stage primaryStage, BoardViewModel boardViewModel) {
         this.primaryStage = primaryStage;
         this.boardViewModel = boardViewModel;
+        GRID_WIDTH = boardViewModel.gridWidth();
+        GRID_HEIGHT = boardViewModel.gridHeight();
         start(this.primaryStage);
     }
 

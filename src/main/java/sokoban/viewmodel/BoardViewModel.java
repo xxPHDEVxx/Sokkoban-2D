@@ -48,11 +48,11 @@ public class BoardViewModel {
     public  int maxFilledCells() {
         return board.maxFilledCells();
     }
-    public static int gridWidth() {
-        return Grid.getGridWidth();
+    public int gridWidth() {
+        return getGrid().getGridWidth();
     }
-    public static int gridHeight() {
-        return Grid.getGridHeight();
+    public int gridHeight() {
+        return getGrid().getGridHeight();
     }
 
     public static void exitMenu(){System.exit(0);}

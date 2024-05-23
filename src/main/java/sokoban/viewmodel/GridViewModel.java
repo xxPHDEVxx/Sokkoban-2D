@@ -29,4 +29,12 @@ public class GridViewModel {
             e.printStackTrace();
         }
     }
+
+    public int gridWidth(){
+        return board.getGrid().getGridWidth();
+    }
+
+    public int gridHeight(){
+        return board.getGrid().getGridHeight();
+    }
 }

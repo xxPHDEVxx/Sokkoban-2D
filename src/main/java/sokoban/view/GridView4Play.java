@@ -6,23 +6,23 @@ import sokoban.viewmodel.GridViewModel;
 
 public class GridView4Play extends GridView{
     public GridView4Play(GridViewModel gridViewModel, DoubleBinding gridWidth, DoubleBinding gridHeight) {
-        setPadding(new Insets(PADDING));
+        super(gridViewModel, gridWidth, gridHeight);
         fillGrid(gridViewModel, gridWidth, gridHeight);
 }
 
-    public void fillGrid(GridViewModel gridViewModel, DoubleBinding gridWidth, DoubleBinding gridHeight) {
+    public void fillGrid(GridViewModel gridViewModel, DoubleBinding boardWidth, DoubleBinding boardHeight) {
         //taille de chaque cellule
-        DoubleBinding cellWidth = gridWidth
+        DoubleBinding cellWidth = boardWidth
                 .subtract(PADDING * 2)
-                .divide(GRID_WIDTH);
+                .divide(gridWidth);
 
-        DoubleBinding cellHeight = gridHeight
+        DoubleBinding cellHeight = boardHeight
                 .subtract(PADDING * 2)
-                .divide(GRID_WIDTH);
+                .divide(gridWidth);
 
         // Remplissage de la grille
-        for (int i = 0; i < GRID_HEIGHT; ++i) {
-            for (int j = 0; j < GRID_WIDTH; ++j) {
+        for (int i = 0; i < gridViewModel.gridHeight(); ++i) {
+            for (int j = 0; j < gridViewModel.gridWidth(); ++j) {
                 CellView4Play cellView = new CellView4Play(gridViewModel.getCellViewModel(i, j), cellWidth, cellHeight);
                 add(cellView, j, i); // lignes/colonnes inversées dans gridpane
             }

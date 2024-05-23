@@ -8,23 +8,23 @@ import sokoban.viewmodel.GridViewModel;
 public class GridView4Design extends GridView{
 
     public GridView4Design(GridViewModel gridViewModel, DoubleBinding gridWidth, DoubleBinding gridHeight) {
-        setPadding(new Insets(PADDING));
+        super(gridViewModel, gridWidth, gridHeight);
         fillGrid(gridViewModel, gridWidth, gridHeight);
     }
 
-    public void fillGrid(GridViewModel gridViewModel, DoubleBinding gridWidth, DoubleBinding gridHeight) {
+    public void fillGrid(GridViewModel gridViewModel, DoubleBinding boardWidth, DoubleBinding boardHeight) {
         //taille de chaque cellule
-        DoubleBinding cellWidth = gridWidth
+        DoubleBinding cellWidth = boardWidth
                 .subtract(PADDING * 2)
-                .divide(GRID_WIDTH);
+                .divide(this.gridWidth);
 
-        DoubleBinding cellHeight = gridHeight
+        DoubleBinding cellHeight = boardHeight
                 .subtract(PADDING * 2)
-                .divide(GRID_WIDTH);
+                .divide(this.gridWidth);
 
         // Remplissage de la grille
-        for (int i = 0; i < GRID_HEIGHT; ++i) {
-            for (int j = 0; j < GRID_WIDTH; ++j) {
+        for (int i = 0; i < this.gridHeight; ++i) {
+            for (int j = 0; j < this.gridWidth; ++j) {
                 CellView4Design cellView = new CellView4Design(gridViewModel.getCellViewModel(i, j), cellWidth, cellHeight);
                 add(cellView, j, i); // lignes/colonnes inversées dans gridpane
             }
