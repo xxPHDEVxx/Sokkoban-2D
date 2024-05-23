@@ -28,12 +28,16 @@ public class CellView4Design extends CellView{
 
         minWidthProperty().bind(widthProperty);
         minHeightProperty().bind(heightProperty);
-        //image de base en fond
-        imageView.setImage(ground);
         imageView.setPreserveRatio(true);
+        midImageView.setPreserveRatio(true);
         topImageView.setPreserveRatio(true);
-        topImageView.fitHeightProperty().bind(heightProperty);
+        imageView.fitWidthProperty().bind(widthProperty);
+        imageView.fitHeightProperty().bind(heightProperty);
+        midImageView.fitWidthProperty().bind(widthProperty);
+        midImageView.fitHeightProperty().bind(heightProperty);
         topImageView.fitWidthProperty().bind(widthProperty);
+        topImageView.fitHeightProperty().bind(heightProperty);
+
 
 
         getChildren().addAll(imageView, midImageView, topImageView);

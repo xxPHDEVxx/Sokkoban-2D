@@ -181,8 +181,8 @@ public abstract class BoardView extends BorderPane {
         FileChooser fileChooser = new FileChooser();
         File selectedFile = fileChooser.showSaveDialog(stage);
 
-        Grid grid = boardViewModel.getGrid();
-        GridViewModel gvm = boardViewModel.getGridVM();
+        Grid grid = boardViewModel.getBoard().getGrid();
+        GridViewModel gvm = boardViewModel.getGridViewModel();
         gvm.saveMenu(grid, selectedFile);
     }
 

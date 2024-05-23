@@ -20,6 +20,7 @@ public class CellView4Play extends CellView{
         topImageView.fitWidthProperty().bind(widthProperty);
         topImageView.fitHeightProperty().bind(heightProperty);
 
+
         // Ajout des composants visuels au StackPane
         getChildren().addAll(imageView, midImageView,stackPane, topImageView);
 

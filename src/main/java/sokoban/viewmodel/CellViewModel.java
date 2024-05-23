@@ -74,7 +74,8 @@ public class CellViewModel {
             Box box = (Box) getCellValue().stream().filter(element -> element instanceof Box).findFirst().orElse(null);
             if (box != null && box.getNumberLabel() != null) {
                 Label numberLabel = box.getNumberLabel();
-                numberLabel.setStyle("-fx-font-size: 26px; -fx-text-fill: black; -fx-font-weight: bold; -fx-background-color: white; -fx-padding: 5px;");
+                numberLabel.setStyle("-fx-font-size: 26px; -fx-text-fill: black;" +
+                        " -fx-font-weight: bold; -fx-background-color: white; -fx-padding: 30%; -fx-height: 50%");
                 return numberLabel;
             }
         }
