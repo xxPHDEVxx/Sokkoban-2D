@@ -51,6 +51,19 @@ public class Grid4Design extends Grid{
         countCell();
     }
 
+    public void put(int line, int col, GameElement element) {
+        Cell cell = matrix[line][col];
+
+        // Insert a new instance of the element based on specific rules
+        if (addElementToCell(cell, element)) {
+            // Invalidate counters
+            filledCellsCount.invalidate();
+            playerCount.invalidate();
+            goalCount.invalidate();
+            boxCount.invalidate();
+        }
+    }
+
     /**
      * Sets up the binding to count filled cells in the grid.
      */
@@ -104,41 +117,6 @@ public class Grid4Design extends Grid{
                 .flatMap(Arrays::stream)
                 .filter(cell -> cell.isGoal())
                 .count());
-    }
-
-    /**
-     * Puts an element into the cell at the specified position, replacing the existing one.
-     * @param line The row index.
-     * @param col The column index.
-     * @param element The game element to put.
-     */
-    void put(int line, int col, GameElement element) {
-        Cell cell = matrix[line][col];
-        List<GameElement> cellItems = cell.valueProperty();
-
-        // Remove existing element if present
-        if (cellItems.contains(element)) {
-            cellItems.remove(element);
-        }
-
-        // Insert a new instance of the element
-        if (element instanceof Box) {
-            cell.addElement(new Box());
-        } else if (element instanceof Player) {
-            cell.addElement(new Player());
-        } else if (element instanceof Wall) {
-            cell.addElement(new Wall());
-        } else if (element instanceof Goal) {
-            cell.addElement(new Goal());
-        } else {
-            cell.addElement(new Ground());
-        }
-
-        // Invalidate counters
-        filledCellsCount.invalidate();
-        playerCount.invalidate();
-        goalCount.invalidate();
-        boxCount.invalidate();
     }
 
     /**

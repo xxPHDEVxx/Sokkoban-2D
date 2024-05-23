@@ -3,12 +3,10 @@ package sokoban.viewmodel;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.binding.LongBinding;
 import javafx.beans.property.*;
-import javafx.scene.control.Label;
 import sokoban.model.*;
 
 import java.io.File;
 import java.util.List;
-import java.util.Random;
 
 public class BoardViewModel {
     private final GridViewModel gridViewModel;
@@ -216,10 +214,6 @@ public class BoardViewModel {
         board.incrementMoveCount(nb);
     }
 
-    public void setBoard(Board board) {
-        this.board = board;
-    }
-
 
     // Feature : Undo Redo ( undo or redo a moove)
     public void undo() {
@@ -235,7 +229,7 @@ public class BoardViewModel {
                 System.out.println("empty grid");
                 return;
             }
-            board.getGrid().copyFill(previousBoard.getGrid());
+            board.getGrid().copy(previousBoard.getGrid());
 
             // Décrémenter le compteur de mouvements (ou mettre à jour en conséquence)
             if (moveCountProperty().get() > 0) {
@@ -258,7 +252,7 @@ public class BoardViewModel {
                 System.out.println("empty grid");
                 return;
             }
-            board.getGrid().copyFill(nextBoard.getGrid());
+            board.getGrid().copy(nextBoard.getGrid());
 
             // Incrémenter le compteur de mouvements (ou mettre à jour en conséquence)
             incrementMoveCount(1);
@@ -267,7 +261,7 @@ public class BoardViewModel {
 
     public Grid4Play gridGame(){
         Grid4Play gridGame = new Grid4Play(gridWidth(),gridHeight());
-        gridGame.copyFill(board.getGrid());
+        gridGame.copy(board.getGrid());
         boxNumber(gridGame);
         mushroom(gridGame);
         return gridGame;
@@ -304,7 +298,7 @@ public class BoardViewModel {
 
     public void saveGridDesign(){
         saveGridDesign = new Grid4Design(gridWidth(),gridHeight());
-        saveGridDesign.copyFill(board.getGrid());
+        saveGridDesign.copy(board.getGrid());
     }
 
     public Grid4Design getSaveGridDesign() {

@@ -2,11 +2,9 @@ package sokoban.model;
 
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.binding.LongBinding;
-import javafx.beans.property.ListProperty;
 import javafx.beans.property.LongProperty;
 import javafx.beans.property.ReadOnlyListProperty;
 import javafx.beans.property.SimpleLongProperty;
-import javafx.collections.ObservableList;
 import javafx.scene.control.Label;
 import sokoban.viewmodel.ToolViewModel;
 
@@ -335,7 +333,7 @@ public class Board {
     public Board copy() {
         Board clonedBoard = new Board();
         Grid clonedGrid = new Grid4Design();
-        clonedGrid.copyFill(this.getGrid());
+        clonedGrid.copy(this.getGrid());
 
         // Set the cloned grid in the cloned board
         clonedBoard.grid = clonedGrid;
@@ -424,58 +422,85 @@ public class Board {
         }
     }
 
-    public boolean hideOrShow(){
-        boolean visible = false;
-        for (int i = 0; i < this.getGrid().getGridHeight(); i++) {
-            for (int j = 0; j < this.getGrid().getGridWidth(); j++) {
-                List<GameElement> cellItems = this.valueProperty(i,j);
-                int last = cellItems.size() - 1;
-                if (cellItems.stream().anyMatch(element -> element instanceof Mushroom)) {
-                    if (cellItems.get(last) instanceof Ground) {
-                        cellItems.remove(last);
-                        visible = true;
-                    }
-                    else {
-                        cellItems.add(new Ground());
+    /**
+     * This method toggles the visibility of mushrooms on the grid.
+     * If a mushroom is visible (i.e., not covered by a Ground element), it will be hidden by adding a Ground element.
+     * If a mushroom is hidden (i.e., covered by a Ground element), the Ground element will be removed, making the mushroom visible.
+     * The method returns true if any mushroom was made visible, otherwise it returns false.
+     * Additionally, if any mushroom is made visible, the move count is incremented by 10.
+     *
+     * @return true if any mushroom was made visible, false otherwise.
+     */
+    public boolean hideOrShow() {
+        boolean visible = false;  // Flag to track if any mushroom was made visible
+        for (int i = 0; i < this.getGrid().getGridHeight(); i++) {  // Loop through all rows
+            for (int j = 0; j < this.getGrid().getGridWidth(); j++) {  // Loop through all columns
+                List<GameElement> cellItems = this.valueProperty(i, j);  // Get the list of game elements at the current cell
+                int last = cellItems.size() - 1;  // Index of the last element in the list
+                if (cellItems.stream().anyMatch(element -> element instanceof Mushroom)) {  // Check if there's a mushroom in the cell
+                    if (cellItems.get(last) instanceof Ground) {  // If the last element is a Ground
+                        cellItems.remove(last);  // Remove the Ground element to reveal the mushroom
+                        visible = true;  // Set the flag to true, indicating a mushroom was made visible
+                    } else {
+                        cellItems.add(new Ground());  // Otherwise, add a Ground element to hide the mushroom
                     }
                 }
             }
         }
 
-        if (visible)
-            incrementMoveCount(10);
-        return visible;
+        if (visible) {
+            incrementMoveCount(10);  // Increment move count by 10 if any mushroom was made visible
+        }
+        return visible;  // Return whether any mushroom was made visible
     }
 
-    public boolean mushVisible(){
-        boolean visible = true;
-        for (int i = 0; i < this.getGrid().getGridHeight(); i++) {
-            for (int j = 0; j < this.getGrid().getGridWidth(); j++) {
-                List<GameElement> cellItems = this.valueProperty(i,j);
-                int last = cellItems.size() - 1;
-                if (cellItems.stream().anyMatch(element -> element instanceof Mushroom)) {
-                    if (cellItems.get(last) instanceof Ground) {
-                        visible = false;
+
+    /**
+     * This method checks if the mushroom on the grid is visible.
+     * A mushroom is considered visible if it is not covered by a Ground element.
+     * The method returns true if the mushroom is visible, otherwise it returns false.
+     *
+     * @return true if the mushroom is visible, false otherwise.
+     */
+    public boolean mushVisible() {
+        boolean visible = true;  // Flag to track if all mushrooms are visible
+        for (int i = 0; i < this.getGrid().getGridHeight(); i++) {  // Loop through all rows
+            for (int j = 0; j < this.getGrid().getGridWidth(); j++) {  // Loop through all columns
+                List<GameElement> cellItems = this.valueProperty(i, j);  // Get the list of game elements at the current cell
+                int last = cellItems.size() - 1;  // Index of the last element in the list
+                if (cellItems.stream().anyMatch(element -> element instanceof Mushroom)) {  // Check if there's a mushroom in the cell
+                    if (cellItems.get(last) instanceof Ground) {  // If the last element is a Ground
+                        visible = false;  // Set the flag to false, indicating a mushroom is hidden
+                        break;
                     }
                 }
             }
         }
-        return visible;
+        return visible;  // Return whether all mushrooms are visible
     }
 
-    public void boxNumber(Grid grid){
-        int number = 0;
-        for (int i = 0; i < Grid.getGridHeight(); ++i) {
-            for (int j = 0; j < Grid.getGridWidth(); ++j) {
-                List<GameElement> targetCellItems = grid.getValues(i, j);
-                for (GameElement element : targetCellItems){
-                    if (element instanceof Box){
-                        number++;
-                        ((Box) element).setNumberLabel(new Label(String.valueOf(number)));
+
+    /**
+     * This method numbers all the boxes on the grid sequentially.
+     * Each Box element on the grid is assigned a unique number label in the order they are encountered.
+     * The numbering starts from 1 and increases sequentially.
+     *
+     * @param grid The grid containing the boxes to be numbered.
+     */
+    public void boxNumber(Grid grid) {
+        int number = 0;  // Counter for numbering the boxes
+        for (int i = 0; i < Grid.getGridHeight(); ++i) {  // Loop through all rows
+            for (int j = 0; j < Grid.getGridWidth(); ++j) {  // Loop through all columns
+                List<GameElement> targetCellItems = grid.getValues(i, j);  // Get the list of game elements at the current cell
+                for (GameElement element : targetCellItems) {  // Iterate over each element in the cell
+                    if (element instanceof Box) {  // Check if the element is a Box
+                        number++;  // Increment the box counter
+                        ((Box) element).setNumberLabel(new Label(String.valueOf(number)));  // Set the number label of the box
                     }
                 }
             }
         }
     }
+
 
 }

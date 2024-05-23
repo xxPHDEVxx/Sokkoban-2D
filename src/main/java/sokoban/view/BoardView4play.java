@@ -132,6 +132,7 @@ public class BoardView4play extends BoardView {
         btnFinish.setOnAction(action -> {
             boardViewModel.getBoard().setGrid(boardViewModel.getSaveGridDesign());
             new BoardView4Design(primaryStage, boardViewModel);
+            boardViewModel.moveCountProperty().set(0);
         });
     }
 
