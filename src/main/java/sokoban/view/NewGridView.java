@@ -17,113 +17,44 @@ import java.util.regex.Pattern;
 
 public class NewGridView {
 
-    BoardViewModel bordViewModel;
-    public void showDialog(BoardView boardView){
+    private BoardViewModel boardViewModel;
+
+    public NewGridView(BoardViewModel boardViewModel){
+        this.boardViewModel = boardViewModel;
+    }
+
+    public void showDialog(BoardView boardView) {
         Stage dialog = new Stage();
         dialog.initModality(Modality.APPLICATION_MODAL);
         dialog.setTitle("Sokoban");
 
         Label label = new Label("Give new game dimensions");
-        Label labelWidth = new Label("Width");
-        Label labelHeight = new Label("Height");
         TextField txtWidth = new TextField();
         TextField txtHeight = new TextField();
         Button btnOk = new Button("Ok");
         Button btnCancel = new Button("Cancel");
-        btnOk.setDisable(true);
+
+        // Désactiver le bouton Ok tant que les champs de texte sont vides
+        btnOk.disableProperty().bind(txtWidth.textProperty().isEmpty().or(txtHeight.textProperty().isEmpty()));
 
         btnOk.setOnAction(e -> {
             int width = Integer.parseInt(txtWidth.getText());
             int height = Integer.parseInt(txtHeight.getText());
-
-            bordViewModel.newGridMenu(width, height);
+            boardViewModel.newGridMenu(width, height);
             dialog.close();
             boardView.refresh();
-         });
-        btnCancel.setOnAction(e -> {
-            dialog.close();
         });
 
-        VBox vbox = new VBox();
-        VBox vboxtxt = new VBox();
-        HBox hboxWidth = new HBox();
-        HBox hboxHeight = new HBox();
-        HBox hboxbtn = new HBox();
-        btnOk.setMinSize(70,15);
-        btnCancel.setMinSize(70,15);
-        txtWidth.setMinSize(150,15);
-        txtHeight.setMinSize(150,15);
+        btnCancel.setOnAction(e -> dialog.close());
 
-        txtWidth.setTextFormatter(createNumericTextFormatter());
-        txtHeight.setTextFormatter(createNumericTextFormatter());
-
-        Label errorLabelWidth = new Label();
-        Label errorLabelHeight = new Label();
-        errorLabelWidth.setTextFill(Color.RED);
-        errorLabelHeight.setTextFill(Color.RED);
-
-        txtWidth.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue.isEmpty()) {
-                int value = Integer.parseInt(newValue);
-                if (value < 10) {
-                    errorLabelWidth.setText("Width must be at least 10");
-                }
-                else if (value > 50){
-                    errorLabelWidth.setText("Width must be at most 50");
-                } else {
-                    errorLabelWidth.setText("");
-                }
-            } else {
-                errorLabelWidth.setText("");
-            }
-            updateButtonState(txtWidth.getText(), txtHeight.getText(), btnOk);
-        });
-
-        txtHeight.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue.isEmpty()) {
-                int value = Integer.parseInt(newValue);
-                if (value < 10) {
-                    errorLabelHeight.setText("Height must be at least 10");
-                }
-                else if (value > 50){
-                    errorLabelHeight.setText("Height must be at most 50");
-                } else {
-                    errorLabelHeight.setText("");
-                }
-            } else {
-                errorLabelHeight.setText("");
-            }
-            updateButtonState(txtWidth.getText(), txtHeight.getText(), btnOk);
-        });
-
-        hboxWidth.setSpacing(13);
-        hboxHeight.setSpacing(10);
-        hboxWidth.getChildren().addAll(labelWidth,txtWidth);
-        hboxHeight.getChildren().addAll(labelHeight,txtHeight);
-        errorLabelWidth.setPadding(new Insets(5, 0, 0, 0));
-        vboxtxt.getChildren().addAll(hboxWidth,errorLabelWidth,hboxHeight,errorLabelHeight);
-        errorLabelWidth.setPadding(new Insets(0, 0, 10, 0));
-        hboxbtn.getChildren().addAll(btnOk,btnCancel);
-        vbox.getChildren().addAll(label,vboxtxt,hboxbtn);
-
-        hboxbtn.setAlignment(Pos.BASELINE_RIGHT);
-        hboxbtn.setSpacing(10);
-        vboxtxt.setAlignment(Pos.CENTER_LEFT);
-        label.setAlignment(Pos.TOP_LEFT);
-        labelWidth.setLineSpacing(10);
-        vboxtxt.setPadding(new Insets(10));
+        VBox vbox = new VBox(10);
+        vbox.getChildren().addAll(label, txtWidth, txtHeight, new HBox(10, btnOk, btnCancel));
+        vbox.setAlignment(Pos.CENTER);
         vbox.setPadding(new Insets(10));
 
         Scene dialogScene = new Scene(vbox, 300, 175);
         dialog.setScene(dialogScene);
         dialog.showAndWait();
-    }
-    private static void showErrorDialog(String message) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Error");
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
     }
     public static TextFormatter<Integer> createNumericTextFormatter() {
         Pattern pattern = Pattern.compile("-?\\d*");

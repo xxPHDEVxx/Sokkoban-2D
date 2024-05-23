@@ -163,6 +163,7 @@ public abstract class BoardView extends BorderPane {
             }
             BoardViewModel.setChanged(false);
         }
+        NewGridView newGridView = new NewGridView(boardViewModel);
         newGridView.showDialog(this);
     }
 

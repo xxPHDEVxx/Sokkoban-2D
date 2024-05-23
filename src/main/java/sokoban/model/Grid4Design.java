@@ -13,9 +13,6 @@ import java.util.List;
  * It holds a matrix of Cell4Design objects and manages the game elements within the grid.
  */
 public class Grid4Design extends Grid{
-    // Grid dimensions
-    private static int GRID_WIDTH = 15;
-    private static int GRID_HEIGHT = 10;
 
     // Bindings for counting various elements in the grid
     private LongBinding filledCellsCount;
@@ -28,7 +25,16 @@ public class Grid4Design extends Grid{
      * Default constructor initializes the grid with default dimensions.
      */
     public Grid4Design() {
-        this(GRID_WIDTH, GRID_HEIGHT);
+        matrix = new Cell4Design[gridHeight][];
+        for (int i = 0; i < gridHeight; ++i) {
+            matrix[i] = new Cell4Design[gridWidth];
+            for (int j = 0; j < gridWidth; ++j) {
+                matrix[i][j] = new Cell4Design();
+                matrix[i][j].addElement(new Ground());
+            }
+        }
+        setFilledCellsCount();
+        countCell();
     }
 
     /**
@@ -37,12 +43,12 @@ public class Grid4Design extends Grid{
      * @param height The height of the grid.
      */
     public Grid4Design(int width, int height) {
-        GRID_WIDTH = width;
-        GRID_HEIGHT = height;
-        matrix = new Cell4Design[GRID_HEIGHT][];
-        for (int i = 0; i < GRID_HEIGHT; ++i) {
-            matrix[i] = new Cell4Design[GRID_WIDTH];
-            for (int j = 0; j < GRID_WIDTH; ++j) {
+        gridWidth = width;
+        gridHeight = height;
+        matrix = new Cell4Design[height][];
+        for (int i = 0; i < height; ++i) {
+            matrix[i] = new Cell4Design[width];
+            for (int j = 0; j < width; ++j) {
                 matrix[i][j] = new Cell4Design();
                 matrix[i][j].addElement(new Ground());
             }

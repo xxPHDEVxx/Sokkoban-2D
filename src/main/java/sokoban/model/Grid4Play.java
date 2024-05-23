@@ -1,17 +1,15 @@
 package sokoban.model;
 
-import java.util.List;
-
 public class Grid4Play extends Grid{
 
     public Grid4Play(int width, int height) {
         super();
-        GRID_WIDTH = width;
-        GRID_HEIGHT = height;
-        matrix = new Cell4Play[GRID_HEIGHT][];
-        for (int i = 0; i < GRID_HEIGHT; ++i) {
-            matrix[i] = new Cell4Play[GRID_WIDTH];
-            for (int j = 0; j < GRID_WIDTH; ++j) {
+        gridWidth = width;
+        gridHeight = height;
+        matrix = new Cell4Play[gridHeight][];
+        for (int i = 0; i < gridHeight; ++i) {
+            matrix[i] = new Cell4Play[gridWidth];
+            for (int j = 0; j < gridWidth; ++j) {
                 matrix[i][j] = new Cell4Play();
             }
         }
