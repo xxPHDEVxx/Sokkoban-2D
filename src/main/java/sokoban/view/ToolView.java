@@ -17,6 +17,8 @@ import sokoban.model.*;
 
 public class ToolView extends FlowPane {
 
+    private ToolViewModel viewModel;
+
     private static final Image[] images = {
             new Image("ground.png"),
             new Image("goal.png"),
@@ -26,6 +28,7 @@ public class ToolView extends FlowPane {
     };
 
     public ToolView(ToolViewModel viewModel) {
+        this.viewModel = viewModel;
         layoutControls();
 
         for (Image image : images) {
@@ -76,7 +79,7 @@ public class ToolView extends FlowPane {
     private void setToolEventHandlers(ImageView imageView) {
         imageView.setOnMouseClicked(event -> {
             ToolViewModel.setToolSelected(determineToolFromImageView(imageView));
-            BoardViewModel.setChanged(true);
+            viewModel.gridChanged();
             applyHighlightEffect(imageView);
         });
     }

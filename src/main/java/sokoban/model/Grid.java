@@ -81,13 +81,16 @@ public abstract class Grid {
         } else if (element instanceof Goal) {
             cell.addElement(new Goal());
             return true;
-        } else if (element instanceof Mushroom){
+        } else if (element instanceof Mushroom) {
             cell.addElement(new Mushroom());
             return true;
         } else {
-            cell.addElement(new Ground());
-            return true;
+            if (!(cell.values.stream().allMatch(item -> item instanceof Ground))) {
+                cell.addElement(new Ground());
+                return true;
+            }
         }
+        return true;
     }
 
      abstract void remove(int line, int col, GameElement element);

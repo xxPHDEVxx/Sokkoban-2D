@@ -129,7 +129,9 @@ public class BoardView4play extends BoardView {
     // Configuration du bouton "Finish"
     private void setupFinishButton(BoardViewModel boardViewModel, Stage primaryStage) {
         btnFinish.setOnAction(action -> {
-            boardViewModel.getBoard().setGrid(boardViewModel.getSaveGridDesign());
+            boardViewModel.endGame();
+            boardViewModel.goToDesign();
+            boardViewModel.configureBindings();
             new BoardView4Design(primaryStage, boardViewModel);
             boardViewModel.moveCountProperty().set(0);
         });

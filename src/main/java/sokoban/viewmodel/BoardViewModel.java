@@ -13,7 +13,6 @@ public class BoardViewModel {
     private final GridViewModel gridViewModel;
     private GridState gridState;
     private Board board;
-    private static BooleanProperty isChanged = new SimpleBooleanProperty(false);
     private Grid4Design saveGridDesign;
 
     /**
@@ -73,6 +72,9 @@ public class BoardViewModel {
     public int maxFilledCells() {
         return board.maxFilledCells();
     }
+    public void configureBindings(){
+        board.configureBindings();
+    }
 
     /**
      * Gets the width of the grid
@@ -107,6 +109,7 @@ public class BoardViewModel {
      */
     public void newGridMenu(int width, int height) {
         board.setGrid(new Grid4Design(width, height));
+        board.configureBindings();
     }
 
     /**
@@ -115,21 +118,21 @@ public class BoardViewModel {
      * @param file the file containing the board data
      * @return the opened Grid
      */
-    public Grid openBoard(File file) {
-        return board.open(file);
+    public void openBoard(File file) {
+         board.open(file);
     }
 
     // Static property to track if the model has changed
-    public static BooleanProperty isChangedProperty() {
-        return isChanged;
+    public  BooleanProperty isChangedProperty() {
+        return board.isChangedProperty();
     }
 
-    public static boolean isChanged() {
-        return isChangedProperty().get();
+    public  boolean isChanged() {
+        return board.IsChanged();
     }
 
-    public static void setChanged(boolean isChanged) {
-        isChangedProperty().set(isChanged);
+    public void setChanged(boolean isChanged) {
+        board.setChanged(isChanged);
     }
 
     /**
@@ -353,6 +356,10 @@ public class BoardViewModel {
         boxNumber(gridGame);
         mushroom(gridGame);
         return gridGame;
+    }
+
+    public void goToDesign(){
+        board.setGrid(this.getSaveGridDesign());
     }
 
     /**

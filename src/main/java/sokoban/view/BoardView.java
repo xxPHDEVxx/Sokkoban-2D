@@ -26,9 +26,6 @@ public abstract class BoardView extends BorderPane {
 
     protected BoardViewModel boardViewModel;
     protected ToolViewModel toolViewModel;
-    NewGridView newGridView;
-    private int GRID_WIDTH;
-    private int GRID_HEIGHT;
 
     // Labels to display various status messages
     private final Label cellCountLabel = new Label("");
@@ -39,7 +36,7 @@ public abstract class BoardView extends BorderPane {
     private final VBox vbox = new VBox();
     private final HBox boxCellCount = new HBox();
     private final VBox boxRules = new VBox();
-    private final ToolView toolView = new ToolView(toolViewModel);
+    private final ToolView toolView;
     private final Menu fileMenu = new Menu("Fichier");
     private final MenuItem menuItemNew = new MenuItem("New...");
     private final MenuItem menuItemOpen = new MenuItem("Open...");
@@ -61,8 +58,8 @@ public abstract class BoardView extends BorderPane {
     public BoardView(Stage primaryStage, BoardViewModel boardViewModel) {
         this.primaryStage = primaryStage;
         this.boardViewModel = boardViewModel;
-        GRID_WIDTH = boardViewModel.gridWidth();
-        GRID_HEIGHT = boardViewModel.gridHeight();
+        toolViewModel = new ToolViewModel(boardViewModel);
+        toolView = new ToolView(toolViewModel);
         start(this.primaryStage);
 
         layoutControls();
@@ -146,22 +143,22 @@ public abstract class BoardView extends BorderPane {
 
     // Method to handle exit action
     private void handleExit() {
-        if (BoardViewModel.isChanged()) {
+        if (boardViewModel.isChanged()) {
             if (SaveConfirm.showDialog() == SaveConfirm.Response.CANCEL) {
                 return;
             }
-            BoardViewModel.setChanged(false);
+            boardViewModel.setChanged(false);
         }
         BoardViewModel.exitMenu();
     }
 
-    // Method to handle new action
+    // Method to handle new grid
     private void handleNew() {
-        if (BoardViewModel.isChanged()) {
+        if (boardViewModel.isChanged()) {
             if (SaveConfirm.showDialog() == SaveConfirm.Response.CANCEL) {
                 return;
             }
-            BoardViewModel.setChanged(false);
+            boardViewModel.setChanged(false);
         }
         NewGridView newGridView = new NewGridView(boardViewModel);
         newGridView.showDialog(this);
@@ -169,11 +166,11 @@ public abstract class BoardView extends BorderPane {
 
     // Method to handle open action
     private void handleOpen(Stage stage) {
-        if (BoardViewModel.isChanged()) {
+        if (boardViewModel.isChanged()) {
             if (SaveConfirm.showDialog() == SaveConfirm.Response.CANCEL) {
                 return;
             }
-            BoardViewModel.setChanged(false);
+            boardViewModel.setChanged(false);
         }
         FileChooser fileChooser = new FileChooser();
         File selectedFile = fileChooser.showOpenDialog(stage);
@@ -247,7 +244,7 @@ public abstract class BoardView extends BorderPane {
     // Method to define play button action
     public void actionBtnPlay() {
         btnPlay.setOnAction(action -> {
-            if (BoardViewModel.isChanged()) {
+            if (boardViewModel.isChanged()) {
                 if (SaveConfirm.showDialog() == SaveConfirm.Response.CANCEL) {
                     return;
                 }

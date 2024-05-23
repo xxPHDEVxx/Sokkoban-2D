@@ -25,8 +25,9 @@ public class GridViewModel {
                 }
                 writer.println();
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            // Gérer l'exception IOException ici
+            System.out.println("aucun fichier sauvegardé");
         }
     }
 

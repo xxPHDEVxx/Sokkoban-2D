@@ -21,9 +21,7 @@ public class CellViewModel {
         board.put(line, col);
     }
 
-    public void removeTool() {
-        board.removeTool(line, col, new Ground());
-    }
+    public void removeTool() {board.removeTool(line, col);}
 
     public ReadOnlyListProperty<GameElement> valueProperty() {
         return board.valueProperty(line, col);
@@ -36,18 +34,23 @@ public class CellViewModel {
     protected static char getSymbolForElement(List<GameElement> elements) {
         if (elements.stream().anyMatch(element -> element instanceof Wall)) {
             return '#';
-        } else if (elements.stream().anyMatch(element -> element instanceof Goal) && elements.size() < 3) {
+        } else if (elements.stream().anyMatch(element -> element instanceof Goal)
+                && elements.size() < 3) {
             return '.';
-        } else if (elements.stream().anyMatch(element -> element instanceof Box) && elements.size() < 3) {
+        } else if (elements.stream().anyMatch(element -> element instanceof Box)
+                && elements.size() < 3) {
             return '$';
-        } else if (elements.stream().anyMatch(element -> element instanceof Box && element instanceof Goal)) {
+        } else if ((elements.stream().anyMatch(element -> element instanceof Box))
+                && (elements.stream().anyMatch(element -> element instanceof Goal))) {
             return '*';
-        } else if (elements.stream().anyMatch(element -> element instanceof Player) && elements.size() < 3) {
+        } else if (elements.stream().anyMatch(element -> element instanceof Player)
+                && elements.size() < 3) {
             return '@';
-        } else if (elements.stream().anyMatch(element -> element instanceof Player && element instanceof Goal)) {
-            return ' ';
-        } else if (elements.stream().anyMatch(element -> element instanceof Ground)) {
+        } else if ((elements.stream().anyMatch(element -> element instanceof Player))
+                && (elements.stream().anyMatch(element -> element instanceof Goal))) {
             return '+';
+        } else if (elements.stream().anyMatch(element -> element instanceof Ground)) {
+            return ' ';
         } else {
             return ' ';
         }

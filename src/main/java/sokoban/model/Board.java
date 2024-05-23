@@ -2,9 +2,7 @@ package sokoban.model;
 
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.binding.LongBinding;
-import javafx.beans.property.LongProperty;
-import javafx.beans.property.ReadOnlyListProperty;
-import javafx.beans.property.SimpleLongProperty;
+import javafx.beans.property.*;
 import javafx.scene.control.Label;
 import sokoban.viewmodel.ToolViewModel;
 
@@ -35,6 +33,7 @@ public class Board {
     private BooleanBinding countGoalOK;
     private BooleanBinding countGoalBoxOK;
     private BooleanBinding rulesOK;
+    private BooleanProperty isChanged = new SimpleBooleanProperty(false);
     private final LongProperty moveCount = new SimpleLongProperty(0);
     private GridState gridState;
 
@@ -148,12 +147,14 @@ public class Board {
      * Removes a tool (game element) from the specified position on the board.
      * @param line The row index.
      * @param col The column index.
-     * @param ground The ground element to be placed after removal.
      */
-    public void removeTool(int line, int col, GameElement ground) {
+    public void removeTool(int line, int col) {
         List<GameElement> cellItems = valueProperty(line, col);
-        GameElement currentValue = valueProperty(line, col).get(cellItems.size() - 1);
-        removeCellElement(line, col, currentValue);
+        if (!(cellItems.size() == 1)) {
+            setChanged(true);
+            GameElement currentValue = valueProperty(line, col).get(cellItems.size() - 1);
+            removeCellElement(line, col, currentValue);
+        }
     }
 
     /**
@@ -228,6 +229,18 @@ public class Board {
         return grid.playerCountProperty();
     }
 
+    public boolean IsChanged() {
+        return isChanged.get();
+    }
+
+    public BooleanProperty isChangedProperty() {
+        return isChanged;
+    }
+
+    public void setChanged(boolean isChanged) {
+        isChangedProperty().set(isChanged);
+    }
+
     /**
      * Configures bindings to check game rules.
      */
@@ -259,6 +272,15 @@ public class Board {
      * @return The loaded grid.
      */
     public Grid open(File file) {
+
+        // Clear current elements
+        for (int i = 0; i < this.getGrid().gridHeight; i++) {
+            for (int j = 0; j < this.getGrid().gridWidth; j++) {
+                this.valueProperty(i, j).clear();
+                this.valueProperty(i,j).add(new Ground());
+            }
+        }
+
         try (Scanner scanner = new Scanner(file)) {
             int row = 0;
             while (scanner.hasNextLine()) {
@@ -312,8 +334,10 @@ public class Board {
                 cellItems.add(new Player());
                 cellItems.add(new Goal());
                 return cellItems;
-            default:
+            case ' ':
                 cellItems.add(new Ground());
+                return cellItems;
+            default:
                 return cellItems;
         }
     }
@@ -332,7 +356,7 @@ public class Board {
      */
     public Board copy() {
         Board clonedBoard = new Board();
-        Grid clonedGrid = new Grid4Design();
+        Grid clonedGrid = new Grid4Design(grid.gridWidth, grid.gridHeight);
         clonedGrid.copy(this.getGrid());
 
         // Set the cloned grid in the cloned board

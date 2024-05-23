@@ -34,8 +34,38 @@ public class NewGridView {
         Button btnOk = new Button("Ok");
         Button btnCancel = new Button("Cancel");
 
-        // Désactiver le bouton Ok tant que les champs de texte sont vides
-        btnOk.disableProperty().bind(txtWidth.textProperty().isEmpty().or(txtHeight.textProperty().isEmpty()));
+        // Validation des dimensions entre 10 et 50 avec affichage des messages d'erreur
+        String errorMessage = "Value must be between 10 and 50";
+        Label errorLabelWidth = new Label();
+        Label errorLabelHeight = new Label();
+
+        txtWidth.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*")) {
+                txtWidth.setText(newValue.replaceAll("[^\\d]", ""));
+            }
+            int value = !newValue.isEmpty() ? Integer.parseInt(newValue) : 0;
+            if (value < 10 || value > 50) {
+                errorLabelWidth.setText(errorMessage);
+            } else {
+                errorLabelWidth.setText("");
+            }
+            btnOk.setDisable(!errorLabelWidth.getText().isEmpty() || !errorLabelHeight.getText().isEmpty() ||
+                    txtHeight.getText().isEmpty() || txtWidth.getText().isEmpty());
+        });
+
+        txtHeight.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*")) {
+                txtHeight.setText(newValue.replaceAll("[^\\d]", ""));
+            }
+            int value = !newValue.isEmpty() ? Integer.parseInt(newValue) : 0;
+            if (value < 10 || value > 50) {
+                errorLabelHeight.setText(errorMessage);
+            } else {
+                errorLabelHeight.setText("");
+            }
+            btnOk.setDisable(!errorLabelWidth.getText().isEmpty() || !errorLabelHeight.getText().isEmpty() ||
+                    txtWidth.getText().isEmpty() || txtHeight.getText().isEmpty());
+        });
 
         btnOk.setOnAction(e -> {
             int width = Integer.parseInt(txtWidth.getText());
@@ -48,7 +78,7 @@ public class NewGridView {
         btnCancel.setOnAction(e -> dialog.close());
 
         VBox vbox = new VBox(10);
-        vbox.getChildren().addAll(label, txtWidth, txtHeight, new HBox(10, btnOk, btnCancel));
+        vbox.getChildren().addAll(label, txtWidth, errorLabelWidth, txtHeight, errorLabelHeight, new HBox(10, btnOk, btnCancel));
         vbox.setAlignment(Pos.CENTER);
         vbox.setPadding(new Insets(10));
 
@@ -56,6 +86,8 @@ public class NewGridView {
         dialog.setScene(dialogScene);
         dialog.showAndWait();
     }
+
+
     public static TextFormatter<Integer> createNumericTextFormatter() {
         Pattern pattern = Pattern.compile("-?\\d*");
 
@@ -69,17 +101,4 @@ public class NewGridView {
         return new TextFormatter<>(new IntegerStringConverter(), null, filter);
     }
 
-    private static void updateButtonState(String width, String height, Button btnOk) {
-        if (!width.isEmpty() && !height.isEmpty()) {
-            int widthValue = Integer.parseInt(width);
-            int heightValue = Integer.parseInt(height);
-            if (widthValue >= 10 && widthValue <= 50 && heightValue >= 10 && heightValue <= 50) {
-                btnOk.setDisable(false);
-            } else {
-                btnOk.setDisable(true);
-            }
-        } else {
-            btnOk.setDisable(true);
-        }
-    }
 }
