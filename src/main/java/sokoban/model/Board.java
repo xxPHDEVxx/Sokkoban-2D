@@ -3,14 +3,18 @@ package sokoban.model;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.binding.LongBinding;
 import javafx.beans.property.ListProperty;
+import javafx.beans.property.LongProperty;
 import javafx.beans.property.ReadOnlyListProperty;
+import javafx.beans.property.SimpleLongProperty;
 import javafx.collections.ObservableList;
+import javafx.scene.control.Label;
 import sokoban.viewmodel.ToolViewModel;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.Scanner;
 
 /**
@@ -33,12 +37,15 @@ public class Board {
     private BooleanBinding countGoalOK;
     private BooleanBinding countGoalBoxOK;
     private BooleanBinding rulesOK;
+    private final LongProperty moveCount = new SimpleLongProperty(0);
+    private GridState gridState;
 
     /**
      * Default constructor initializes the board and configures bindings.
      */
     public Board() {
         isFull = grid.filledCellsCountProperty().isEqualTo(Board.MAX_FILLED_CELLS);
+        this.gridState = new GridState();
         configureBindings();
     }
 
@@ -49,6 +56,10 @@ public class Board {
     public int maxFilledCells() {
         MAX_FILLED_CELLS = (grid.getGridHeight() * grid.getGridWidth()) / 2;
         return Board.MAX_FILLED_CELLS;
+    }
+
+    public GridState getGridState() {
+        return gridState;
     }
 
     /**
@@ -192,7 +203,13 @@ public class Board {
     public ReadOnlyListProperty<GameElement> valueProperty(int line, int col) {
         return grid.valueProperty(line, col);
     }
-
+    public LongProperty moveCountProperty() {
+        return moveCount;
+    }
+    //compteur de mouvement
+    public void incrementMoveCount(int nb) {
+        moveCountProperty().set(moveCountProperty().get() + nb);
+    }
     public LongBinding filledCellsCountProperty() {
         return grid.filledCellsCountProperty();
     }
@@ -254,9 +271,9 @@ public class Board {
                         char symbol = line.charAt(col);
                         // Convert character to GameElement and add to the grid
                         List<GameElement> items = convertSymbolToCellValue(symbol);
-                        grid.addElement(row, col, items.get(0));
+                        grid.put(row, col, items.get(0));
                         if (items.size() > 1) {
-                            grid.addElement(row, col, items.get(1));
+                            grid.put(row, col, items.get(1));
                         }
                     }
                     row++;
@@ -328,4 +345,137 @@ public class Board {
 
         return clonedBoard;
     }
+
+    /**
+     * Replace randomly boxes of the grid
+     */
+    public void mushroomEffect(){
+        Grid grid = this.getGrid();
+        Random random = new Random();
+        int boxCount = 1;
+        int boxNumber = 0;
+        //List<GameElement> boxes = new ArrayList<>();
+        // save etat initial
+        if (gridState.getBoardHistory().size() == 0) {
+            gridState.addBoardState(this);
+        }
+
+        // Clear current box(es)
+        for (int i = 0; i < grid.getGridHeight(); i++) {
+            for (int j = 0; j < grid.getGridWidth(); j++) {
+                List<GameElement> cellItems = this.valueProperty(i,j);
+                for (GameElement item : cellItems){
+                    if (item instanceof Box){
+                        cellItems.remove(item);
+                        boxNumber++;
+                        break;
+                    }
+                }
+            }
+        }
+
+        // Place boxes randomly anywhere except on sides
+        while (boxNumber > 0) {
+            int i = random.nextInt(Grid.getGridHeight());
+            int j = random.nextInt(Grid.getGridWidth());
+            List<GameElement> cellItems = grid.valueProperty(i,j);
+            if (!(i == 0 || j == 0 || i == 9 || j == 14)) {
+                if ((cellItems.size() == 1) ||
+                        (cellItems.size() == 2 && cellItems.stream().anyMatch(element -> element instanceof Goal))){
+                    Box box = new Box();
+                    box.setNumberLabel(new Label(String.valueOf(boxCount)));
+                    cellItems.add(box);
+                    boxNumber--;
+                    boxCount++;
+                }
+            }
+        }
+        moveCountProperty().set(moveCountProperty().get() + 20);
+    }
+
+    // Mushroom feature
+
+    /**
+     * To place mushroom on the grid
+     * @param grid
+     * @return
+     */
+    public void mushroom(Grid grid){
+        Random random = new Random();
+        Boolean free = false;
+
+        for (int i = 0; i < grid.getGridHeight(); i++) {
+            for (int j = 0; j < grid.getGridWidth(); j++) {
+                List<GameElement> cellItems = this.valueProperty(i,j);
+                if (cellItems.stream().anyMatch(element -> element instanceof Mushroom))
+                    cellItems.remove(cellItems.size() - 2);
+                }
+            }
+
+        while (!free) {
+            int i = random.nextInt(Grid.getGridHeight());
+            int j = random.nextInt(Grid.getGridWidth());
+            List<GameElement> cellItems = grid.valueProperty(i,j);
+            if (cellItems.stream().allMatch(element -> element instanceof Ground) && cellItems.size() == 1) {
+                cellItems.add(new Mushroom());
+                cellItems.add(new Ground());
+                free = true;
+            }
+        }
+    }
+
+    public boolean hideOrShow(){
+        boolean visible = false;
+        for (int i = 0; i < this.getGrid().getGridHeight(); i++) {
+            for (int j = 0; j < this.getGrid().getGridWidth(); j++) {
+                List<GameElement> cellItems = this.valueProperty(i,j);
+                int last = cellItems.size() - 1;
+                if (cellItems.stream().anyMatch(element -> element instanceof Mushroom)) {
+                    if (cellItems.get(last) instanceof Ground) {
+                        cellItems.remove(last);
+                        visible = true;
+                    }
+                    else {
+                        cellItems.add(new Ground());
+                    }
+                }
+            }
+        }
+
+        if (visible)
+            incrementMoveCount(10);
+        return visible;
+    }
+
+    public boolean mushVisible(){
+        boolean visible = true;
+        for (int i = 0; i < this.getGrid().getGridHeight(); i++) {
+            for (int j = 0; j < this.getGrid().getGridWidth(); j++) {
+                List<GameElement> cellItems = this.valueProperty(i,j);
+                int last = cellItems.size() - 1;
+                if (cellItems.stream().anyMatch(element -> element instanceof Mushroom)) {
+                    if (cellItems.get(last) instanceof Ground) {
+                        visible = false;
+                    }
+                }
+            }
+        }
+        return visible;
+    }
+
+    public void boxNumber(Grid grid){
+        int number = 0;
+        for (int i = 0; i < Grid.getGridHeight(); ++i) {
+            for (int j = 0; j < Grid.getGridWidth(); ++j) {
+                List<GameElement> targetCellItems = grid.getValues(i, j);
+                for (GameElement element : targetCellItems){
+                    if (element instanceof Box){
+                        number++;
+                        ((Box) element).setNumberLabel(new Label(String.valueOf(number)));
+                    }
+                }
+            }
+        }
+    }
+
 }

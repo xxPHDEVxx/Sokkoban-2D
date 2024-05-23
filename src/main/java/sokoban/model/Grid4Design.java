@@ -171,19 +171,4 @@ public class Grid4Design extends Grid{
         setGoalCount();
         setBoxInTargetCount();
     }
-
-    /**
-     * Adds a game element to the specified position in the grid.
-     * @param row The row index.
-     * @param col The column index.
-     * @param value The game element to add.
-     */
-    public void addElement(int row, int col, GameElement value) {
-        if (isValidPosition(row, col)) {
-            matrix[row][col].addElement(value);
-        } else {
-            throw new IllegalArgumentException("Invalid row or column index");
-        }
-    }
-
 }

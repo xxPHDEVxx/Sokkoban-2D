@@ -55,4 +55,8 @@ public class GridState {
     public List<Board> getBoardHistory() {
         return boardHistory;
     }
+
+    public void setCurrentIndex(int currentIndex) {
+        this.currentIndex = currentIndex;
     }
+}

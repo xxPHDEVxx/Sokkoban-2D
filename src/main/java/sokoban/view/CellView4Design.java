@@ -17,21 +17,10 @@ import sokoban.viewmodel.ToolViewModel;
 import java.util.List;
 
 public class CellView4Design extends CellView{
-    private static final Image ground = new Image("ground.png");
-    private final CellViewModel viewModel;
-    private final DoubleBinding widthProperty;
-    private final DoubleBinding heightProperty;
 
-    private ImageView imageView = new ImageView();
-    private ImageView midImageView = new ImageView();
-    private ImageView topImageView = new ImageView();
     CellView4Design(CellViewModel viewModel, DoubleBinding cellWidthProperty, DoubleBinding cellHeightProperty) {
-        this.viewModel = viewModel;
-        this.widthProperty = cellWidthProperty;
-        this.heightProperty = cellHeightProperty;
-        setAlignment(Pos.CENTER);
+        super(viewModel, cellWidthProperty, cellHeightProperty);
         configureBindings();
-
     }
 
 
@@ -47,12 +36,12 @@ public class CellView4Design extends CellView{
         topImageView.fitWidthProperty().bind(widthProperty);
 
 
-        getChildren().addAll(imageView, topImageView, midImageView);
+        getChildren().addAll(imageView, midImageView, topImageView);
 
         // un clic sur la cellule permet de jouer celle-ci
         this.setOnMouseClicked(event -> {
             if (event.getButton() == MouseButton.SECONDARY) {
-                removeTool(viewModel.getLine(), viewModel.getCol());
+                removeTool();
                 event.consume();
             } else if (event.getButton() == MouseButton.PRIMARY) {
                 if (ToolViewModel.getToolSelected() != null && !viewModel.getBoard().isFull()) {
@@ -95,24 +84,6 @@ public class CellView4Design extends CellView{
 
     }
 
-    //changement d'image au click ( si l'élement goal est présent on inverse les images pour la visibilité)
-    private void setImage(List<GameElement> elements) {
-        midImageView.setImage(null);
-        topImageView.setImage(null);
-
-        if (elements.size() > 2 && elements.get(2) instanceof Goal) {
-            midImageView.setImage(elements.get(2).getImage());
-            topImageView.setImage(elements.get(1).getImage());
-        } else {
-            if (elements.size() > 1)
-                midImageView.setImage(elements.get(1).getImage());
-            if (elements.size() > 2)
-                topImageView.setImage(elements.get(2).getImage());
-        }
-    }
-
-
-
     //image grisé au moment du hover
     private void hoverChanged(ObservableValue<? extends Boolean> obs, Boolean oldVal, Boolean newVal) {
         if (newVal) {
@@ -125,7 +96,7 @@ public class CellView4Design extends CellView{
         }
     }
 
-    private void removeTool(int line, int col) {
+    private void removeTool() {
         viewModel.removeTool();
     }
 

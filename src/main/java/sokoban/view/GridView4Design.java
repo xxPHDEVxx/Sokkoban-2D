@@ -9,7 +9,10 @@ public class GridView4Design extends GridView{
 
     public GridView4Design(GridViewModel gridViewModel, DoubleBinding gridWidth, DoubleBinding gridHeight) {
         setPadding(new Insets(PADDING));
+        fillGrid(gridViewModel, gridWidth, gridHeight);
+    }
 
+    public void fillGrid(GridViewModel gridViewModel, DoubleBinding gridWidth, DoubleBinding gridHeight) {
         //taille de chaque cellule
         DoubleBinding cellWidth = gridWidth
                 .subtract(PADDING * 2)

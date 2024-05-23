@@ -5,10 +5,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyCodeCombination;
-import javafx.scene.input.KeyCombination;
-import javafx.scene.input.KeyEvent;
+import javafx.scene.input.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
@@ -25,110 +22,136 @@ public class BoardView4Play extends BoardView  {
     private Label finisher = new Label("");
     private HBox level = new HBox();
     private VBox headerPlay = new VBox();
-    private VBox boardLvl = new VBox();
-    private Button button = new Button("Finish");
-    private  final int SCENE_MIN_WIDTH = 1080;
-    private  final int SCENE_MIN_HEIGHT = 800;
-    private Stage playStage;
+    private Button btnFinish = new Button("Finish");
+    private Button btnMushroom = new Button("Show mushroom");
+    private Button btnHideMushroom = new Button("Hide mushroom");
 
-    public BoardView4Play(Stage playStage, GridView4Play gridView, BoardViewModel boardViewModel) {
-        super(playStage, boardViewModel);
+    // Constructeur de la vue de jeu
+    public BoardView4Play(Stage primaryStage, GridView4Play gridView, BoardViewModel boardViewModel) {
+        super(primaryStage, boardViewModel);
         this.gridView = gridView;
-        this.playStage = playStage;
-        playStage.setScene(gridView.getScene());
-        playStage.show();
+        this.primaryStage = primaryStage;
+        primaryStage.setScene(gridView.getScene());
+        primaryStage.show();
         initialize();
-        configureScene(playStage);
+        configureScene(primaryStage);
         createHeaderPlay();
-        actionBtnFinish(boardViewModel, primaryStage);
+        setupFinishButton(boardViewModel, primaryStage);
+        showMushroom();
     }
 
-    public void initialize() {
-        playStage.setTitle("jeu");
-        //style
+    // Initialisation des composants de la vue
+    private void initialize() {
+        primaryStage.setTitle("Jeu");
+
+        // Style pour les composants
         headerPlay.getStyleClass().add("header");
-        Font fontTitle = Font.font("Verdana", FontWeight.BOLD, 20);
-        title.setFont(fontTitle);
+        title.setFont(Font.font("Verdana", FontWeight.BOLD, 20));
+        finisher.setFont(Font.font("Verdana", FontWeight.BOLD, 15));
+
+        // Organisation des composants
         headerPlay.setAlignment(Pos.CENTER);
-
-        Font fontFinish = Font.font("Verdana", FontWeight.BOLD, 15);
-        finisher.setFont(fontFinish);
-
-        // box button
-        HBox boxBtn = new HBox();
-        boxBtn.getChildren().addAll(button);
-        boxBtn.setAlignment(Pos.CENTER);
-
-        //insert sur la vue
-        level.getChildren().add(gridView);
         level.setAlignment(Pos.CENTER);
         gridView.setAlignment(Pos.CENTER);
-        headerPlay.getChildren().addAll(title, numberOfMovesPlayed, goal, finisher);
-        boardLvl.getChildren().addAll(headerPlay, level, boxBtn);
         boardLvl.setAlignment(Pos.CENTER);
 
+        // Ajout des composants à leurs conteneurs
+        HBox boxBtn = new HBox(btnFinish, btnMushroom);
+        boxBtn.setSpacing(15);
+        boxBtn.setAlignment(Pos.CENTER);
+
+        headerPlay.getChildren().addAll(title, numberOfMovesPlayed, goal, finisher);
+        level.getChildren().add(gridView);
+        boardLvl.getChildren().addAll(headerPlay, level, boxBtn);
+        bindings();
     }
 
-    public void configureScene(Stage playStage) {
+    // Configuration de la scène et des événements clavier
+    private void configureScene(Stage playStage) {
         Scene sceneLevel = new Scene(boardLvl, SCENE_MIN_WIDTH, SCENE_MIN_HEIGHT);
         playStage.setScene(sceneLevel);
 
-        // Directly request focus
-        sceneLevel.getRoot().setFocusTraversable(true);
-
-        sceneLevel.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
-
-            if (new KeyCodeCombination(KeyCode.Z, KeyCombination.CONTROL_DOWN).match(event)) {
-                boardViewModel.undo();
-                //refresh visuel
-                gridView.fillGrid(boardViewModel.getGridViewModel(), gridWidth, gridHeight);
-                return;
-            } else if (new KeyCodeCombination(KeyCode.Y, KeyCombination.CONTROL_DOWN).match(event)) {
-                boardViewModel.redo();
-                // refresh visuel
-                gridView.fillGrid(boardViewModel.getGridViewModel(), gridWidth, gridHeight);
-                return;
-            }
-
-            // Traitement des touches de direction
-            switch (event.getCode()) {
-                case UP, Z:
-                    boardViewModel.movePlayer(Direction.UP);
-                    break;
-                case DOWN, S:
-                    boardViewModel.movePlayer(Direction.DOWN);
-                    break;
-                case LEFT, Q:
-                    boardViewModel.movePlayer(Direction.LEFT);
-                    break;
-                case RIGHT, D:
-                    boardViewModel.movePlayer(Direction.RIGHT);
-                    break;
-            }
-            event.consume();
-        });
-
         // Assurer que le composant prend le focus lors de l'affichage
+        sceneLevel.getRoot().setFocusTraversable(true);
         playStage.showingProperty().addListener((obs, wasShowing, isNowShowing) -> {
             if (isNowShowing) {
                 sceneLevel.getRoot().requestFocus();
             }
         });
+
+        // Gestion des événements clavier
+        sceneLevel.addEventFilter(KeyEvent.KEY_PRESSED, event -> handleKeyPress(event));
     }
 
-    public void createHeaderPlay() {
-        numberOfMovesPlayed.textProperty().bind(Bindings.concat("Number of moves played : ",boardViewModel.moveCountProperty().asString()));
-        goal.textProperty().bind(Bindings.concat("Number of goals reached : ",boardViewModel.boxInTargetCountProperty().asString()," of ", boardViewModel.goalCountProperty().asString()));
+    // Méthode pour gérer les pressions des touches
+    private void handleKeyPress(KeyEvent event) {
+        if (new KeyCodeCombination(KeyCode.Z, KeyCombination.CONTROL_DOWN).match(event)) {
+            boardViewModel.undo();
+            return;
+        } else if (new KeyCodeCombination(KeyCode.Y, KeyCombination.CONTROL_DOWN).match(event)) {
+            boardViewModel.redo();
+            return;
+        }
+
+        switch (event.getCode()) {
+            case UP, Z -> boardViewModel.movePlayer(Direction.UP);
+            case DOWN, S -> boardViewModel.movePlayer(Direction.DOWN);
+            case LEFT, Q -> boardViewModel.movePlayer(Direction.LEFT);
+            case RIGHT, D -> boardViewModel.movePlayer(Direction.RIGHT);
+        }
+        event.consume();
+    }
+
+    // Création de l'en-tête pour le jeu
+    private void createHeaderPlay() {
+        numberOfMovesPlayed.textProperty().bind(Bindings.concat("Number of moves played: ", boardViewModel.moveCountProperty().asString()));
+        goal.textProperty().bind(Bindings.concat("Number of goals reached: ", boardViewModel.boxInTargetCountProperty().asString(), " of ", boardViewModel.goalCountProperty().asString()));
         finisher.textProperty().bind(Bindings.when(boardViewModel.boxInTargetCountProperty().isEqualTo(boardViewModel.goalCountProperty()))
                 .then(Bindings.concat("You won in ", boardViewModel.moveCountProperty().asString(), " moves, congratulations"))
                 .otherwise(""));
     }
 
-    //bouton finish a refaire
-    public void actionBtnFinish(BoardViewModel bordvm, Stage primaryStage) {
-        button.setOnAction(action -> {
+    private void bindings(){
+        btnFinish.disableProperty().bind(boardViewModel.boxInTargetCountProperty().isEqualTo(boardViewModel.goalCountProperty()).not());
+        btnMushroom.disableProperty().bind(boardViewModel.boxInTargetCountProperty().isEqualTo(boardViewModel.goalCountProperty()));
+
+        // Ajoute ou retire le filtre d'événements en fonction de la valeur de la liaison
+        boardViewModel.boxInTargetCountProperty().isEqualTo(boardViewModel.goalCountProperty()).not()
+                .addListener((observable, oldValue, newValue) -> {
+                    if (newValue) {
+                        btnMushroom.getScene().addEventFilter(MouseEvent.MOUSE_CLICKED, mouseEventFilter);
+                    } else {
+                        btnMushroom.getScene().removeEventFilter(MouseEvent.MOUSE_CLICKED, mouseEventFilter);
+                    }
+                });
+    }
+
+    // Configuration du bouton "Finish"
+    private void setupFinishButton(BoardViewModel boardViewModel, Stage primaryStage) {
+        btnFinish.setOnAction(action -> {
             boardViewModel.getBoard().setGrid(boardViewModel.getSaveGridDesign());
-            new BoardView4Design(primaryStage,boardViewModel);
+            new BoardView4Design(primaryStage, boardViewModel);
         });
     }
+
+    // Configuration bouton "show mushroom"
+    private void showMushroom(){
+        btnMushroom.setOnAction(action ->{
+            if(boardViewModel.hideOrShow()){
+                btnMushroom.setText("Hide mushroom");
+                // annuler clic si mushroom visible
+                btnMushroom.getScene().addEventFilter(MouseEvent.MOUSE_CLICKED, mouseEventFilter);
+            } else {
+                btnMushroom.setText("Show mushroom");
+                // Retirer le filtre de clic lorsque le mushroom est caché
+                btnMushroom.getScene().removeEventFilter(MouseEvent.MOUSE_CLICKED, mouseEventFilter);
+            }
+        });
+    }
+
+    // Filtre d'événements pour annuler les clics de souris
+    private final javafx.event.EventHandler<MouseEvent> mouseEventFilter = event -> {
+        // Consomme l'événement de clic de la souris
+        event.consume();
+    };
 }

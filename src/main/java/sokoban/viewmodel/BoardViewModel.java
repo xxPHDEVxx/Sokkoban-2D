@@ -8,25 +8,25 @@ import sokoban.model.*;
 
 import java.io.File;
 import java.util.List;
+import java.util.Random;
 
 public class BoardViewModel {
     private final GridViewModel gridViewModel;
     private GridState gridState;
     private  Board board;
     private static BooleanProperty isChanged = new SimpleBooleanProperty(false);
-    private final LongProperty moveCount = new SimpleLongProperty(0);
     private Grid4Design saveGridDesign;
 
     public BoardViewModel(Board board) {
         this.board = board;
-        this.gridState = new GridState();
+        gridState = board.getGridState();
         gridViewModel = new GridViewModel(board);
     }
 
     public GridViewModel getGridViewModel() {
         return gridViewModel;
     }
-
+    public LongProperty moveCountProperty(){return board.moveCountProperty();}
     public LongBinding filledCellsCountProperty() {
         return board.filledCellsCountProperty();
     }
@@ -91,11 +91,11 @@ public class BoardViewModel {
     public boolean movePlayer(Direction direction) {
 
         // check fin de partie
-        if (this.boxInTargetCountProperty().get() == this.goalCountProperty().get()){
+        if (endGame()){
             return false;
         }
 
-        // solution temporaire pour save etat initial
+        // save etat initial
         if (gridState.getBoardHistory().size() == 0) {
             gridState.addBoardState(board);
         }
@@ -120,7 +120,7 @@ public class BoardViewModel {
         List<GameElement> targetCellItems = board.getGrid().getValues(newRow, newCol);
 
         // Vérification si un mur bloque le chemin
-        if (targetCellItems.stream().anyMatch(element -> element instanceof Wall)) {
+        if (targetCellItems.stream().anyMatch(element -> element instanceof Wall || element instanceof Mushroom)) {
             System.out.println("Move invalid: Wall is blocking the way.");
             return false;
         }
@@ -157,7 +157,7 @@ public class BoardViewModel {
         playerCellItems.removeIf(element -> element instanceof Player);
 
         // Incrémentation du compteur de mouvements
-        incrementMoveCount();
+        incrementMoveCount(1);
         boxInTargetCountProperty().invalidate();
 
         gridState.addBoardState(board);
@@ -212,22 +212,20 @@ public class BoardViewModel {
     }
 
     //compteur de mouvement
-    public void incrementMoveCount() {
-        moveCount.set(moveCount.get() + 1);
-    }
-
-    public LongProperty moveCountProperty() {
-        return moveCount;
+    public void incrementMoveCount(int nb) {
+        board.incrementMoveCount(nb);
     }
 
     public void setBoard(Board board) {
         this.board = board;
     }
 
+
+    // Feature : Undo Redo ( undo or redo a moove)
     public void undo() {
 
         // check fin de partie
-        if (this.boxInTargetCountProperty().get() == this.goalCountProperty().get()){
+        if (endGame()){
             return;
         }
 
@@ -240,8 +238,8 @@ public class BoardViewModel {
             board.getGrid().copyFill(previousBoard.getGrid());
 
             // Décrémenter le compteur de mouvements (ou mettre à jour en conséquence)
-            if (moveCount.get() > 0) {
-                moveCount.set(moveCount.get() + 5);
+            if (moveCountProperty().get() > 0) {
+                incrementMoveCount(5);
             }
         }
     }
@@ -250,7 +248,7 @@ public class BoardViewModel {
     public void redo() {
 
         // check fin de partie
-        if (this.boxInTargetCountProperty().get() == this.goalCountProperty().get()){
+        if (endGame()){
             return;
         }
 
@@ -263,7 +261,7 @@ public class BoardViewModel {
             board.getGrid().copyFill(nextBoard.getGrid());
 
             // Incrémenter le compteur de mouvements (ou mettre à jour en conséquence)
-            moveCount.set(moveCount.get() + 1);
+            incrementMoveCount(1);
         }
     }
 
@@ -271,23 +269,38 @@ public class BoardViewModel {
         Grid4Play gridGame = new Grid4Play(gridWidth(),gridHeight());
         gridGame.copyFill(board.getGrid());
         boxNumber(gridGame);
+        mushroom(gridGame);
         return gridGame;
     }
 
     public void boxNumber(Grid grid){
-        int number = 0;
-        for (int i = 0; i < Grid.getGridHeight(); ++i) {
-            for (int j = 0; j < Grid.getGridWidth(); ++j) {
-                List<GameElement> targetCellItems = grid.getValues(i, j);
-                for (GameElement element : targetCellItems){
-                    if (element instanceof Box){
-                        number++;
-                        ((Box) element).setNumberLabel(new Label(String.valueOf(number)));
-                    }
-                }
-            }
-        }
+        board.boxNumber(grid);
     }
+
+    // Mushroom feature
+
+    /**
+     * To place mushroom on the grid
+     * @param grid
+     * @return
+     */
+    public void mushroom(Grid grid){
+        board.mushroom(grid);
+    }
+
+    /**
+     * To hide the mushroom
+     * @return boolean to know if it's visible or not
+     */
+    public boolean hideOrShow(){
+        return board.hideOrShow();
+    }
+
+
+    public boolean mushVisible(){
+        return board.mushVisible();
+    }
+
 
     public void saveGridDesign(){
         saveGridDesign = new Grid4Design(gridWidth(),gridHeight());
@@ -296,5 +309,18 @@ public class BoardViewModel {
 
     public Grid4Design getSaveGridDesign() {
         return saveGridDesign;
+    }
+
+    public boolean endGame(){
+        if (this.boxInTargetCountProperty().get() == this.goalCountProperty().get()){
+            if (gridState.getBoardHistory() != null) {
+                gridState.getBoardHistory().clear();
+                gridState.setCurrentIndex(0);
+                return true;
+            }
+        }
+        if (mushVisible())
+            return true;
+        return false;
     }
 }
