@@ -17,8 +17,6 @@ import sokoban.model.*;
 
 public class ToolView extends FlowPane {
 
-    private final ToolViewModel viewModel;
-    private static final int PADDING = 20;
     private static final Image[] images = {
             new Image("ground.png"),
             new Image("goal.png"),
@@ -28,16 +26,7 @@ public class ToolView extends FlowPane {
     };
 
     public ToolView(ToolViewModel viewModel) {
-        this.viewModel = viewModel;
         layoutControls();
-    }
-
-    private void layoutControls() {
-        setOrientation(Orientation.VERTICAL);
-        setAlignment(Pos.CENTER);
-        setVgap(20);
-        setHgap(20);
-        setPadding(new Insets(PADDING));
 
         for (Image image : images) {
             ImageView imageView = createImageView(image);
@@ -45,15 +34,28 @@ public class ToolView extends FlowPane {
             dragAndRoll(imageView);
             setToolEventHandlers(imageView);
             getChildren().add(imageView);
+            imageView.fitHeightProperty().bind(this.heightProperty().multiply(0.3));
+            imageView.fitWidthProperty().bind(this.widthProperty().multiply(0.3));
         }
+
+    }
+
+    private void layoutControls() {
+        setOrientation(Orientation.VERTICAL);
+        setAlignment(Pos.CENTER);
+        setVgap(20);
     }
 
     private ImageView createImageView(Image image) {
         ImageView imageView = new ImageView(image);
         imageView.setPreserveRatio(true);
-        imageView.setFitWidth(50); // Taille fixe pour simplifier l'affichage
+
+        // Liaison des propriétés de largeur et de hauteur des ImageView à la taille du ToolView
+        imageView.fitWidthProperty().bind(this.widthProperty().multiply(0.4)); // 40% de la largeur du ToolView
+        imageView.fitHeightProperty().bind(this.heightProperty().multiply(0.4)); // 40% de la hauteur du ToolView
         return imageView;
     }
+
 
     private void addHoverHandler(ImageView imageView) {
         imageView.setOnMouseEntered(event -> imageView.setOpacity(0.7));

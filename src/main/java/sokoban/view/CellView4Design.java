@@ -26,11 +26,6 @@ public class CellView4Design extends CellView{
 
     private void configureBindings() {
 
-        minWidthProperty().bind(widthProperty);
-        minHeightProperty().bind(heightProperty);
-        imageView.setPreserveRatio(true);
-        midImageView.setPreserveRatio(true);
-        topImageView.setPreserveRatio(true);
         imageView.fitWidthProperty().bind(widthProperty);
         imageView.fitHeightProperty().bind(heightProperty);
         midImageView.fitWidthProperty().bind(widthProperty);

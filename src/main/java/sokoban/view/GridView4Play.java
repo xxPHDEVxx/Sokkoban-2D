@@ -13,12 +13,10 @@ public class GridView4Play extends GridView{
     public void fillGrid(GridViewModel gridViewModel, DoubleBinding boardWidth, DoubleBinding boardHeight) {
         //taille de chaque cellule
         DoubleBinding cellWidth = boardWidth
-                .subtract(PADDING * 2)
                 .divide(gridWidth);
 
         DoubleBinding cellHeight = boardHeight
-                .subtract(PADDING * 2)
-                .divide(gridWidth);
+                .divide(gridHeight);
 
         // Remplissage de la grille
         for (int i = 0; i < gridViewModel.gridHeight(); ++i) {

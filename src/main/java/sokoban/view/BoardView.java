@@ -2,6 +2,7 @@ package sokoban.view;
 
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.DoubleBinding;
+import javafx.beans.property.DoubleProperty;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -63,6 +64,8 @@ public abstract class BoardView extends BorderPane {
         GRID_WIDTH = boardViewModel.gridWidth();
         GRID_HEIGHT = boardViewModel.gridHeight();
         start(this.primaryStage);
+
+        layoutControls();
     }
 
     // Method to start the application
@@ -85,6 +88,21 @@ public abstract class BoardView extends BorderPane {
         stage.setScene(scene);
         stage.show();
     }
+    private void layoutControls() {
+        // Le reste de votre code...
+
+        // Liaison de la largeur de toolView à 20% de la largeur de boardGame
+        toolView.prefWidthProperty().bind(boardGame.widthProperty().multiply(0.15));
+        toolView.prefHeightProperty().bind(boardGame.heightProperty().multiply(1));
+
+        // Liaison de la largeur de boardView à 80% de la largeur de boardGame
+        this.prefWidthProperty().bind(boardGame.widthProperty().multiply(0.85));
+        this.prefHeightProperty().bind(boardGame.heightProperty().multiply(0.85));
+
+        //boardGame.prefHeightProperty().bind(scene.heightProperty().multiply(0.8));
+        boardGame.prefWidthProperty().bind(primaryStage.widthProperty().multiply(0.8));
+        boardGame.prefHeightProperty().bind(primaryStage.heightProperty().multiply(0.8));
+    }
 
     // Method to configure main components
     private void configMainComponents(Stage stage) {
@@ -97,33 +115,20 @@ public abstract class BoardView extends BorderPane {
 
     // Method to create the grid
     public void createGrid(Scene scene) {
-        gridWidth = Bindings.createDoubleBinding(
-                () -> {
-                    var size = Math.min(widthProperty().get() - toolView.widthProperty().get(), heightProperty().get() - (boxCellCount.heightProperty().get() + boxRules.heightProperty().get()));
-                    return Math.floor(size / GRID_WIDTH) * GRID_WIDTH;
-                },
-                scene.widthProperty(),
-                scene.heightProperty(),
-                boxCellCount.heightProperty());
 
-        gridHeight = Bindings.createDoubleBinding(
-                () -> {
-                    var size = Math.min(heightProperty().get() - (boxCellCount.heightProperty().get() + boxRules.heightProperty().get()), widthProperty().get() - toolView.widthProperty().get());
-                    return Math.floor(size / GRID_HEIGHT) * GRID_HEIGHT;
-                },
-                scene.widthProperty(),
-                scene.heightProperty(),
-                boxCellCount.heightProperty());
+        gridWidth = scene.widthProperty().multiply(0.75);
+        gridHeight = gridWidth.divide(1.5);
+
 
         gridView = new GridView4Design(boardViewModel.getGridViewModel(), gridWidth, gridHeight);
 
         // Définir la largeur et la hauteur de la grid en fonction de la largeur calculée
-        gridView.minWidthProperty().bind(gridWidth);
-        gridView.minHeightProperty().bind(gridHeight);
+        gridView.prefWidthProperty().bind(gridWidth);
+        gridView.prefHeightProperty().bind(gridHeight);
 
-        boardGame.setAlignment(Pos.CENTER);
         setCenter(gridView);
     }
+
 
     // Method to create the menu bar
     private void createMenuBar(Stage stage) {

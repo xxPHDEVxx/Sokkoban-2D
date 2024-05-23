@@ -7,7 +7,7 @@ import sokoban.viewmodel.BoardViewModel;
 import sokoban.viewmodel.GridViewModel;
 
 public abstract class GridView extends GridPane {
-    static final int PADDING = 20;
+    protected final int PADDING = 20;
     protected int gridWidth;
     protected int gridHeight;
     protected DoubleBinding boardWidth;
