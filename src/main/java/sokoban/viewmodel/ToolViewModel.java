@@ -15,10 +15,6 @@ public class ToolViewModel {
     public ToolViewModel(BoardViewModel boardViewModel) {
         this.boardViewModel = boardViewModel;
     }
-
-    public void gridChanged(){
-        boardViewModel.setChanged(true);
-    }
     public  static void setToolSelected(GameElement toolSelected) {
         ToolViewModel.toolSelected = toolSelected;
     }

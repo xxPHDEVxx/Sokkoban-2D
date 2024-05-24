@@ -88,24 +88,29 @@ public abstract class BoardView extends BorderPane {
         stage.show();
     }
     private void layoutControls() {
-        // Le reste de votre code...
-
-        // Liaison de la largeur de toolView à 20% de la largeur de boardGame
-        toolView.prefWidthProperty().bind(boardGame.widthProperty().multiply(0.15));
-        toolView.prefHeightProperty().bind(boardGame.heightProperty().multiply(1));
-
-        // Liaison de la largeur de boardView à 80% de la largeur de boardGame
-        this.prefWidthProperty().bind(boardGame.widthProperty().multiply(0.85));
-        this.prefHeightProperty().bind(boardGame.heightProperty().multiply(0.85));
-
-        //boardGame.prefHeightProperty().bind(scene.heightProperty().multiply(0.8));
-        boardGame.prefWidthProperty().bind(primaryStage.widthProperty().multiply(0.8));
-        boardGame.prefHeightProperty().bind(primaryStage.heightProperty().multiply(0.8));
+        responsiveBox();
+        responsiveLabel();
     }
+
 
     // Method to configure main components
     private void configMainComponents(Stage stage) {
-        stage.setTitle("Sokoban");
+        // Lier le titre avec isChanged
+        stage.titleProperty().bind(
+                Bindings.when(boardViewModel.isChangedProperty())
+                        .then("Sokoban(*)")
+                        .otherwise("Sokoban")
+        );
+
+        // Modifier le titre du stage en fonction de BoardView4Play et de la propriété isChanged
+        if (this instanceof BoardView4play) {
+            stage.titleProperty().bind(
+                    Bindings.when(boardViewModel.isChangedProperty())
+                            .then("Jeu(*)")
+                            .otherwise("Jeu")
+            );
+        }
+
         createMenuBar(stage);
         createHeader();
         insertHeader();
@@ -116,7 +121,7 @@ public abstract class BoardView extends BorderPane {
     public void createGrid(Scene scene) {
 
         gridWidth = scene.widthProperty().multiply(0.75);
-        gridHeight = gridWidth.divide(1.5);
+        gridHeight = scene.heightProperty().multiply(0.6);
 
 
         gridView = new GridView4Design(boardViewModel.getGridViewModel(), gridWidth, gridHeight);
@@ -203,8 +208,6 @@ public abstract class BoardView extends BorderPane {
     public void createHeader() {
         cellCountLabel.textProperty().bind(boardViewModel.filledCellsCountProperty()
                 .asString("Number of filled cells: %d of " + boardViewModel.maxFilledCells()));
-        Font font = Font.font("Verdana", FontWeight.BOLD, 20);
-        cellCountLabel.setFont(font);
 
         errBox.textProperty().bind(Bindings.when(boardViewModel.boxCountProperty().greaterThan(0))
                 .then("")
@@ -234,6 +237,7 @@ public abstract class BoardView extends BorderPane {
         errCountBoxGoal.setTextFill(Color.RED);
 
         cellCountLabel.getStyleClass().add("header");
+
         boxCellCount.getChildren().add(cellCountLabel);
         boxRules.getChildren().addAll(errBox, errGoal, errPlayer, errCountBoxGoal);
         boxCellCount.setAlignment(Pos.CENTER);
@@ -241,6 +245,48 @@ public abstract class BoardView extends BorderPane {
         vbox.getChildren().add(boxCellCount);
         vbox.getChildren().add(boxRules);
         boxCellCount.setMinWidth(100);
+
+    }
+
+    public void responsiveBox(){
+        // Liaison de la largeur de toolView à 20% de la largeur de boardGame
+        toolView.prefWidthProperty().bind(boardGame.widthProperty().multiply(0.15));
+
+        // Liaison de la largeur de boardView à 80% de la largeur de boardGame
+        this.prefWidthProperty().bind(boardGame.widthProperty().multiply(0.8));
+
+        // Liaison de la hauteur de boardGame à la hauteur de la scène moins la hauteur de vbox
+        boardGame.prefHeightProperty().bind(scene.heightProperty().subtract(vbox.heightProperty()));
+        boardGame.prefWidthProperty().bind(scene.widthProperty().subtract(vbox.widthProperty()));
+
+        // Liaison de la largeur de vbox à la largeur de la scène moins la largeur de toolView
+        vbox.prefWidthProperty().bind(scene.widthProperty().subtract(toolView.widthProperty()));
+        vbox.prefHeightProperty().bind(scene.heightProperty().subtract(toolView.heightProperty()));
+    }
+
+    public void responsiveLabel(){
+
+        cellCountLabel.fontProperty().bind(Bindings.createObjectBinding(() ->
+                        Font.font("Verdana", FontWeight.BOLD, boxCellCount.getWidth() / 50),
+                boxCellCount.widthProperty()));
+
+        // Liaison de la largeur de boxCellCount et boxRules à la largeur du parent
+        boxCellCount.prefWidthProperty().bind(vbox.widthProperty());
+        boxRules.prefWidthProperty().bind(vbox.widthProperty());
+
+        // Ajustement de la taille du texte dans boxRules
+        errBox.fontProperty().bind(Bindings.createObjectBinding(() ->
+                        Font.font("Verdana", boxRules.getWidth() / 70),
+                boxRules.widthProperty()));
+        errGoal.fontProperty().bind(Bindings.createObjectBinding(() ->
+                        Font.font("Verdana", boxRules.getWidth() / 70),
+                boxRules.widthProperty()));
+        errPlayer.fontProperty().bind(Bindings.createObjectBinding(() ->
+                        Font.font("Verdana", boxRules.getWidth() / 70),
+                boxRules.widthProperty()));
+        errCountBoxGoal.fontProperty().bind(Bindings.createObjectBinding(() ->
+                        Font.font("Verdana", boxRules.getWidth() / 60),
+                boxRules.widthProperty()));
     }
 
     // Method to refresh the view
@@ -266,7 +312,6 @@ public abstract class BoardView extends BorderPane {
     // Method to start the game
     public void playGame() {
         if (boardViewModel.rulesOKProperty().get()) {
-            primaryStage.setTitle("Sokoban");
             startGame(primaryStage);
         }
     }

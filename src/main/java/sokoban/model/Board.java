@@ -91,6 +91,7 @@ public class Board {
                 putElement(line, col, selected);
             }
         }
+        setChanged(true);
     }
 
     // Private helper methods for handling different scenarios when placing elements

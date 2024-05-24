@@ -79,7 +79,6 @@ public class ToolView extends FlowPane {
     private void setToolEventHandlers(ImageView imageView) {
         imageView.setOnMouseClicked(event -> {
             ToolViewModel.setToolSelected(determineToolFromImageView(imageView));
-            viewModel.gridChanged();
             applyHighlightEffect(imageView);
         });
     }

@@ -1,11 +1,13 @@
 package sokoban.view;
 
+import javafx.beans.binding.Bindings;
 import javafx.beans.binding.DoubleBinding;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
+import javafx.scene.text.Font;
 import sokoban.model.GameElement;
 import sokoban.model.Goal;
 import sokoban.viewmodel.CellViewModel;
@@ -54,7 +56,12 @@ public abstract class CellView extends StackPane {
      */
     protected void handleBoxNumber() {
         Label numberLabel = viewModel.createBoxNumberLabel();
+
         if (numberLabel != null && stackPane.getChildren().isEmpty()) {
+            // Lier la taille de la police du label à la plus petite dimension de la cellule
+            numberLabel.fontProperty().bind(Bindings.createObjectBinding(() ->
+                            Font.font("Verdana", Math.min(widthProperty.get(), heightProperty.get()) / 2),
+                    widthProperty, heightProperty));
             stackPane.getChildren().add(numberLabel);
             StackPane.setAlignment(numberLabel, Pos.CENTER);
         }

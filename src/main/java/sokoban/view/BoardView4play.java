@@ -42,7 +42,6 @@ public class BoardView4play extends BoardView {
 
     // Initialisation des composants de la vue
     private void initialize() {
-        primaryStage.setTitle("Jeu");
 
         // Style pour les composants
         headerPlay.getStyleClass().add("header");
@@ -80,7 +79,7 @@ public class BoardView4play extends BoardView {
         });
 
         // Gestion des événements clavier
-        sceneLevel.addEventFilter(KeyEvent.KEY_PRESSED, event -> handleKeyPress(event));
+        sceneLevel.addEventFilter(KeyEvent.KEY_PRESSED, this::handleKeyPress);
     }
 
     // Méthode pour gérer les pressions des touches

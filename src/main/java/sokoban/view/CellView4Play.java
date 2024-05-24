@@ -24,6 +24,7 @@ public class CellView4Play extends CellView{
         // Ajout des composants visuels au StackPane
         getChildren().addAll(imageView, midImageView,stackPane, topImageView);
 
+
         // un clic sur la cellule permet de jouer celle-ci
         this.setOnMouseClicked(event -> {
             viewModel.isMushroom();
