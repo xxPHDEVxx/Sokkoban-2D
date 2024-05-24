@@ -96,6 +96,14 @@ public abstract class BoardView extends BorderPane {
     // Method to configure main components
     private void configMainComponents(Stage stage) {
         stage.setTitle("Sokoban");
+
+        // Lier le titre avec isChanged
+        stage.titleProperty().bind(
+                Bindings.when(boardViewModel.isChangedProperty())
+                        .then("Sokoban(*)")
+                        .otherwise("Sokoban")
+        );
+
         createMenuBar(stage);
         createHeader();
         insertHeader();
@@ -274,6 +282,10 @@ public abstract class BoardView extends BorderPane {
         errCountBoxGoal.fontProperty().bind(Bindings.createObjectBinding(() ->
                         Font.font("Verdana", boxRules.getWidth() / 60),
                 boxRules.widthProperty()));
+    }
+
+    public void setTitle(Stage stage,String title){
+        stage.setTitle(title);
     }
 
     // Method to refresh the view
