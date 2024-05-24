@@ -33,6 +33,8 @@ public class CellView4Design extends CellView{
         topImageView.fitWidthProperty().bind(widthProperty);
         topImageView.fitHeightProperty().bind(heightProperty);
 
+        this.prefHeightProperty().bind(this.widthProperty);
+        this.prefWidthProperty().bind(this.heightProperty);
 
 
         getChildren().addAll(imageView, midImageView, topImageView);
