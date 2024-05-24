@@ -49,6 +49,7 @@ public abstract class CellView extends StackPane {
         this.heightProperty = cellHeightProperty;
         setAlignment(Pos.CENTER);
         init();
+
     }
 
     /**
@@ -75,7 +76,6 @@ public abstract class CellView extends StackPane {
 
         // Définit l'image de base pour tous les types de cellules
         imageView.setImage(ground);
-
         // Gère l'affichage des images selon les éléments présents dans la cellule
         if (elements.size() > 2 && elements.get(1) instanceof Goal) {
             midImageView.setImage(elements.get(2).getImage());

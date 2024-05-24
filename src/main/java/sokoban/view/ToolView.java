@@ -49,8 +49,7 @@ public class ToolView extends FlowPane {
 
     private void layoutControls() {
         setOrientation(Orientation.VERTICAL);
-        setAlignment(Pos.CENTER);
-        setVgap(20);
+        //setPadding(new Insets(50));
     }
 
     private ImageView createImageView(Image image) {
@@ -58,8 +57,8 @@ public class ToolView extends FlowPane {
         imageView.setPreserveRatio(true);
 
         // Liaison des propriétés de largeur et de hauteur des ImageView à la taille du ToolView
-        imageView.fitWidthProperty().bind(this.widthProperty().multiply(0.4)); // 40% de la largeur du ToolView
-        imageView.fitHeightProperty().bind(this.heightProperty().multiply(0.4)); // 40% de la hauteur du ToolView
+        imageView.fitWidthProperty().bind(this.widthProperty().multiply(0.3)); // 40% de la largeur du ToolView
+        imageView.fitHeightProperty().bind(this.heightProperty().multiply(0.3)); // 40% de la hauteur du ToolView
 
         return imageView;
     }

@@ -26,12 +26,12 @@ public class CellView4Design extends CellView{
 
     private void configureBindings() {
 
-        /*imageView.fitWidthProperty().bind(widthProperty);
-        imageView.fitHeightProperty().bind(heightProperty);
-        midImageView.fitWidthProperty().bind(widthProperty);
-        midImageView.fitHeightProperty().bind(heightProperty);
-        topImageView.fitWidthProperty().bind(widthProperty);
-        topImageView.fitHeightProperty().bind(heightProperty);*/
+        imageView.setPreserveRatio(true);
+        midImageView.setPreserveRatio(true);
+        topImageView.setPreserveRatio(true);
+        setPrefWidth(widthProperty.get());
+        setPrefHeight(heightProperty.get());
+
 
 
         getChildren().addAll(imageView, midImageView, topImageView);

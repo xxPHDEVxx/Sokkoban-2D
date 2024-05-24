@@ -12,6 +12,10 @@ public class GridView4Design extends GridView{
         fillGrid(gridViewModel, gridWidth, gridHeight);
     }
 
+    public void layoutControls(){
+
+    }
+
     public void fillGrid(GridViewModel gridViewModel, DoubleBinding boardWidth, DoubleBinding boardHeight) {
         //taille de chaque cellule
         DoubleBinding cellWidth = boardWidth
@@ -25,8 +29,6 @@ public class GridView4Design extends GridView{
         for (int i = 0; i < this.gridHeight; ++i) {
             for (int j = 0; j < this.gridWidth; ++j) {
                 CellView4Design cellView = new CellView4Design(gridViewModel.getCellViewModel(i, j), cellWidth, cellHeight);
-                cellView.prefWidthProperty().bind(cellWidth);
-                cellView.prefHeightProperty().bind(cellHeight);
                 add(cellView, j, i); // lignes/colonnes inversées dans gridpane
             }
         }

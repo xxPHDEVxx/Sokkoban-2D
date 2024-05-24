@@ -8,7 +8,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -35,6 +34,7 @@ public abstract class BoardView extends BorderPane {
     private final Label errBox = new Label("");
     private final Label errCountBoxGoal = new Label("- Number of box and target must be equals.");
     private final VBox vbox = new VBox();
+    private final VBox right = new VBox();
     private final HBox boxCellCount = new HBox();
     private final VBox boxRules = new VBox();
     private final ToolView toolView;
@@ -55,6 +55,7 @@ public abstract class BoardView extends BorderPane {
     protected DoubleBinding gridWidth;
     protected DoubleBinding gridHeight;
     protected VBox boardLvl = new VBox();
+    protected int ratio;
 
     // Constructor to initialize the BoardView
     public BoardView(Stage primaryStage, BoardViewModel boardViewModel) {
@@ -83,13 +84,23 @@ public abstract class BoardView extends BorderPane {
         boxBtn.setAlignment(Pos.CENTER);
         btnPlay.setAlignment(Pos.CENTER);
         setTop(vbox);
+        setRight(right);
+        ratio = boardViewModel.gridWidth() /boardViewModel.gridHeight();
 
 
         stage.setScene(scene);
         stage.show();
     }
     private void layoutControls() {
-        vbox.setPadding(new Insets(30));
+
+        gridView.setStyle("-fx-border-color: black; -fx-border-width: 2px;");
+        toolView.setStyle("-fx-border-color: green; -fx-border-width: 2px;");
+        boxBtn.setStyle("-fx-border-color: yellow; -fx-border-width: 2px;");
+        vbox.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
+        this.setStyle("-fx-border-color: blue; -fx-border-width: 2px;");
+        boardGame.setStyle("-fx-border-color: grey; -fx-border-width: 2px;");
+
+
         responsiveBox();
         responsiveLabel();
     }
@@ -114,14 +125,10 @@ public abstract class BoardView extends BorderPane {
     // Method to create the grid
     public void createGrid(Scene scene) {
 
-        gridWidth = scene.widthProperty().multiply(0.75);
-        gridHeight = scene.heightProperty().multiply(0.6);
+        gridWidth = scene.widthProperty().multiply(0.6);
+        gridHeight = gridWidth.divide(boardViewModel.gridWidth() / boardViewModel.gridHeight());
 
         gridView = new GridView4Design(boardViewModel.getGridViewModel(), gridWidth, gridHeight);
-
-        // Définir la largeur et la hauteur de la grid en fonction de la largeur calculée
-        gridView.prefWidthProperty().bind(gridWidth);
-        gridView.prefHeightProperty().bind(gridHeight);
 
         setCenter(gridView);
     }
@@ -242,17 +249,6 @@ public abstract class BoardView extends BorderPane {
     }
 
     private void responsiveBox(){
-        // Liaison de la largeur de toolView à 20% de la largeur de boardGame
-        toolView.prefWidthProperty().bind(this.widthProperty().multiply(0.15));
-
-        VBox.setVgrow(this, Priority.ALWAYS);
-        this.setMaxHeight(Integer.MAX_VALUE);
-        VBox.setVgrow(boxBtn, Priority.ALWAYS);
-        boxBtn.setMaxHeight(Integer.MAX_VALUE);
-        HBox.setHgrow(this, Priority.ALWAYS);
-        HBox.setHgrow(toolView, Priority.ALWAYS);
-        toolView.setMaxWidth(Integer.MAX_VALUE);
-        this.setMaxWidth(Integer.MAX_VALUE);
 
 
         // Liaison de la largeur de boardView à 80% de la largeur de boardGame
