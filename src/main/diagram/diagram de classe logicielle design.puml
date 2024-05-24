@@ -1,0 +1,280 @@
+@startuml
+package Sokoban {
+skinparam Shadowing false               /' Désactive l'effet d'ombre sur les éléments '/
+skinparam classAttributeIconSize 0      /' Taille des icônes d'attribut de classe (ici 0 pour les cacher) '/
+skinparam defaultFontName Consolas      /' Utilisation de la police Consolas par défaut '/
+!pragma useIntermediatePackages false   /' Désactive l'utilisation de packages intermédiaires '/
+
+class Sokoban.SokobanApp{
+    +start()
+    +main()
+ }
+
+class javafx.scene.layout.BorderPane {
+    -Label
+    -VBox
+    -HBox
+    -Menu
+    -MenuItem
+    -Button
+    }
+class javafx.scene.layout.FlowPane {
+    -ImageView
+}
+class javafx.scene.layout.GridPane { }
+class javafx.scene.layout.StackPane {
+    -Image
+}
+
+class Model.Board{
+    -MAX_FILLED_CELLS : int
+    -isFull : BooleanBinding
+    -CountBoxOk = booleanBinding
+    -CountPlayerOk = booleanBinding
+    -CountGoalOk = booleanBinding
+    -CountGoalBoxOK = booleanBinding
+    -rulesOK : BooleanBinding
+    +maxFilledCells()
+    +play(int, int,cellvalue)
+    +removeExistingPlayer()
+    +valueProperty(int, int) = valuesProperty(line, col)
+    +ConfigureBinding()
+    +getGrid()
+    +getBoard()
+    +setGrid(grid)
+    +open()
+    +getRulesOk()
+    +ConvertSymbolToCellValue(char)
+}
+
+enum Model.Direction{
+}
+class Model.Grid4Play{
+}
+class Model.Grid4Design{
+}
+class Model.Wall{
+}
+class Model.Player{
+}
+class Model.Box{
+}
+class Model.Goal{
+}
+class Model.Mushroom{
+}
+class Model.ground{
+}
+
+abstract class Model.Grid{
+    -GridWidth = int
+    -GridHeight = int
+    -Cell4design = matrix
+    +setBoxInTargetCount()
+    +setItemsCount()
+    +getGridWidth()
+    +getGridHeight()
+    +getValue()
+    +isValidPosition()
+    +setValue()
+}
+
+abstract class Model.Cell{
+    -value
+    +{abstract} getValue()
+    +{abstract} setValue()
+    +{abstract}isEmpty()
+    +{abstract}isBox()
+    +{abstract}isPlayer()
+    +{abstract}isGoal()
+    +{abstract}isBoxInTarget()
+    +{abstract}valuesProperty()
+    +{abstract}getCell()
+}
+class Model.Cell4Design{
+    +{abstract} getValue()
+}
+class Model.Cell4Play{
+    -value = ObjectProperty
+}
+
+abstract class View.BoardView {
+    -boardViewModel = BoardViewModel
+    -Grid_Width = int
+    -Grid_Height = int
+    -CellCountLabel = Label
+    -err = label
+    -menu = menu
+    -GridView = GridView
+    -PlayStage = playStage
+    +start()
+    +configMainComponents(stage)
+    +createGrid(scene)
+    +createMenuBar(stage)
+    +createHeader()
+    +insertHeader()
+    +refresh()
+    +actionBtnPLay()
+    +playGame()
+    +startGame()
+}
+class View.BoardView4Design{}
+class View.BoardView4Play{
+    -gridview = GridView
+    -title = Label
+    -Scene_width = int
+    -Scene_height = int
+    +initialize()
+    +configureScene(stage)
+    +refreshGrid()
+    +createHeaderPlay()
+    +actionBtnFinish()
+}
+abstract class View.CellView{
+    -Items = Image
+    -ViewModel = CellViewModel
+    -WidthProperty = DoubleBinding
+    -HeighProperty =DoubleBinding
+    +configureBinding()
+    +setImage()
+    +hoverChange()
+    +refresh()
+}
+abstract class View.GridView{
+    -GridWidth = int
+    -GridHeight = int
+    -BoardWidth = doublebinding
+    -BoardHeight = doublebinding
+    -GridViewModel
+}
+class View.NewGridView{
+    +showDialog()
+}
+class View.SaveConfirm{
+    +showDialog()
+}
+class View.ToolView{
+    -Padding = int
+    -Items = images
+    +LayoutControl()
+    +addHoverHandler(ImageView)
+    +dragAndRoll(ImageView)
+    +setToolEventHandlers(ImageView)
+    +determineTool(ImageView)
+}
+
+class Model.GridState{
+    - BoardHistory
+    - CurrentIndex = int
+}
+
+class ViewModel.BoardViewModel {
+    -board = Board
+    +getGridViewModel()
+    +filledCellsCountProperty()
+    +ItemsCountProperty()
+    +maxFilledCells()
+    +getGridSize()
+    +exitMenu()
+    +newGridMenu()
+    +openBoard()
+    +isChanged()
+    +movePlayer()
+    +canPushBox()
+    +findPlayerCell()
+    +checkPush()
+    +incrementMoveCount()
+    +Undo()
+    +Redo()
+}
+class ViewModel.CellViewModel {
+    -Board = board
+    -line, col = int
+    +play()
+    +valuesProperty()
+    +getCellValue()
+    +getSymbolForElement()
+    +getBoard()
+    +getLine()
+    +getCol()
+}
+class ViewModel.GridViewModel {
+    -Board = Board
+    +getCellViewModel(int,int)
+    +saveMenu(grid, File)
+}
+class ViewModel.ToolViewModel {
+    -ToolView = ToolView
+    -Tool = tool
+    -value = objectProperty
+    -toolSelected = CellValue
+    +getValue()
+    +valuesProperty = ReadONlyObjectProperty
+    +setToolSelected(CellValue)
+    +getToolSelected()
+}
+abstract class Model.gameElement{
+    -image
+    +getImage()
+    +setImage()
+    +copy()
+}
+class View.CellView4Design{
+}
+class View.CellView4Play{
+}
+class View.GridView4Design{
+}
+class View.GridView4Design{
+}
+
+
+gameElement <|-- Wall
+gameElement <|-- ground
+gameElement <|-- Box
+gameElement <|-- Model.Mushroom
+gameElement <|-- Model.Goal
+gameElement <|-- Model.Player
+Grid <|-- Grid4Play
+Grid <|-- Model.Grid4Design
+Cell <|-- Model.Cell4Design
+Cell <|-- Model.Cell4Play
+CellView <|-- View.CellView4Design
+CellView <|-- View.CellView4Play
+View.BoardView <|-- View.BoardView4Design
+View.BoardView <|-- View.BoardView4Play
+View.GridView <|-- View.GridView4Design
+View.GridView <|-- View.GridView4Play
+
+BoardView <|-- BorderPane
+CellView <|-- StackPane
+GridView <|-- GridPane
+ToolView <|-- FlowPane
+SokobanApp ..> View.BoardView4Design : <<create>>
+SokobanApp ..> ViewModel.BoardViewModel : <<create>>
+SokobanApp ..> Model.Board : <<create>>
+
+BoardViewModel 	*-- GridViewModel
+BoardViewModel 	*-- GridState
+BoardViewModel 	*-- Board
+BoardView ..> ViewModel.BoardViewModel : <<use>>
+GridView ..> ViewModel.GridViewModel : <<use>>
+CellView ..> CellViewModel : <<use>>
+
+Grid ..> gameElement
+Grid ..> Cell
+Board ..> Grid
+Board ..> Model.Direction
+Board ..> GridState
+
+BoardViewModel ..> CellViewModel
+GridViewModel ..> CellViewModel
+BoardViewModel ..> ViewModel.ToolViewModel
+BoardView o-- ToolView
+BoardView o-- GridView
+View.CellView4Design ..> View.GridView4Design
+View.CellView4Play ..> View.GridView4Play
+BoardView ..> View.SaveConfirm
+BoardView ..> View.NewGridView
+@enduml
+}

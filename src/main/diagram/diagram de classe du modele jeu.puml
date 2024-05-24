@@ -1,0 +1,54 @@
+@startuml
+
+abstract class cells
+class target
+class wall
+class player
+class grid
+class box
+abstract class element
+abstract class isMoveable
+class Sokoban
+class ground
+abstract class isStackable
+abstract class isNotStackable
+class Cell4Design
+class Cell4Play
+abstract class Board
+class Tool
+
+
+element <|--  isStackable
+element <|-- isNotStackable
+
+isMoveable <|-- player
+isMoveable <|-- box
+
+Cell4Play "1" -- "1" element : contains >
+Cell4Design "1" -- "1" element : contains >
+grid "100" o-- "2500" cells : isComposeBy >
+Sokoban "1" o-- "1" Board : isComposeBy >
+Board "0" o-- "1" ToolBox : isComposeBy >
+Board "1" o-- "1" grid : isComposeBy >
+cells <|-- Cell4Design
+cells <|-- Cell4Play
+isNotStackable <|-- wall
+isStackable <|-- ground
+isStackable <|-- target
+isStackable <|-- isMoveable
+
+abstract class element{
+    int : howMany
+}
+abstract class isStackable{
+    int : maxStack
+}
+class box {
+    bool : isOnTarget
+}
+class grid{
+       int : width
+    int : height
+    }
+
+@enduml
