@@ -43,8 +43,8 @@ public class SaveConfirm {
             if (selectedFile != null) {
                 Board board = new Board();
                 BoardViewModel boardVM = new BoardViewModel(board);
-                Grid grid = boardVM.getGrid();
-                GridViewModel gvm = boardVM.getGridVM();
+                Grid grid = boardVM.getBoard().getGrid();
+                GridViewModel gvm = boardVM.getGridViewModel();
                 gvm.saveMenu(grid, selectedFile);
             }
         });

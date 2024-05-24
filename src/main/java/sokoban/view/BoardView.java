@@ -2,6 +2,7 @@ package sokoban.view;
 
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.DoubleBinding;
+import javafx.beans.property.DoubleProperty;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -14,20 +15,19 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import sokoban.model.Board;
 import sokoban.model.Grid;
 import sokoban.viewmodel.BoardViewModel;
 import sokoban.viewmodel.GridViewModel;
 import sokoban.viewmodel.ToolViewModel;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 
 public abstract class BoardView extends BorderPane {
 
     protected BoardViewModel boardViewModel;
     protected ToolViewModel toolViewModel;
-    NewGridView newGridView;
-    private int GRID_WIDTH = BoardViewModel.gridWidth();
-    private int GRID_HEIGHT = BoardViewModel.gridHeight();
 
     // Labels to display various status messages
     private final Label cellCountLabel = new Label("");
@@ -38,7 +38,7 @@ public abstract class BoardView extends BorderPane {
     private final VBox vbox = new VBox();
     private final HBox boxCellCount = new HBox();
     private final VBox boxRules = new VBox();
-    private final ToolView toolView = new ToolView(toolViewModel);
+    private final ToolView toolView;
     private final Menu fileMenu = new Menu("Fichier");
     private final MenuItem menuItemNew = new MenuItem("New...");
     private final MenuItem menuItemOpen = new MenuItem("Open...");
@@ -55,13 +55,16 @@ public abstract class BoardView extends BorderPane {
     protected DoubleBinding gridWidth;
     protected DoubleBinding gridHeight;
     protected VBox boardLvl = new VBox();
-    protected HBox level = new HBox();
 
     // Constructor to initialize the BoardView
     public BoardView(Stage primaryStage, BoardViewModel boardViewModel) {
         this.primaryStage = primaryStage;
         this.boardViewModel = boardViewModel;
+        toolViewModel = new ToolViewModel(boardViewModel);
+        toolView = new ToolView(toolViewModel);
         start(this.primaryStage);
+
+        layoutControls();
     }
 
     // Method to start the application
@@ -84,6 +87,21 @@ public abstract class BoardView extends BorderPane {
         stage.setScene(scene);
         stage.show();
     }
+    private void layoutControls() {
+        // Le reste de votre code...
+
+        // Liaison de la largeur de toolView à 20% de la largeur de boardGame
+        toolView.prefWidthProperty().bind(boardGame.widthProperty().multiply(0.15));
+        toolView.prefHeightProperty().bind(boardGame.heightProperty().multiply(1));
+
+        // Liaison de la largeur de boardView à 80% de la largeur de boardGame
+        this.prefWidthProperty().bind(boardGame.widthProperty().multiply(0.85));
+        this.prefHeightProperty().bind(boardGame.heightProperty().multiply(0.85));
+
+        //boardGame.prefHeightProperty().bind(scene.heightProperty().multiply(0.8));
+        boardGame.prefWidthProperty().bind(primaryStage.widthProperty().multiply(0.8));
+        boardGame.prefHeightProperty().bind(primaryStage.heightProperty().multiply(0.8));
+    }
 
     // Method to configure main components
     private void configMainComponents(Stage stage) {
@@ -96,33 +114,20 @@ public abstract class BoardView extends BorderPane {
 
     // Method to create the grid
     public void createGrid(Scene scene) {
-        gridWidth = Bindings.createDoubleBinding(
-                () -> {
-                    var size = Math.min(widthProperty().get() - toolView.widthProperty().get(), heightProperty().get() - (boxCellCount.heightProperty().get() + boxRules.heightProperty().get()));
-                    return Math.floor(size / GRID_WIDTH) * GRID_WIDTH;
-                },
-                scene.widthProperty(),
-                scene.heightProperty(),
-                boxCellCount.heightProperty());
 
-        gridHeight = Bindings.createDoubleBinding(
-                () -> {
-                    var size = Math.min(heightProperty().get() - (boxCellCount.heightProperty().get() + boxRules.heightProperty().get()), widthProperty().get() - toolView.widthProperty().get());
-                    return Math.floor(size / GRID_HEIGHT) * GRID_HEIGHT;
-                },
-                scene.widthProperty(),
-                scene.heightProperty(),
-                boxCellCount.heightProperty());
+        gridWidth = scene.widthProperty().multiply(0.75);
+        gridHeight = gridWidth.divide(1.5);
+
 
         gridView = new GridView4Design(boardViewModel.getGridViewModel(), gridWidth, gridHeight);
 
         // Définir la largeur et la hauteur de la grid en fonction de la largeur calculée
-        gridView.minWidthProperty().bind(gridWidth);
-        gridView.minHeightProperty().bind(gridHeight);
+        gridView.prefWidthProperty().bind(gridWidth);
+        gridView.prefHeightProperty().bind(gridHeight);
 
-        boardGame.setAlignment(Pos.CENTER);
         setCenter(gridView);
     }
+
 
     // Method to create the menu bar
     private void createMenuBar(Stage stage) {
@@ -134,44 +139,52 @@ public abstract class BoardView extends BorderPane {
         // Set actions for menu items
         menuItemExit.setOnAction(action -> handleExit());
         menuItemNew.setOnAction(action -> handleNew());
-        menuItemOpen.setOnAction(action -> handleOpen(stage));
+        menuItemOpen.setOnAction(action -> {
+            try {
+                handleOpen(stage);
+            } catch (FileNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+        });
         menuItemSave.setOnAction(action -> handleSave(stage));
     }
 
     // Method to handle exit action
     private void handleExit() {
-        if (BoardViewModel.isChanged()) {
+        if (boardViewModel.isChanged()) {
             if (SaveConfirm.showDialog() == SaveConfirm.Response.CANCEL) {
                 return;
             }
-            BoardViewModel.setChanged(false);
+            boardViewModel.setChanged(false);
         }
         BoardViewModel.exitMenu();
     }
 
-    // Method to handle new action
+    // Method to handle new grid
     private void handleNew() {
-        if (BoardViewModel.isChanged()) {
+        if (boardViewModel.isChanged()) {
             if (SaveConfirm.showDialog() == SaveConfirm.Response.CANCEL) {
                 return;
             }
-            BoardViewModel.setChanged(false);
+            boardViewModel.setChanged(false);
         }
+        NewGridView newGridView = new NewGridView(boardViewModel);
         newGridView.showDialog(this);
     }
 
     // Method to handle open action
-    private void handleOpen(Stage stage) {
-        if (BoardViewModel.isChanged()) {
+    private void handleOpen(Stage stage) throws FileNotFoundException {
+        if (boardViewModel.isChanged()) {
             if (SaveConfirm.showDialog() == SaveConfirm.Response.CANCEL) {
                 return;
             }
-            BoardViewModel.setChanged(false);
+            boardViewModel.setChanged(false);
         }
         FileChooser fileChooser = new FileChooser();
         File selectedFile = fileChooser.showOpenDialog(stage);
         if (selectedFile != null) {
             boardViewModel.openBoard(selectedFile);
+            refresh();
         }
     }
 
@@ -180,9 +193,10 @@ public abstract class BoardView extends BorderPane {
         FileChooser fileChooser = new FileChooser();
         File selectedFile = fileChooser.showSaveDialog(stage);
 
-        Grid grid = boardViewModel.getGrid();
-        GridViewModel gvm = boardViewModel.getGridVM();
+        Grid grid = boardViewModel.getBoard().getGrid();
+        GridViewModel gvm = boardViewModel.getGridViewModel();
         gvm.saveMenu(grid, selectedFile);
+        boardViewModel.setChanged(false);
     }
 
     // Method to create the header
@@ -240,7 +254,7 @@ public abstract class BoardView extends BorderPane {
     // Method to define play button action
     public void actionBtnPlay() {
         btnPlay.setOnAction(action -> {
-            if (BoardViewModel.isChanged()) {
+            if (boardViewModel.isChanged()) {
                 if (SaveConfirm.showDialog() == SaveConfirm.Response.CANCEL) {
                     return;
                 }

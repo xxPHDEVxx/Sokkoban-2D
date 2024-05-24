@@ -9,14 +9,16 @@ import sokoban.model.*;
 import sokoban.view.ToolView;
 
 public class ToolViewModel {
-    private static ToolView toolView;
-
     private static GameElement toolSelected;
+    private BoardViewModel boardViewModel;
 
-    public ToolViewModel(ToolView toolView) {
-        this.toolView = toolView;
+    public ToolViewModel(BoardViewModel boardViewModel) {
+        this.boardViewModel = boardViewModel;
     }
 
+    public void gridChanged(){
+        boardViewModel.setChanged(true);
+    }
     public  static void setToolSelected(GameElement toolSelected) {
         ToolViewModel.toolSelected = toolSelected;
     }

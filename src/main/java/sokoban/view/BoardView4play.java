@@ -24,7 +24,6 @@ public class BoardView4play extends BoardView {
     private VBox headerPlay = new VBox();
     private Button btnFinish = new Button("Finish");
     private Button btnMushroom = new Button("Show mushroom");
-    private Button btnHideMushroom = new Button("Hide mushroom");
     private GridView4Play gridView;
 
     // Constructeur de la vue de jeu
@@ -130,9 +129,17 @@ public class BoardView4play extends BoardView {
     // Configuration du bouton "Finish"
     private void setupFinishButton(BoardViewModel boardViewModel, Stage primaryStage) {
         btnFinish.setOnAction(action -> {
-            boardViewModel.getBoard().setGrid(boardViewModel.getSaveGridDesign());
+            GameAgain();
             new BoardView4Design(primaryStage, boardViewModel);
+            boardViewModel.moveCountProperty().set(0);
         });
+    }
+
+    public void GameAgain(){
+        boardViewModel.endGame();
+        boardViewModel.goToDesign();
+        boardViewModel.configureBindings();
+        boardViewModel.setChanged(false);
     }
 
     // Configuration bouton "show mushroom"

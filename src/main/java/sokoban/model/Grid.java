@@ -11,8 +11,8 @@ import java.util.List;
 
 public abstract class Grid {
      // Grid dimensions
-     protected static int GRID_WIDTH = 15;
-     protected static int GRID_HEIGHT = 10;
+     protected int gridWidth = 15;
+     protected int gridHeight = 10;
 
      // Matrix holding the cells of the grid
      protected  Cell[][] matrix;
@@ -30,7 +30,7 @@ public abstract class Grid {
       * Copies the contents of another Grid4Design object into this one.
       * @param copy The grid to copy from.
       */
-     public void copyFill(Grid copy) {
+     public void copy(Grid copy) {
           // Check if dimensions match
           if (this.getGridHeight() != copy.getGridHeight() || this.getGridWidth() != copy.getGridWidth()) {
                throw new IllegalArgumentException("Grid dimensions do not match.");
@@ -55,8 +55,8 @@ public abstract class Grid {
      }
 
      // Getters for grid dimensions
-     public static int getGridWidth() { return GRID_WIDTH; }
-     public static int getGridHeight() { return GRID_HEIGHT; }
+     public int getGridWidth() { return gridWidth; }
+     public int getGridHeight() { return gridHeight; }
 
      /**
       * Returns the value property of the cell at the specified position.
@@ -68,9 +68,34 @@ public abstract class Grid {
           return matrix[line][col].valueProperty();
      }
 
-     abstract void put(int line, int col, GameElement element);
+    protected boolean addElementToCell(Cell cell, GameElement element) {
+        if (element instanceof Box) {
+            cell.addElement(new Box());
+            return true;
+        } else if (element instanceof Player) {
+            cell.addElement(new Player());
+            return true;
+        } else if (element instanceof Wall) {
+            cell.addElement(new Wall());
+            return true;
+        } else if (element instanceof Goal) {
+            cell.addElement(new Goal());
+            return true;
+        } else if (element instanceof Mushroom) {
+            cell.addElement(new Mushroom());
+            return true;
+        } else {
+            if (!(cell.values.stream().allMatch(item -> item instanceof Ground))) {
+                cell.addElement(new Ground());
+                return true;
+            }
+        }
+        return true;
+    }
 
      abstract void remove(int line, int col, GameElement element);
+     abstract void put(int line, int col, GameElement element);
+     abstract void resize(int width, int height);
 
     /**
      * Returns the list of game elements at the specified position.
@@ -81,9 +106,6 @@ public abstract class Grid {
     public ObservableList<GameElement> getValues(int line, int col) {
         return matrix[line][col].valueProperty();
     }
-    public Cell getCell(int i, int j){
-        return matrix[i][j];
-    }
 
     /**
      * Checks if the specified position is valid within the grid.
@@ -92,7 +114,7 @@ public abstract class Grid {
      * @return True if the position is valid, false otherwise.
      */
     public boolean isValidPosition(int line, int col) {
-        return line >= 0 && line < GRID_HEIGHT && col >= 0 && col < GRID_WIDTH;
+        return line >= 0 && line < gridHeight && col >= 0 && col < gridWidth;
     }
 
     public void setFilledCellsCount() {
