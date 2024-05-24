@@ -1,9 +1,14 @@
 @startuml
-
+package Sokoban {
 skinparam Shadowing false               /' Désactive l'effet d'ombre sur les éléments '/
 skinparam classAttributeIconSize 0      /' Taille des icônes d'attribut de classe (ici 0 pour les cacher) '/
 skinparam defaultFontName Consolas      /' Utilisation de la police Consolas par défaut '/
 !pragma useIntermediatePackages false   /' Désactive l'utilisation de packages intermédiaires '/
+
+class Sokoban.SokobanApp{
+    +start()
+    +main()
+ }
 
 class javafx.scene.layout.BorderPane {
     -Label
@@ -28,7 +33,6 @@ class Model.Board{
     -CountPlayerOk = booleanBinding
     -CountGoalOk = booleanBinding
     -CountGoalBoxOK = booleanBinding
-    -grid : Grid
     -rulesOK : BooleanBinding
     +maxFilledCells()
     +play(int, int,cellvalue)
@@ -42,17 +46,27 @@ class Model.Board{
     +getRulesOk()
     +ConvertSymbolToCellValue(char)
 }
-enum Model.Direction{}
-enum Model.CellValue{
-    -Wall
-    -Player
-    -Ground
-    -Goal
-    -Box
-    -PlayerOnGoal
-    -BoxOnGoal
+
+enum Model.Direction{
 }
-class Model.Grid{
+class Model.Grid4Play{
+}
+class Model.Grid4Design{
+}
+class Model.Wall{
+}
+class Model.Player{
+}
+class Model.Box{
+}
+class Model.Goal{
+}
+class Model.Mushroom{
+}
+class Model.ground{
+}
+
+abstract class Model.Grid{
     -GridWidth = int
     -GridHeight = int
     -Cell4design = matrix
@@ -64,10 +78,9 @@ class Model.Grid{
     +isValidPosition()
     +setValue()
 }
-class Model.Tool{
-    +value()
-    }
+
 abstract class Model.Cell{
+    -value
     +{abstract} getValue()
     +{abstract} setValue()
     +{abstract}isEmpty()
@@ -117,7 +130,7 @@ class View.BoardView4Play{
     +createHeaderPlay()
     +actionBtnFinish()
 }
-class View.CellView{
+abstract class View.CellView{
     -Items = Image
     -ViewModel = CellViewModel
     -WidthProperty = DoubleBinding
@@ -127,10 +140,12 @@ class View.CellView{
     +hoverChange()
     +refresh()
 }
-class View.GridView{
-    -Padding = int
-    -Width = int
-    -Height = int
+abstract class View.GridView{
+    -GridWidth = int
+    -GridHeight = int
+    -BoardWidth = doublebinding
+    -BoardHeight = doublebinding
+    -GridViewModel
 }
 class View.NewGridView{
     +showDialog()
@@ -148,11 +163,13 @@ class View.ToolView{
     +determineTool(ImageView)
 }
 
+class Model.GridState{
+    - BoardHistory
+    - CurrentIndex = int
+}
+
 class ViewModel.BoardViewModel {
-    -GridViewModel = GridViewModel
     -board = Board
-    -isChanged = BooleanProperty
-    -moveCount = LongProperty
     +getGridViewModel()
     +filledCellsCountProperty()
     +ItemsCountProperty()
@@ -167,6 +184,8 @@ class ViewModel.BoardViewModel {
     +findPlayerCell()
     +checkPush()
     +incrementMoveCount()
+    +Undo()
+    +Redo()
 }
 class ViewModel.CellViewModel {
     -Board = board
@@ -194,51 +213,68 @@ class ViewModel.ToolViewModel {
     +setToolSelected(CellValue)
     +getToolSelected()
 }
+abstract class Model.gameElement{
+    -image
+    +getImage()
+    +setImage()
+    +copy()
+}
+class View.CellView4Design{
+}
+class View.CellView4Play{
+}
+class View.GridView4Design{
+}
+class View.GridView4Design{
+}
 
-Cell <|.. Cell4Design
-Cell <|.. Cell4Play
-BoardView <|.. BoardView4Design
-BoardView <|.. BoardView4Play
-BoardView o-- SaveConfirm
 
-Board *-- Grid: IsComposedBy
-Board *-- Tool: IsComposedBy
-Grid o-- Cell : use
+gameElement <|-- Wall
+gameElement <|-- ground
+gameElement <|-- Box
+gameElement <|-- Model.Mushroom
+gameElement <|-- Model.Goal
+gameElement <|-- Model.Player
+Grid <|-- Grid4Play
+Grid <|-- Model.Grid4Design
+Cell <|-- Model.Cell4Design
+Cell <|-- Model.Cell4Play
+CellView <|-- View.CellView4Design
+CellView <|-- View.CellView4Play
+View.BoardView <|-- View.BoardView4Design
+View.BoardView <|-- View.BoardView4Play
+View.GridView <|-- View.GridView4Design
+View.GridView <|-- View.GridView4Play
 
-BoardView *-- GridView : isComposedBy
-BoardView4Design *-- ToolView : isComposedBy
-GridView *-- CellView : contains
-BoardView o-- NewGridView
+BoardView <|-- BorderPane
+CellView <|-- StackPane
+GridView <|-- GridPane
+ToolView <|-- FlowPane
+SokobanApp ..> View.BoardView4Design : <<create>>
+SokobanApp ..> ViewModel.BoardViewModel : <<create>>
+SokobanApp ..> Model.Board : <<create>>
 
+BoardViewModel 	*-- GridViewModel
+BoardViewModel 	*-- GridState
+BoardViewModel 	*-- Board
+BoardView ..> ViewModel.BoardViewModel : <<use>>
+GridView ..> ViewModel.GridViewModel : <<use>>
+CellView ..> CellViewModel : <<use>>
 
-BoardViewModel o-- CellViewModel : use
-CellViewModel o-- GridViewModel : use
-BoardViewModel o-- GridViewModel : use
+Grid ..> gameElement
+Grid ..> Cell
+Board ..> Grid
+Board ..> Model.Direction
+Board ..> GridState
 
-BorderPane <|.. BoardView
-StackPane <|.. CellView
-GridPane <|.. GridView
-FlowPane <|.. ToolView
-
-Board o-- CellViewModel : use
-Board o-- GridViewModel : use
-Board o-- BoardViewModel : use
-BoardView4Play o-- CellView : use
-BoardView o-- ToolView : use
-
-ToolView o-- ToolViewModel : use
-BoardViewModel o-- BoardView
-BoardViewModel o-- ToolView
-BoardViewModel o-- GridView
-BoardViewModel o-- SaveConfirm
-BoardViewModel o-- NewGridView
-CellViewModel o-- CellView
-CellViewModel o-- GridView
-GridViewModel o-- BoardView
-GridViewModel o-- SaveConfirm
-GridViewModel o-- GridView
-ToolViewModel o-- ToolView
-ToolViewModel o-- GridView
-ToolViewModel o-- CellView
-
+BoardViewModel ..> CellViewModel
+GridViewModel ..> CellViewModel
+BoardViewModel ..> ViewModel.ToolViewModel
+BoardView o-- ToolView
+BoardView o-- GridView
+View.CellView4Design ..> View.GridView4Design
+View.CellView4Play ..> View.GridView4Play
+BoardView ..> View.SaveConfirm
+BoardView ..> View.NewGridView
 @enduml
+}
