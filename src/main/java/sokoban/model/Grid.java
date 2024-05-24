@@ -69,6 +69,8 @@ public abstract class Grid {
      }
 
     protected boolean addElementToCell(Cell cell, GameElement element) {
+         List<GameElement> cellItems = cell.values;
+
         if (element instanceof Box) {
             cell.addElement(new Box());
             return true;
@@ -85,7 +87,7 @@ public abstract class Grid {
             cell.addElement(new Mushroom());
             return true;
         } else {
-            if (!(cell.values.stream().allMatch(item -> item instanceof Ground))) {
+            if (!(cell.values.stream().allMatch(item -> item instanceof Ground)) || cellItems.isEmpty()) {
                 cell.addElement(new Ground());
                 return true;
             }
@@ -95,7 +97,6 @@ public abstract class Grid {
 
      abstract void remove(int line, int col, GameElement element);
      abstract void put(int line, int col, GameElement element);
-     abstract void resize(int width, int height);
 
     /**
      * Returns the list of game elements at the specified position.

@@ -7,7 +7,6 @@ import sokoban.viewmodel.BoardViewModel;
 import sokoban.viewmodel.GridViewModel;
 
 public abstract class GridView extends GridPane {
-    protected final int PADDING = 20;
     protected int gridWidth;
     protected int gridHeight;
     protected DoubleBinding boardWidth;
@@ -20,6 +19,5 @@ public abstract class GridView extends GridPane {
         this.boardHeight = gridHeight;
         this.gridWidth = gridViewModel.gridWidth();
         this.gridHeight = gridViewModel.gridHeight();
-        setPadding(new Insets(PADDING));
     }
 }

@@ -10,10 +10,8 @@ import sokoban.view.ToolView;
 
 public class ToolViewModel {
     private static GameElement toolSelected;
-    private BoardViewModel boardViewModel;
 
-    public ToolViewModel(BoardViewModel boardViewModel) {
-        this.boardViewModel = boardViewModel;
+    public ToolViewModel(){
     }
     public  static void setToolSelected(GameElement toolSelected) {
         ToolViewModel.toolSelected = toolSelected;

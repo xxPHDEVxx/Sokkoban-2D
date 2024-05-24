@@ -14,13 +14,12 @@ public class GridView4Play extends GridView{
         //taille de chaque cellule
         DoubleBinding cellWidth = boardWidth
                 .divide(gridWidth);
-
         DoubleBinding cellHeight = boardHeight
                 .divide(gridHeight);
 
         // Remplissage de la grille
-        for (int i = 0; i < gridViewModel.gridHeight(); ++i) {
-            for (int j = 0; j < gridViewModel.gridWidth(); ++j) {
+        for (int i = 0; i < gridHeight; ++i) {
+            for (int j = 0; j < gridWidth; ++j) {
                 CellView4Play cellView = new CellView4Play(gridViewModel.getCellViewModel(i, j), cellWidth, cellHeight);
                 add(cellView, j, i); // lignes/colonnes inversées dans gridpane
             }
