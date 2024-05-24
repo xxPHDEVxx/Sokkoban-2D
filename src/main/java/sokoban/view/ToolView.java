@@ -10,14 +10,16 @@ import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import sokoban.viewmodel.BoardViewModel;
 import sokoban.viewmodel.ToolViewModel;
 import sokoban.model.*;
 
 public class ToolView extends FlowPane {
 
     private ToolViewModel viewModel;
+    private VBox imageContainer;
+
 
     private static final Image[] images = {
             new Image("ground.png"),
@@ -29,18 +31,20 @@ public class ToolView extends FlowPane {
 
     public ToolView(ToolViewModel viewModel) {
         this.viewModel = viewModel;
-        layoutControls();
+
+        imageContainer = new VBox(20); // 20 pixels de distance fixe entre les images
+        imageContainer.setAlignment(Pos.CENTER);
+        getChildren().add(imageContainer);
 
         for (Image image : images) {
             ImageView imageView = createImageView(image);
             addHoverHandler(imageView);
             dragAndRoll(imageView);
             setToolEventHandlers(imageView);
-            getChildren().add(imageView);
-            imageView.fitHeightProperty().bind(this.heightProperty().multiply(0.3));
-            imageView.fitWidthProperty().bind(this.widthProperty().multiply(0.3));
+            imageContainer.getChildren().add(imageView);
         }
 
+        layoutControls();
     }
 
     private void layoutControls() {
@@ -56,6 +60,7 @@ public class ToolView extends FlowPane {
         // Liaison des propriétés de largeur et de hauteur des ImageView à la taille du ToolView
         imageView.fitWidthProperty().bind(this.widthProperty().multiply(0.4)); // 40% de la largeur du ToolView
         imageView.fitHeightProperty().bind(this.heightProperty().multiply(0.4)); // 40% de la hauteur du ToolView
+
         return imageView;
     }
 

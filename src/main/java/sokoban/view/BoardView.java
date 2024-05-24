@@ -2,20 +2,19 @@ package sokoban.view;
 
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.DoubleBinding;
-import javafx.beans.property.DoubleProperty;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import sokoban.model.Board;
 import sokoban.model.Grid;
 import sokoban.viewmodel.BoardViewModel;
 import sokoban.viewmodel.GridViewModel;
@@ -44,6 +43,7 @@ public abstract class BoardView extends BorderPane {
     private final MenuItem menuItemOpen = new MenuItem("Open...");
     private final MenuItem menuItemSave = new MenuItem("Save As...");
     private final MenuItem menuItemExit = new MenuItem("Exit...");
+    private final HBox boxBtn = new HBox();
     private final HBox boardGame = new HBox();
     protected final int SCENE_MIN_WIDTH = 1080;
     protected final int SCENE_MIN_HEIGHT = 800;
@@ -70,24 +70,26 @@ public abstract class BoardView extends BorderPane {
     // Method to start the application
     public void start(Stage stage) {
         configMainComponents(stage);
-
-        boardGame.getChildren().addAll(toolView, this);
-        scene = new Scene(vbox, SCENE_MIN_WIDTH, SCENE_MIN_HEIGHT);
+        scene = new Scene(boardGame, SCENE_MIN_WIDTH, SCENE_MIN_HEIGHT);
 
         createGrid(scene);
-        vbox.getChildren().add(boardGame);
+        boardGame.getChildren().addAll(this);
+        this.setLeft(toolView);
 
         // Integration du bouton play
-        HBox boxBtn = new HBox();
-        boxBtn.setAlignment(Pos.CENTER);
+        this.setBottom(boxBtn);
         boxBtn.setPadding(new Insets(10));
         boxBtn.getChildren().add(btnPlay);
-        vbox.getChildren().add(boxBtn);
+        boxBtn.setAlignment(Pos.CENTER);
+        btnPlay.setAlignment(Pos.CENTER);
+        setTop(vbox);
+
 
         stage.setScene(scene);
         stage.show();
     }
     private void layoutControls() {
+        vbox.setPadding(new Insets(30));
         responsiveBox();
         responsiveLabel();
     }
@@ -102,14 +104,6 @@ public abstract class BoardView extends BorderPane {
                         .otherwise("Sokoban")
         );
 
-        // Modifier le titre du stage en fonction de BoardView4Play et de la propriété isChanged
-        if (this instanceof BoardView4play) {
-            stage.titleProperty().bind(
-                    Bindings.when(boardViewModel.isChangedProperty())
-                            .then("Jeu(*)")
-                            .otherwise("Jeu")
-            );
-        }
 
         createMenuBar(stage);
         createHeader();
@@ -122,7 +116,6 @@ public abstract class BoardView extends BorderPane {
 
         gridWidth = scene.widthProperty().multiply(0.75);
         gridHeight = scene.heightProperty().multiply(0.6);
-
 
         gridView = new GridView4Design(boardViewModel.getGridViewModel(), gridWidth, gridHeight);
 
@@ -248,23 +241,34 @@ public abstract class BoardView extends BorderPane {
 
     }
 
-    public void responsiveBox(){
+    private void responsiveBox(){
         // Liaison de la largeur de toolView à 20% de la largeur de boardGame
-        toolView.prefWidthProperty().bind(boardGame.widthProperty().multiply(0.15));
+        toolView.prefWidthProperty().bind(this.widthProperty().multiply(0.15));
+
+        VBox.setVgrow(this, Priority.ALWAYS);
+        this.setMaxHeight(Integer.MAX_VALUE);
+        VBox.setVgrow(boxBtn, Priority.ALWAYS);
+        boxBtn.setMaxHeight(Integer.MAX_VALUE);
+        HBox.setHgrow(this, Priority.ALWAYS);
+        HBox.setHgrow(toolView, Priority.ALWAYS);
+        toolView.setMaxWidth(Integer.MAX_VALUE);
+        this.setMaxWidth(Integer.MAX_VALUE);
+
 
         // Liaison de la largeur de boardView à 80% de la largeur de boardGame
-        this.prefWidthProperty().bind(boardGame.widthProperty().multiply(0.8));
+        //this.prefWidthProperty().bind(boardGame.widthProperty().multiply(0.8));
+        //this.prefHeightProperty().bind(boardGame.heightProperty().multiply(0.7));
 
         // Liaison de la hauteur de boardGame à la hauteur de la scène moins la hauteur de vbox
-        boardGame.prefHeightProperty().bind(scene.heightProperty().subtract(vbox.heightProperty()));
-        boardGame.prefWidthProperty().bind(scene.widthProperty().subtract(vbox.widthProperty()));
+        //boardGame.prefHeightProperty().bind(scene.heightProperty().subtract(vbox.heightProperty()));
+        //boardGame.prefWidthProperty().bind(scene.widthProperty().subtract(vbox.widthProperty()));
 
         // Liaison de la largeur de vbox à la largeur de la scène moins la largeur de toolView
-        vbox.prefWidthProperty().bind(scene.widthProperty().subtract(toolView.widthProperty()));
-        vbox.prefHeightProperty().bind(scene.heightProperty().subtract(toolView.heightProperty()));
+        //vbox.prefWidthProperty().bind(scene.widthProperty().subtract(toolView.widthProperty()));
+        //vbox.prefHeightProperty().bind(scene.heightProperty().subtract(toolView.heightProperty()));
     }
 
-    public void responsiveLabel(){
+    private void responsiveLabel(){
 
         cellCountLabel.fontProperty().bind(Bindings.createObjectBinding(() ->
                         Font.font("Verdana", FontWeight.BOLD, boxCellCount.getWidth() / 50),
@@ -285,7 +289,7 @@ public abstract class BoardView extends BorderPane {
                         Font.font("Verdana", boxRules.getWidth() / 70),
                 boxRules.widthProperty()));
         errCountBoxGoal.fontProperty().bind(Bindings.createObjectBinding(() ->
-                        Font.font("Verdana", boxRules.getWidth() / 60),
+                        Font.font("Verdana", boxRules.getWidth() / 70),
                 boxRules.widthProperty()));
     }
 
@@ -298,19 +302,20 @@ public abstract class BoardView extends BorderPane {
     }
 
     // Method to define play button action
-    public void actionBtnPlay() {
+    private void actionBtnPlay() {
         btnPlay.setOnAction(action -> {
             if (boardViewModel.isChanged()) {
                 if (SaveConfirm.showDialog() == SaveConfirm.Response.CANCEL) {
                     return;
                 }
+                boardViewModel.setChanged(false);
             }
             playGame();
         });
     }
 
     // Method to start the game
-    public void playGame() {
+    private void playGame() {
         if (boardViewModel.rulesOKProperty().get()) {
             startGame(primaryStage);
         }

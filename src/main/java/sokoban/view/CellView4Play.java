@@ -12,13 +12,6 @@ public class CellView4Play extends CellView{
     }
 
     private void configureBindings() {
-        // Configuration des liaisons de taille pour les images
-        imageView.fitWidthProperty().bind(widthProperty);
-        imageView.fitHeightProperty().bind(heightProperty);
-        midImageView.fitWidthProperty().bind(widthProperty);
-        midImageView.fitHeightProperty().bind(heightProperty);
-        topImageView.fitWidthProperty().bind(widthProperty);
-        topImageView.fitHeightProperty().bind(heightProperty);
 
 
         // Ajout des composants visuels au StackPane

@@ -25,19 +25,19 @@ public class BoardView4play extends BoardView {
     private Button btnFinish = new Button("Finish");
     private Button btnMushroom = new Button("Show mushroom");
     private GridView4Play gridView;
+    private Scene sceneLvl;
 
     // Constructeur de la vue de jeu
     public BoardView4play(Stage primaryStage, GridView4Play gridView, BoardViewModel boardViewModel) {
         super(primaryStage, boardViewModel);
         this.gridView = gridView;
         this.primaryStage = primaryStage;
-        primaryStage.setScene(gridView.getScene());
-        primaryStage.show();
         initialize();
         configureScene(primaryStage);
         createHeaderPlay();
         setupFinishButton(boardViewModel, primaryStage);
         showMushroom();
+        layoutControls();
     }
 
     // Initialisation des composants de la vue
@@ -67,19 +67,29 @@ public class BoardView4play extends BoardView {
 
     // Configuration de la scène et des événements clavier
     private void configureScene(Stage playStage) {
-        Scene sceneLevel = new Scene(boardLvl, SCENE_MIN_WIDTH, SCENE_MIN_HEIGHT);
-        playStage.setScene(sceneLevel);
+        sceneLvl = new Scene(boardLvl, SCENE_MIN_WIDTH, SCENE_MIN_HEIGHT);
+        playStage.setScene(sceneLvl);
 
         // Assurer que le composant prend le focus lors de l'affichage
-        sceneLevel.getRoot().setFocusTraversable(true);
+        sceneLvl.getRoot().setFocusTraversable(true);
         playStage.showingProperty().addListener((obs, wasShowing, isNowShowing) -> {
             if (isNowShowing) {
-                sceneLevel.getRoot().requestFocus();
+                sceneLvl.getRoot().requestFocus();
             }
         });
 
         // Gestion des événements clavier
-        sceneLevel.addEventFilter(KeyEvent.KEY_PRESSED, this::handleKeyPress);
+        sceneLvl.addEventFilter(KeyEvent.KEY_PRESSED, this::handleKeyPress);
+    }
+
+    public void layoutControls(){
+        responsiveBox();
+    }
+    private void responsiveBox(){
+        // Liaison de la hauteur de boardGame à la hauteur de la scène moins la hauteur de vbox
+        boardLvl.prefHeightProperty().bind(sceneLvl.heightProperty());
+        boardLvl.prefWidthProperty().bind(sceneLvl.widthProperty());
+
     }
 
     // Méthode pour gérer les pressions des touches
