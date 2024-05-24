@@ -26,8 +26,8 @@ public abstract class CellView extends StackPane {
     protected static final Image goal = new Image("goal.png");
 
     protected final CellViewModel viewModel;
-    protected final DoubleBinding widthProperty;
-    protected final DoubleBinding heightProperty;
+    protected final DoubleBinding width;
+    protected final DoubleBinding height;
 
     // Panneau principal pour empiler les éléments de la cellule
     protected StackPane stackPane = new StackPane();
@@ -41,12 +41,11 @@ public abstract class CellView extends StackPane {
      *
      * @param viewModel le modèle de vue associé à cette cellule
      * @param cellWidthProperty la propriété de largeur de la cellule
-     * @param cellHeightProperty la propriété de hauteur de la cellule
      */
     public CellView(CellViewModel viewModel, DoubleBinding cellWidthProperty, DoubleBinding cellHeightProperty) {
         this.viewModel = viewModel;
-        this.widthProperty = cellWidthProperty;
-        this.heightProperty = cellHeightProperty;
+        this.width = cellWidthProperty;
+        this.height = cellHeightProperty;
         setAlignment(Pos.CENTER);
         init();
 
@@ -61,8 +60,8 @@ public abstract class CellView extends StackPane {
         if (numberLabel != null && stackPane.getChildren().isEmpty()) {
             // Lier la taille de la police du label à la plus petite dimension de la cellule
             numberLabel.fontProperty().bind(Bindings.createObjectBinding(() ->
-                            Font.font("Verdana", Math.min(widthProperty.get(), heightProperty.get()) / 2),
-                    widthProperty, heightProperty));
+                            Font.font("Verdana", Math.min(width.get(), width.get()) / 2),
+                    width));
             stackPane.getChildren().add(numberLabel);
             StackPane.setAlignment(numberLabel, Pos.CENTER);
         }

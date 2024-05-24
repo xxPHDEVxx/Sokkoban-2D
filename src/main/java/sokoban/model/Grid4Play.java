@@ -18,15 +18,6 @@ public class Grid4Play extends Grid{
     }
 
     public void put(int line, int col, GameElement element) {
-        Cell cell = matrix[line][col];
-
-        // Insert a new instance of the element based on specific rules
-        if (addElementToCell(cell, element)) {
-        }
-    }
-
-    @Override
-    void resize(int width, int height) {
     }
 
     @Override

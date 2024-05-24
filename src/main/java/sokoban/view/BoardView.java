@@ -2,7 +2,6 @@ package sokoban.view;
 
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.DoubleBinding;
-import javafx.beans.property.DoubleProperty;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -15,7 +14,6 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import sokoban.model.Board;
 import sokoban.model.Grid;
 import sokoban.viewmodel.BoardViewModel;
 import sokoban.viewmodel.GridViewModel;
@@ -45,7 +43,7 @@ public abstract class BoardView extends BorderPane {
     private final MenuItem menuItemSave = new MenuItem("Save As...");
     private final MenuItem menuItemExit = new MenuItem("Exit...");
     private final HBox boardGame = new HBox();
-    protected final int SCENE_MIN_WIDTH = 1080;
+    protected final int SCENE_MIN_WIDTH = 1000;
     protected final int SCENE_MIN_HEIGHT = 800;
     private final HBox box = new HBox();
     protected Scene scene;
@@ -60,10 +58,11 @@ public abstract class BoardView extends BorderPane {
     public BoardView(Stage primaryStage, BoardViewModel boardViewModel) {
         this.primaryStage = primaryStage;
         this.boardViewModel = boardViewModel;
-        toolViewModel = new ToolViewModel(boardViewModel);
-        toolView = new ToolView(toolViewModel);
+        toolViewModel = new ToolViewModel();
+        toolView = new ToolView();
         start(this.primaryStage);
-
+        setSizes();
+        createGrid();
         layoutControls();
     }
 
@@ -74,7 +73,6 @@ public abstract class BoardView extends BorderPane {
         boardGame.getChildren().addAll(toolView, this);
         scene = new Scene(vbox, SCENE_MIN_WIDTH, SCENE_MIN_HEIGHT);
 
-        createGrid(scene);
         vbox.getChildren().add(boardGame);
 
         // Integration du bouton play
@@ -83,7 +81,6 @@ public abstract class BoardView extends BorderPane {
         boxBtn.setPadding(new Insets(10));
         boxBtn.getChildren().add(btnPlay);
         vbox.getChildren().add(boxBtn);
-
         stage.setScene(scene);
         stage.show();
     }
@@ -109,19 +106,14 @@ public abstract class BoardView extends BorderPane {
     }
 
     // Method to create the grid
-    public void createGrid(Scene scene) {
-
-        gridWidth = scene.widthProperty().multiply(0.75);
-        gridHeight = scene.heightProperty().multiply(0.6);
-
-
+    public void createGrid() {
         gridView = new GridView4Design(boardViewModel.getGridViewModel(), gridWidth, gridHeight);
-
-        // Définir la largeur et la hauteur de la grid en fonction de la largeur calculée
-        gridView.prefWidthProperty().bind(gridWidth);
-        gridView.prefHeightProperty().bind(gridHeight);
-
         setCenter(gridView);
+    }
+
+    public void setSizes(){
+        gridWidth = vbox.widthProperty().multiply(0.75);
+        gridHeight = vbox.heightProperty().multiply(0.6);
     }
 
 
@@ -243,16 +235,9 @@ public abstract class BoardView extends BorderPane {
         // Liaison de la largeur de toolView à 20% de la largeur de boardGame
         toolView.prefWidthProperty().bind(boardGame.widthProperty().multiply(0.15));
 
-        // Liaison de la largeur de boardView à 80% de la largeur de boardGame
-        this.prefWidthProperty().bind(boardGame.widthProperty().multiply(0.8));
-
         // Liaison de la hauteur de boardGame à la hauteur de la scène moins la hauteur de vbox
-        boardGame.prefHeightProperty().bind(scene.heightProperty().subtract(vbox.heightProperty()));
-        boardGame.prefWidthProperty().bind(scene.widthProperty().subtract(vbox.widthProperty()));
+        boardGame.prefHeightProperty().bind(vbox.heightProperty());
 
-        // Liaison de la largeur de vbox à la largeur de la scène moins la largeur de toolView
-        vbox.prefWidthProperty().bind(scene.widthProperty().subtract(toolView.widthProperty()));
-        vbox.prefHeightProperty().bind(scene.heightProperty().subtract(toolView.heightProperty()));
     }
 
     public void responsiveLabel(){
@@ -282,7 +267,9 @@ public abstract class BoardView extends BorderPane {
 
     // Method to refresh the view
     public void refresh() {
-        createGrid(scene);
+        // Supprimer l'ancienne grille
+        getChildren().remove(gridView);
+        createGrid();
         createHeader();
         box.setAlignment(Pos.CENTER);
         btnPlay.disableProperty().bind(boardViewModel.rulesOKProperty().not());

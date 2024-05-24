@@ -17,8 +17,6 @@ import sokoban.model.*;
 
 public class ToolView extends FlowPane {
 
-    private ToolViewModel viewModel;
-
     private static final Image[] images = {
             new Image("ground.png"),
             new Image("goal.png"),
@@ -27,8 +25,7 @@ public class ToolView extends FlowPane {
             new Image("box.png")
     };
 
-    public ToolView(ToolViewModel viewModel) {
-        this.viewModel = viewModel;
+    public ToolView() {
         layoutControls();
 
         for (Image image : images) {

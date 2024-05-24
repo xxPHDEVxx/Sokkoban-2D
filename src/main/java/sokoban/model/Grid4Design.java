@@ -57,19 +57,6 @@ public class Grid4Design extends Grid{
         countCell();
     }
 
-    public void resize(int height, int width){
-        matrix = new Cell4Design[height][];
-        for (int i = 0; i < height; ++i) {
-            matrix[i] = new Cell4Design[width];
-            for (int j = 0; j < width; ++j) {
-                matrix[i][j] = new Cell4Design();
-                matrix[i][j].addElement(new Ground());
-            }
-        }
-        setFilledCellsCount();
-        countCell();
-    }
-
     public void put(int line, int col, GameElement element) {
         Cell cell = matrix[line][col];
 

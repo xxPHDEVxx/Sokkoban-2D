@@ -119,7 +119,7 @@ public class BoardViewModel {
      * @param file the file containing the board data
      * @return the opened Grid
      */
-    public Grid openBoard(File file) throws FileNotFoundException {
+    public Grid openBoard(File file){
          return board.open(file);
     }
 

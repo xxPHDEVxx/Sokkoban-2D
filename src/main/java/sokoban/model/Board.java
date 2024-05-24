@@ -67,13 +67,12 @@ public class Board {
     public void put(int line, int col) {
         List<GameElement> cellItems = valueProperty(line, col);
         GameElement selected = ToolViewModel.getToolSelected();
-        int size = cellItems.size();
 
         // Remove existing player if the selected element is a player
         if (selected instanceof Player && isPlayerPlaced()) {
             removeExistingPlayer();
         }
-
+        int size = cellItems.size();
         if (size <= 3) {
             if (cellItems.stream().anyMatch(element -> element instanceof Wall)) {
                 handleWall(line, col, cellItems, selected);
@@ -131,10 +130,11 @@ public class Board {
     }
 
     private void handleGoalAndOther(int line, int col, List<GameElement> cellItems, GameElement selected) {
-        if (selected instanceof Box || selected instanceof Player) {
+        if (selected instanceof Player) {
             removeCellElement(line, col, cellItems.get(cellItems.size() - 1));
             putElement(line, col, selected);
-        } else if (selected instanceof Ground) {
+        }
+        else if (selected instanceof Ground) {
             cellItems.clear();
             putElement(line, col, new Ground());
         } else {
@@ -272,46 +272,57 @@ public class Board {
      * @param file The file to open.
      */
     public Grid open(File file) {
-        int height = getGrid().gridHeight;
-        int width = getGrid().gridWidth;
-        int [] dimensions = calculateGridDimensions(file);
 
-        if (dimensions[0] != width || dimensions[1] != height){
-            setGrid(new Grid4Design(dimensions[0], dimensions[1]));
-            configureBindings();
-        }else {
 
-            // Clear current elements
-            for (int i = 0; i < height; i++) {
-                for (int j = 0; j < width; j++) {
-                    this.valueProperty(i, j).clear();
-                    this.valueProperty(i, j).add(new Ground());
-                }
+        try {
+            if (!file.getName().endsWith(".xsb")) {
+                throw new IllegalArgumentException("Le fichier doit avoir une extension .xsb");
             }
-        }
 
-        try (Scanner scanner = new Scanner(file)) {
-            int row = 0;
-            while (scanner.hasNextLine()) {
-                String line = scanner.nextLine();
-                if (!line.isEmpty()) {
-                    // Iterate over each character in the line
-                    for (int col = 0; col < line.length(); col++) {
-                        char symbol = line.charAt(col);
-                        // Convert character to GameElement and add to the grid
-                        List<GameElement> items = convertSymbolToCellValue(symbol);
-                        grid.put(row, col, items.get(0));
-                        if (items.size() > 1) {
-                            grid.put(row, col, items.get(1));
-                        }
+            int height = getGrid().gridHeight;
+            int width = getGrid().gridWidth;
+            int[] dimensions = calculateGridDimensions(file);
+
+            if (dimensions[0] != width || dimensions[1] != height) {
+                setGrid(new Grid4Design(dimensions[0], dimensions[1]));
+                configureBindings();
+            } else {
+                // Clear current elements
+                for (int i = 0; i < height; i++) {
+                    for (int j = 0; j < width; j++) {
+                        this.valueProperty(i, j).clear();
+                        this.valueProperty(i, j).add(new Ground());
                     }
-                    row++;
                 }
             }
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
+
+            try (Scanner scanner = new Scanner(file)) {
+                int row = 0;
+                while (scanner.hasNextLine()) {
+                    String line = scanner.nextLine();
+                    if (!line.isEmpty()) {
+                        // Iterate over each character in the line
+                        for (int col = 0; col < line.length(); col++) {
+                            char symbol = line.charAt(col);
+                            // Convert character to GameElement and add to the grid
+                            List<GameElement> items = convertSymbolToCellValue(symbol);
+                            grid.put(row, col, items.get(0));
+                            if (items.size() > 1) {
+                                grid.put(row, col, items.get(1));
+                            }
+                        }
+                        row++;
+                    }
+                }
+            } catch (FileNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+
+            configureBindings();
+        } catch (IllegalArgumentException e) {
+            System.out.println("Le fichier doit avoir une extension .xsb");
+            return null; // Ou une autre gestion d'erreur appropriée selon le contexte
         }
-        configureBindings();
         return grid;
     }
 

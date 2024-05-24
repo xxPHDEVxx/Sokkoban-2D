@@ -14,7 +14,6 @@ public class GridView4Play extends GridView{
         //taille de chaque cellule
         DoubleBinding cellWidth = boardWidth
                 .divide(gridWidth);
-
         DoubleBinding cellHeight = boardHeight
                 .divide(gridHeight);
 
