@@ -103,7 +103,7 @@ public abstract class BoardView extends BorderPane {
         );
 
         // Modifier le titre du stage en fonction de BoardView4Play et de la propriété isChanged
-        if (this instanceof BoardView4play) {
+        if (this instanceof BoardView4Play) {
             stage.titleProperty().bind(
                     Bindings.when(boardViewModel.isChangedProperty())
                             .then("Jeu(*)")
@@ -321,7 +321,8 @@ public abstract class BoardView extends BorderPane {
         boardViewModel.saveGridDesign(); // Sauvegarde état actuel de la grille avant de lancer le jeu
         boardViewModel.getBoard().setGrid(boardViewModel.gridGame()); // création et attribution grille de jeu
         GridView4Play gridViewPlay = new GridView4Play(boardViewModel.getGridViewModel(), gridWidth, gridHeight);
-        new BoardView4play(playStage, gridViewPlay, boardViewModel);
+
+        new BoardView4Play(playStage, gridViewPlay, boardViewModel);
         // refresh des cellules
         gridViewPlay.fillGrid(boardViewModel.getGridViewModel(), gridWidth, gridHeight);
     }

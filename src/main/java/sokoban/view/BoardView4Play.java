@@ -14,8 +14,8 @@ import javafx.stage.Stage;
 import sokoban.model.Direction;
 import sokoban.viewmodel.BoardViewModel;
 
-public class BoardView4play extends BoardView {
-
+public class BoardView4Play extends BoardView  {
+    private GridView4Play gridView;
     private Label title = new Label("Score");
     private Label numberOfMovesPlayed = new Label("");
     private Label goal = new Label("");
@@ -24,10 +24,8 @@ public class BoardView4play extends BoardView {
     private VBox headerPlay = new VBox();
     private Button btnFinish = new Button("Finish");
     private Button btnMushroom = new Button("Show mushroom");
-    private GridView4Play gridView;
-
     // Constructeur de la vue de jeu
-    public BoardView4play(Stage primaryStage, GridView4Play gridView, BoardViewModel boardViewModel) {
+    public BoardView4Play(Stage primaryStage, GridView4Play gridView, BoardViewModel boardViewModel) {
         super(primaryStage, boardViewModel);
         this.gridView = gridView;
         this.primaryStage = primaryStage;
