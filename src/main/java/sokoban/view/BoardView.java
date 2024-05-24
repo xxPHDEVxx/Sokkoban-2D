@@ -2,6 +2,7 @@ package sokoban.view;
 
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.DoubleBinding;
+import javafx.beans.property.DoubleProperty;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -14,6 +15,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import sokoban.model.Board;
 import sokoban.model.Grid;
 import sokoban.viewmodel.BoardViewModel;
 import sokoban.viewmodel.GridViewModel;
@@ -34,7 +36,6 @@ public abstract class BoardView extends BorderPane {
     private final Label errBox = new Label("");
     private final Label errCountBoxGoal = new Label("- Number of box and target must be equals.");
     private final VBox vbox = new VBox();
-    private final VBox right = new VBox();
     private final HBox boxCellCount = new HBox();
     private final VBox boxRules = new VBox();
     private final ToolView toolView;
@@ -43,7 +44,6 @@ public abstract class BoardView extends BorderPane {
     private final MenuItem menuItemOpen = new MenuItem("Open...");
     private final MenuItem menuItemSave = new MenuItem("Save As...");
     private final MenuItem menuItemExit = new MenuItem("Exit...");
-    private final HBox boxBtn = new HBox();
     private final HBox boardGame = new HBox();
     protected final int SCENE_MIN_WIDTH = 1080;
     protected final int SCENE_MIN_HEIGHT = 800;
@@ -55,7 +55,6 @@ public abstract class BoardView extends BorderPane {
     protected DoubleBinding gridWidth;
     protected DoubleBinding gridHeight;
     protected VBox boardLvl = new VBox();
-    protected int ratio;
 
     // Constructor to initialize the BoardView
     public BoardView(Stage primaryStage, BoardViewModel boardViewModel) {
@@ -71,36 +70,24 @@ public abstract class BoardView extends BorderPane {
     // Method to start the application
     public void start(Stage stage) {
         configMainComponents(stage);
-        scene = new Scene(boardGame, SCENE_MIN_WIDTH, SCENE_MIN_HEIGHT);
+
+        boardGame.getChildren().addAll(toolView, this);
+        scene = new Scene(vbox, SCENE_MIN_WIDTH, SCENE_MIN_HEIGHT);
 
         createGrid(scene);
-        boardGame.getChildren().addAll(this);
-        this.setLeft(toolView);
+        vbox.getChildren().add(boardGame);
 
         // Integration du bouton play
-        this.setBottom(boxBtn);
+        HBox boxBtn = new HBox();
+        boxBtn.setAlignment(Pos.CENTER);
         boxBtn.setPadding(new Insets(10));
         boxBtn.getChildren().add(btnPlay);
-        boxBtn.setAlignment(Pos.CENTER);
-        btnPlay.setAlignment(Pos.CENTER);
-        setTop(vbox);
-        setRight(right);
-        ratio = boardViewModel.gridWidth() /boardViewModel.gridHeight();
-
+        vbox.getChildren().add(boxBtn);
 
         stage.setScene(scene);
         stage.show();
     }
     private void layoutControls() {
-
-        gridView.setStyle("-fx-border-color: black; -fx-border-width: 2px;");
-        toolView.setStyle("-fx-border-color: green; -fx-border-width: 2px;");
-        boxBtn.setStyle("-fx-border-color: yellow; -fx-border-width: 2px;");
-        vbox.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
-        this.setStyle("-fx-border-color: blue; -fx-border-width: 2px;");
-        boardGame.setStyle("-fx-border-color: grey; -fx-border-width: 2px;");
-
-
         responsiveBox();
         responsiveLabel();
     }
@@ -115,7 +102,6 @@ public abstract class BoardView extends BorderPane {
                         .otherwise("Sokoban")
         );
 
-
         createMenuBar(stage);
         createHeader();
         insertHeader();
@@ -125,10 +111,15 @@ public abstract class BoardView extends BorderPane {
     // Method to create the grid
     public void createGrid(Scene scene) {
 
-        gridWidth = scene.widthProperty().multiply(0.6);
-        gridHeight = gridWidth.divide(boardViewModel.gridWidth() / boardViewModel.gridHeight());
+        gridWidth = scene.widthProperty().multiply(0.75);
+        gridHeight = scene.heightProperty().multiply(0.6);
+
 
         gridView = new GridView4Design(boardViewModel.getGridViewModel(), gridWidth, gridHeight);
+
+        // Définir la largeur et la hauteur de la grid en fonction de la largeur calculée
+        gridView.prefWidthProperty().bind(gridWidth);
+        gridView.prefHeightProperty().bind(gridHeight);
 
         setCenter(gridView);
     }
@@ -248,23 +239,23 @@ public abstract class BoardView extends BorderPane {
 
     }
 
-    private void responsiveBox(){
-
+    public void responsiveBox(){
+        // Liaison de la largeur de toolView à 20% de la largeur de boardGame
+        toolView.prefWidthProperty().bind(boardGame.widthProperty().multiply(0.15));
 
         // Liaison de la largeur de boardView à 80% de la largeur de boardGame
-        //this.prefWidthProperty().bind(boardGame.widthProperty().multiply(0.8));
-        //this.prefHeightProperty().bind(boardGame.heightProperty().multiply(0.7));
+        this.prefWidthProperty().bind(boardGame.widthProperty().multiply(0.8));
 
         // Liaison de la hauteur de boardGame à la hauteur de la scène moins la hauteur de vbox
-        //boardGame.prefHeightProperty().bind(scene.heightProperty().subtract(vbox.heightProperty()));
-        //boardGame.prefWidthProperty().bind(scene.widthProperty().subtract(vbox.widthProperty()));
+        boardGame.prefHeightProperty().bind(scene.heightProperty().subtract(vbox.heightProperty()));
+        boardGame.prefWidthProperty().bind(scene.widthProperty().subtract(vbox.widthProperty()));
 
         // Liaison de la largeur de vbox à la largeur de la scène moins la largeur de toolView
-        //vbox.prefWidthProperty().bind(scene.widthProperty().subtract(toolView.widthProperty()));
-        //vbox.prefHeightProperty().bind(scene.heightProperty().subtract(toolView.heightProperty()));
+        vbox.prefWidthProperty().bind(scene.widthProperty().subtract(toolView.widthProperty()));
+        vbox.prefHeightProperty().bind(scene.heightProperty().subtract(toolView.heightProperty()));
     }
 
-    private void responsiveLabel(){
+    public void responsiveLabel(){
 
         cellCountLabel.fontProperty().bind(Bindings.createObjectBinding(() ->
                         Font.font("Verdana", FontWeight.BOLD, boxCellCount.getWidth() / 50),
@@ -285,7 +276,7 @@ public abstract class BoardView extends BorderPane {
                         Font.font("Verdana", boxRules.getWidth() / 70),
                 boxRules.widthProperty()));
         errCountBoxGoal.fontProperty().bind(Bindings.createObjectBinding(() ->
-                        Font.font("Verdana", boxRules.getWidth() / 70),
+                        Font.font("Verdana", boxRules.getWidth() / 60),
                 boxRules.widthProperty()));
     }
 
@@ -298,20 +289,19 @@ public abstract class BoardView extends BorderPane {
     }
 
     // Method to define play button action
-    private void actionBtnPlay() {
+    public void actionBtnPlay() {
         btnPlay.setOnAction(action -> {
             if (boardViewModel.isChanged()) {
                 if (SaveConfirm.showDialog() == SaveConfirm.Response.CANCEL) {
                     return;
                 }
-                boardViewModel.setChanged(false);
             }
             playGame();
         });
     }
 
     // Method to start the game
-    private void playGame() {
+    public void playGame() {
         if (boardViewModel.rulesOKProperty().get()) {
             startGame(primaryStage);
         }
@@ -322,7 +312,8 @@ public abstract class BoardView extends BorderPane {
         boardViewModel.saveGridDesign(); // Sauvegarde état actuel de la grille avant de lancer le jeu
         boardViewModel.getBoard().setGrid(boardViewModel.gridGame()); // création et attribution grille de jeu
         GridView4Play gridViewPlay = new GridView4Play(boardViewModel.getGridViewModel(), gridWidth, gridHeight);
-        new BoardView4play(playStage, gridViewPlay, boardViewModel);
+
+        new BoardView4Play(playStage, gridViewPlay, boardViewModel);
         // refresh des cellules
         gridViewPlay.fillGrid(boardViewModel.getGridViewModel(), gridWidth, gridHeight);
     }

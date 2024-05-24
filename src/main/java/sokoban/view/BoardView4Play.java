@@ -14,8 +14,8 @@ import javafx.stage.Stage;
 import sokoban.model.Direction;
 import sokoban.viewmodel.BoardViewModel;
 
-public class BoardView4play extends BoardView {
-
+public class BoardView4Play extends BoardView  {
+    private GridView4Play gridView;
     private Label title = new Label("Score");
     private Label numberOfMovesPlayed = new Label("");
     private Label goal = new Label("");
@@ -24,20 +24,18 @@ public class BoardView4play extends BoardView {
     private VBox headerPlay = new VBox();
     private Button btnFinish = new Button("Finish");
     private Button btnMushroom = new Button("Show mushroom");
-    private GridView4Play gridView;
-    private Scene sceneLvl;
-
     // Constructeur de la vue de jeu
-    public BoardView4play(Stage primaryStage, GridView4Play gridView, BoardViewModel boardViewModel) {
+    public BoardView4Play(Stage primaryStage, GridView4Play gridView, BoardViewModel boardViewModel) {
         super(primaryStage, boardViewModel);
         this.gridView = gridView;
         this.primaryStage = primaryStage;
+        primaryStage.setScene(gridView.getScene());
+        primaryStage.show();
         initialize();
         configureScene(primaryStage);
         createHeaderPlay();
         setupFinishButton(boardViewModel, primaryStage);
         showMushroom();
-        layoutControls();
     }
 
     // Initialisation des composants de la vue
@@ -67,29 +65,19 @@ public class BoardView4play extends BoardView {
 
     // Configuration de la scène et des événements clavier
     private void configureScene(Stage playStage) {
-        sceneLvl = new Scene(boardLvl, SCENE_MIN_WIDTH, SCENE_MIN_HEIGHT);
-        playStage.setScene(sceneLvl);
+        Scene sceneLevel = new Scene(boardLvl, SCENE_MIN_WIDTH, SCENE_MIN_HEIGHT);
+        playStage.setScene(sceneLevel);
 
         // Assurer que le composant prend le focus lors de l'affichage
-        sceneLvl.getRoot().setFocusTraversable(true);
+        sceneLevel.getRoot().setFocusTraversable(true);
         playStage.showingProperty().addListener((obs, wasShowing, isNowShowing) -> {
             if (isNowShowing) {
-                sceneLvl.getRoot().requestFocus();
+                sceneLevel.getRoot().requestFocus();
             }
         });
 
         // Gestion des événements clavier
-        sceneLvl.addEventFilter(KeyEvent.KEY_PRESSED, this::handleKeyPress);
-    }
-
-    public void layoutControls(){
-        responsiveBox();
-    }
-    private void responsiveBox(){
-        // Liaison de la hauteur de boardGame à la hauteur de la scène moins la hauteur de vbox
-        boardLvl.prefHeightProperty().bind(sceneLvl.heightProperty());
-        boardLvl.prefWidthProperty().bind(sceneLvl.widthProperty());
-
+        sceneLevel.addEventFilter(KeyEvent.KEY_PRESSED, this::handleKeyPress);
     }
 
     // Méthode pour gérer les pressions des touches
@@ -121,7 +109,6 @@ public class BoardView4play extends BoardView {
     }
 
     private void bindings(){
-        btnFinish.disableProperty().bind(boardViewModel.boxInTargetCountProperty().isEqualTo(boardViewModel.goalCountProperty()).not());
         btnMushroom.disableProperty().bind(boardViewModel.boxInTargetCountProperty().isEqualTo(boardViewModel.goalCountProperty()));
 
         // Ajoute ou retire le filtre d'événements en fonction de la valeur de la liaison
