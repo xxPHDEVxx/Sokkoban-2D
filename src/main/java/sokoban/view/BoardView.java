@@ -15,12 +15,14 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import sokoban.model.Board;
 import sokoban.model.Grid;
 import sokoban.viewmodel.BoardViewModel;
 import sokoban.viewmodel.GridViewModel;
 import sokoban.viewmodel.ToolViewModel;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 
 public abstract class BoardView extends BorderPane {
 
@@ -137,7 +139,13 @@ public abstract class BoardView extends BorderPane {
         // Set actions for menu items
         menuItemExit.setOnAction(action -> handleExit());
         menuItemNew.setOnAction(action -> handleNew());
-        menuItemOpen.setOnAction(action -> handleOpen(stage));
+        menuItemOpen.setOnAction(action -> {
+            try {
+                handleOpen(stage);
+            } catch (FileNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+        });
         menuItemSave.setOnAction(action -> handleSave(stage));
     }
 
@@ -165,7 +173,7 @@ public abstract class BoardView extends BorderPane {
     }
 
     // Method to handle open action
-    private void handleOpen(Stage stage) {
+    private void handleOpen(Stage stage) throws FileNotFoundException {
         if (boardViewModel.isChanged()) {
             if (SaveConfirm.showDialog() == SaveConfirm.Response.CANCEL) {
                 return;
@@ -176,6 +184,7 @@ public abstract class BoardView extends BorderPane {
         File selectedFile = fileChooser.showOpenDialog(stage);
         if (selectedFile != null) {
             boardViewModel.openBoard(selectedFile);
+            refresh();
         }
     }
 
@@ -187,6 +196,7 @@ public abstract class BoardView extends BorderPane {
         Grid grid = boardViewModel.getBoard().getGrid();
         GridViewModel gvm = boardViewModel.getGridViewModel();
         gvm.saveMenu(grid, selectedFile);
+        boardViewModel.setChanged(false);
     }
 
     // Method to create the header

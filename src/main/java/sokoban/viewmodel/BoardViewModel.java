@@ -6,6 +6,7 @@ import javafx.beans.property.*;
 import sokoban.model.*;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.List;
 
 public class BoardViewModel {
@@ -118,8 +119,8 @@ public class BoardViewModel {
      * @param file the file containing the board data
      * @return the opened Grid
      */
-    public void openBoard(File file) {
-         board.open(file);
+    public Grid openBoard(File file) throws FileNotFoundException {
+         return board.open(file);
     }
 
     // Static property to track if the model has changed
@@ -183,7 +184,7 @@ public class BoardViewModel {
 
         // Check if a wall or a mushroom is blocking the way
         if (targetCellItems.stream().anyMatch(element -> element instanceof Wall || element instanceof Mushroom)) {
-            System.out.println("Move invalid: Wall is blocking the way.");
+            System.out.println("Move invalid: something is blocking the way.");
             return false;
         }
 

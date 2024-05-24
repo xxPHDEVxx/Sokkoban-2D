@@ -269,15 +269,23 @@ public class Board {
     /**
      * Opens a file and loads its content into the grid.
      * @param file The file to open.
-     * @return The loaded grid.
      */
     public Grid open(File file) {
+        int height = getGrid().gridHeight;
+        int width = getGrid().gridWidth;
+        int [] dimensions = calculateGridDimensions(file);
 
-        // Clear current elements
-        for (int i = 0; i < this.getGrid().gridHeight; i++) {
-            for (int j = 0; j < this.getGrid().gridWidth; j++) {
-                this.valueProperty(i, j).clear();
-                this.valueProperty(i,j).add(new Ground());
+        if (dimensions[0] != width || dimensions[1] != height){
+            setGrid(new Grid4Design(dimensions[0], dimensions[1]));
+            configureBindings();
+        }else {
+
+            // Clear current elements
+            for (int i = 0; i < height; i++) {
+                for (int j = 0; j < width; j++) {
+                    this.valueProperty(i, j).clear();
+                    this.valueProperty(i, j).add(new Ground());
+                }
             }
         }
 
@@ -304,6 +312,30 @@ public class Board {
         }
         configureBindings();
         return grid;
+    }
+
+    public static int[] calculateGridDimensions(File file) {
+        int maxWidth = 0;
+        int maxHeight = 0;
+
+        try (Scanner scanner = new Scanner(file)) {
+            int currentWidth = 0;
+            int currentHeight = 0;
+
+            while (scanner.hasNextLine()) {
+                String line = scanner.nextLine();
+                if (!line.isEmpty()) {
+                    currentWidth = line.length();
+                    currentHeight++;
+                }
+                maxWidth = Math.max(maxWidth, currentWidth);
+                maxHeight = Math.max(maxHeight, currentHeight);
+            }
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
+        return new int[]{maxWidth, maxHeight};
     }
 
     /**

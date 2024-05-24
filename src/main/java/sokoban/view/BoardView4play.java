@@ -129,12 +129,17 @@ public class BoardView4play extends BoardView {
     // Configuration du bouton "Finish"
     private void setupFinishButton(BoardViewModel boardViewModel, Stage primaryStage) {
         btnFinish.setOnAction(action -> {
-            boardViewModel.endGame();
-            boardViewModel.goToDesign();
-            boardViewModel.configureBindings();
+            GameAgain();
             new BoardView4Design(primaryStage, boardViewModel);
             boardViewModel.moveCountProperty().set(0);
         });
+    }
+
+    public void GameAgain(){
+        boardViewModel.endGame();
+        boardViewModel.goToDesign();
+        boardViewModel.configureBindings();
+        boardViewModel.setChanged(false);
     }
 
     // Configuration bouton "show mushroom"

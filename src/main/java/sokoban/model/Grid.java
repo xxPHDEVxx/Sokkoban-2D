@@ -95,6 +95,7 @@ public abstract class Grid {
 
      abstract void remove(int line, int col, GameElement element);
      abstract void put(int line, int col, GameElement element);
+     abstract void resize(int width, int height);
 
     /**
      * Returns the list of game elements at the specified position.

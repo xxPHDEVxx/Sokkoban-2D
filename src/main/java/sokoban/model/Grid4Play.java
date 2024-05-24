@@ -26,6 +26,11 @@ public class Grid4Play extends Grid{
     }
 
     @Override
+    void resize(int width, int height) {
+    }
+
+    @Override
     void remove(int line, int col, GameElement element) {
     }
+
 }
