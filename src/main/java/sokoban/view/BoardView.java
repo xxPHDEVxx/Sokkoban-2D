@@ -102,15 +102,6 @@ public abstract class BoardView extends BorderPane {
                         .otherwise("Sokoban")
         );
 
-        // Modifier le titre du stage en fonction de BoardView4Play et de la propriété isChanged
-        if (this instanceof BoardView4Play) {
-            stage.titleProperty().bind(
-                    Bindings.when(boardViewModel.isChangedProperty())
-                            .then("Jeu(*)")
-                            .otherwise("Jeu")
-            );
-        }
-
         createMenuBar(stage);
         createHeader();
         insertHeader();

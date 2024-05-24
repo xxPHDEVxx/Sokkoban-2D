@@ -109,7 +109,6 @@ public class BoardView4Play extends BoardView  {
     }
 
     private void bindings(){
-        btnFinish.disableProperty().bind(boardViewModel.boxInTargetCountProperty().isEqualTo(boardViewModel.goalCountProperty()).not());
         btnMushroom.disableProperty().bind(boardViewModel.boxInTargetCountProperty().isEqualTo(boardViewModel.goalCountProperty()));
 
         // Ajoute ou retire le filtre d'événements en fonction de la valeur de la liaison
