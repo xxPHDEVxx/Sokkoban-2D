@@ -29,8 +29,10 @@ public class BoardView4Play extends BoardView  {
         super(primaryStage, boardViewModel);
         this.gridView = gridView;
         this.primaryStage = primaryStage;
+        primaryStage.setScene(gridView.getScene());
+        primaryStage.show();
         initialize();
-        configureScene();
+        configureScene(primaryStage);
         createHeaderPlay();
         setupFinishButton(boardViewModel, primaryStage);
         showMushroom();
@@ -62,13 +64,13 @@ public class BoardView4Play extends BoardView  {
     }
 
     // Configuration de la scène et des événements clavier
-    private void configureScene() {
+    private void configureScene(Stage playStage) {
         Scene sceneLevel = new Scene(boardLvl, SCENE_MIN_WIDTH, SCENE_MIN_HEIGHT);
-        primaryStage.setScene(sceneLevel);
+        playStage.setScene(sceneLevel);
 
         // Assurer que le composant prend le focus lors de l'affichage
         sceneLevel.getRoot().setFocusTraversable(true);
-        primaryStage.showingProperty().addListener((obs, wasShowing, isNowShowing) -> {
+        playStage.showingProperty().addListener((obs, wasShowing, isNowShowing) -> {
             if (isNowShowing) {
                 sceneLevel.getRoot().requestFocus();
             }

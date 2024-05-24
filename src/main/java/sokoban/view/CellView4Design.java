@@ -2,12 +2,19 @@ package sokoban.view;
 
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.value.ObservableValue;
+import javafx.geometry.Pos;
 import javafx.scene.effect.ColorAdjust;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.TransferMode;
+import sokoban.model.GameElement;
+import sokoban.model.Goal;
 import sokoban.viewmodel.CellViewModel;
 import sokoban.viewmodel.ToolViewModel;
+
+import java.util.List;
 
 public class CellView4Design extends CellView{
 
@@ -20,14 +27,14 @@ public class CellView4Design extends CellView{
     private void configureBindings() {
 
         imageView.fitWidthProperty().bind(width);
-        imageView.fitHeightProperty().bind(width);
+        imageView.fitHeightProperty().bind(height);
         midImageView.fitWidthProperty().bind(width);
-        midImageView.fitHeightProperty().bind(width);
+        midImageView.fitHeightProperty().bind(height);
         topImageView.fitWidthProperty().bind(width);
-        topImageView.fitHeightProperty().bind((width));
+        topImageView.fitHeightProperty().bind(height);
 
         this.prefHeightProperty().bind(this.width);
-        this.prefWidthProperty().bind(this.width);
+        this.prefWidthProperty().bind(this.height);
 
 
         getChildren().addAll(imageView, midImageView, topImageView);
