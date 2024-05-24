@@ -95,14 +95,21 @@ public abstract class BoardView extends BorderPane {
 
     // Method to configure main components
     private void configMainComponents(Stage stage) {
-        stage.setTitle("Sokoban");
-
         // Lier le titre avec isChanged
         stage.titleProperty().bind(
                 Bindings.when(boardViewModel.isChangedProperty())
                         .then("Sokoban(*)")
                         .otherwise("Sokoban")
         );
+
+        // Modifier le titre du stage en fonction de BoardView4Play et de la propriété isChanged
+        if (this instanceof BoardView4play) {
+            stage.titleProperty().bind(
+                    Bindings.when(boardViewModel.isChangedProperty())
+                            .then("Jeu(*)")
+                            .otherwise("Jeu")
+            );
+        }
 
         createMenuBar(stage);
         createHeader();
@@ -201,8 +208,6 @@ public abstract class BoardView extends BorderPane {
     public void createHeader() {
         cellCountLabel.textProperty().bind(boardViewModel.filledCellsCountProperty()
                 .asString("Number of filled cells: %d of " + boardViewModel.maxFilledCells()));
-        Font font = Font.font("Verdana", FontWeight.BOLD, 20);
-        cellCountLabel.setFont(font);
 
         errBox.textProperty().bind(Bindings.when(boardViewModel.boxCountProperty().greaterThan(0))
                 .then("")
@@ -284,10 +289,6 @@ public abstract class BoardView extends BorderPane {
                 boxRules.widthProperty()));
     }
 
-    public void setTitle(Stage stage,String title){
-        stage.setTitle(title);
-    }
-
     // Method to refresh the view
     public void refresh() {
         createGrid(scene);
@@ -311,7 +312,6 @@ public abstract class BoardView extends BorderPane {
     // Method to start the game
     public void playGame() {
         if (boardViewModel.rulesOKProperty().get()) {
-            primaryStage.setTitle("Sokoban");
             startGame(primaryStage);
         }
     }
