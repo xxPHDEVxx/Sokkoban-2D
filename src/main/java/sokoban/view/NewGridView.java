@@ -17,7 +17,7 @@ import java.util.regex.Pattern;
 
 public class NewGridView {
 
-    private BoardViewModel boardViewModel;
+    private final BoardViewModel boardViewModel;
 
     public NewGridView(BoardViewModel boardViewModel){
         this.boardViewModel = boardViewModel;
@@ -86,19 +86,4 @@ public class NewGridView {
         dialog.setScene(dialogScene);
         dialog.showAndWait();
     }
-
-
-    public static TextFormatter<Integer> createNumericTextFormatter() {
-        Pattern pattern = Pattern.compile("-?\\d*");
-
-        UnaryOperator<TextFormatter.Change> filter = change -> {
-            if (pattern.matcher(change.getControlNewText()).matches()) {
-                return change;
-            } else {
-                return null;
-            }
-        };
-        return new TextFormatter<>(new IntegerStringConverter(), null, filter);
-    }
-
 }

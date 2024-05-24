@@ -303,6 +303,7 @@ public abstract class BoardView extends BorderPane {
     // Method to start the game
     public void playGame() {
         if (boardViewModel.rulesOKProperty().get()) {
+            boardViewModel.setChanged(false);
             startGame(primaryStage);
         }
     }

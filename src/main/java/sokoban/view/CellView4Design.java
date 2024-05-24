@@ -27,14 +27,15 @@ public class CellView4Design extends CellView{
     private void configureBindings() {
 
         imageView.fitWidthProperty().bind(width);
-        imageView.fitHeightProperty().bind(height);
+        imageView.fitHeightProperty().bind(width);
         midImageView.fitWidthProperty().bind(width);
-        midImageView.fitHeightProperty().bind(height);
+        midImageView.fitHeightProperty().bind(width);
         topImageView.fitWidthProperty().bind(width);
-        topImageView.fitHeightProperty().bind(height);
+        topImageView.fitHeightProperty().bind(width);
+
 
         this.prefHeightProperty().bind(this.width);
-        this.prefWidthProperty().bind(this.height);
+        this.prefWidthProperty().bind(this.width);
 
 
         getChildren().addAll(imageView, midImageView, topImageView);
