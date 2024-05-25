@@ -183,7 +183,7 @@ public class BoardViewModel {
         List<GameElement> targetCellItems = board.getGrid().getValues(newRow, newCol);
 
         // Check if a wall or a mushroom is blocking the way
-        if (targetCellItems.stream().anyMatch(element -> element instanceof Wall || element instanceof Mushroom)) {
+        if (targetCellItems.stream().anyMatch(element -> element instanceof Wall)) {
             System.out.println("Move invalid: something is blocking the way.");
             return false;
         }
@@ -208,10 +208,21 @@ public class BoardViewModel {
         }
 
         // Move the player to the new position
+        if (targetCellItems.stream().anyMatch(gameElement -> gameElement instanceof Mushroom)){
+            targetCellItems.clear();
+            targetCellItems.add(new Ground());
+            targetCellItems.add(new Mushroom());
+        }
         targetCellItems.add(new Player());
 
         // Remove the player from the original cell
         List<GameElement> playerCellItems = board.getGrid().getValues(playerCell.getLine(), playerCell.getCol());
+        if (playerCellItems.stream().anyMatch(gameElement -> gameElement instanceof Mushroom)){
+            playerCellItems.clear();
+            playerCellItems.add(new Ground());
+            playerCellItems.add(new Mushroom());
+            playerCellItems.add(new Ground());
+        }
         playerCellItems.removeIf(element -> element instanceof Player);
 
         // Increment the move count

@@ -96,6 +96,10 @@ public class CellViewModel {
         board.mushroom(board.getGrid());
     }
 
+    public boolean mushroomDisplay(){
+       return board.mushroomDisplay(line,col);
+    }
+
     public void addBoardHistory(){
         board.getGridState().addBoardState(board);
     }

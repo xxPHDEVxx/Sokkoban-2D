@@ -463,12 +463,10 @@ public class Board {
 
     /**
      * To place mushroom on the grid
-     * @param grid
-     * @return
      */
     public void mushroom(Grid grid){
         Random random = new Random();
-        Boolean free = false;
+        boolean free = false;
 
         for (int i = 0; i < grid.getGridHeight(); i++) {
             for (int j = 0; j < grid.getGridWidth(); j++) {
@@ -509,6 +507,13 @@ public class Board {
                     if (cellItems.get(last) instanceof Ground) {  // If the last element is a Ground
                         cellItems.remove(last);  // Remove the Ground element to reveal the mushroom
                         visible = true;  // Set the flag to true, indicating a mushroom was made visible
+                    } else if (cellItems.get(last) instanceof Player) {
+                        cellItems.set(1, new Player());
+                        cellItems.set(2, new Mushroom());
+                        return true;
+                    } else if (cellItems.get(1) instanceof Player) {
+                        cellItems.set(2, new Player());
+                        cellItems.set(1, new Mushroom());
                     } else {
                         cellItems.add(new Ground());  // Otherwise, add a Ground element to hide the mushroom
                     }
@@ -537,7 +542,7 @@ public class Board {
                 List<GameElement> cellItems = this.valueProperty(i, j);  // Get the list of game elements at the current cell
                 int last = cellItems.size() - 1;  // Index of the last element in the list
                 if (cellItems.stream().anyMatch(element -> element instanceof Mushroom)) {  // Check if there's a mushroom in the cell
-                    if (cellItems.get(last) instanceof Ground) {  // If the last element is a Ground
+                    if (cellItems.get(last) instanceof Ground || cellItems.get(last) instanceof Player) {  // If the last element is a Ground
                         visible = false;  // Set the flag to false, indicating a mushroom is hidden
                         break;
                     }
@@ -545,6 +550,11 @@ public class Board {
             }
         }
         return visible;  // Return whether all mushrooms are visible
+    }
+
+    public boolean mushroomDisplay(int line, int col){
+        List<GameElement> cellItems = valueProperty(line,col);
+            return ((cellItems.size() > 2) &&(cellItems.get(1) instanceof Mushroom ) && (cellItems.get(2) instanceof Player));
     }
 
 

@@ -105,7 +105,10 @@ public abstract class CellView extends StackPane {
             handleBoxNumber();
         } else {
             if (elements.size() > 1) {
-                midImageView.setImage(elements.get(1).getImage());
+                if (viewModel.mushroomDisplay()){
+                    midImageView.setImage(ground);
+                } else
+                    midImageView.setImage(elements.get(1).getImage());
             }
             if (elements.size() > 2) {
                 topImageView.setImage(elements.get(2).getImage());

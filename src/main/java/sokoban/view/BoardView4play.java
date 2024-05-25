@@ -16,15 +16,15 @@ import sokoban.model.Direction;
 import sokoban.viewmodel.BoardViewModel;
 
 public class BoardView4Play extends BoardView  {
-    private final GridView4Play gridView;
-    private final Label title = new Label("Score");
-    private final Label numberOfMovesPlayed = new Label("");
-    private final Label goal = new Label("");
-    private final Label finisher = new Label("");
-    private final HBox level = new HBox();
-    private final VBox headerPlay = new VBox();
-    private final Button btnFinish = new Button("Finish");
-    private final Button btnMushroom = new Button("Show mushroom");
+    private GridView4Play gridView;
+    private Label title = new Label("Score");
+    private Label numberOfMovesPlayed = new Label("");
+    private Label goal = new Label("");
+    private Label finisher = new Label("");
+    private HBox level = new HBox();
+    private VBox headerPlay = new VBox();
+    private Button btnFinish = new Button("Finish");
+    private Button btnMushroom = new Button("Show mushroom");
     // Constructeur de la vue de jeu
     public BoardView4Play(Stage primaryStage, GridView4Play gridView, BoardViewModel boardViewModel) {
         super(primaryStage, boardViewModel);
