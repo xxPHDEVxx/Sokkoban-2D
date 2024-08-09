@@ -129,7 +129,7 @@ public abstract class Grid {
         boxInTargetCount = Bindings.createLongBinding(() -> Arrays
                 .stream(matrix)
                 .flatMap(Arrays::stream)
-                .filter(cell -> cell.isBoxInTarget())
+                .filter(Cell::isBoxInTarget)
                 .count());
     }
     public void setBoxCellsCount() {
@@ -175,6 +175,5 @@ public abstract class Grid {
         setPlayerCount();
         setGoalCount();
         setBoxInTargetCount();
-
     }
 }

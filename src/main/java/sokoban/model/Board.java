@@ -48,6 +48,7 @@ public class Board {
 
     /**
      * Calculates and returns the maximum number of filled cells allowed based on grid size.
+     *
      * @return The maximum number of filled cells.
      */
     public int maxFilledCells() {
@@ -61,8 +62,9 @@ public class Board {
 
     /**
      * Places an element on the board at the specified position based on the current tool selected.
+     *
      * @param line The row index.
-     * @param col The column index.
+     * @param col  The column index.
      */
     public void put(int line, int col) {
         List<GameElement> cellItems = valueProperty(line, col);
@@ -133,8 +135,7 @@ public class Board {
         if (selected instanceof Player) {
             removeCellElement(line, col, cellItems.get(cellItems.size() - 1));
             putElement(line, col, selected);
-        }
-        else if (selected instanceof Ground) {
+        } else if (selected instanceof Ground) {
             cellItems.clear();
             putElement(line, col, new Ground());
         } else {
@@ -146,8 +147,9 @@ public class Board {
 
     /**
      * Removes a tool (game element) from the specified position on the board.
+     *
      * @param line The row index.
-     * @param col The column index.
+     * @param col  The column index.
      */
     public void removeTool(int line, int col) {
         List<GameElement> cellItems = valueProperty(line, col);
@@ -177,8 +179,9 @@ public class Board {
 
     /**
      * Places an element in the specified cell on the grid.
-     * @param line The row index.
-     * @param col The column index.
+     *
+     * @param line    The row index.
+     * @param col     The column index.
      * @param element The game element to place.
      */
     public void putElement(int line, int col, GameElement element) {
@@ -187,8 +190,9 @@ public class Board {
 
     /**
      * Removes an element from the specified cell on the grid.
-     * @param line The row index.
-     * @param col The column index.
+     *
+     * @param line    The row index.
+     * @param col     The column index.
      * @param element The game element to remove.
      */
     public void removeCellElement(int line, int col, GameElement element) {
@@ -203,13 +207,16 @@ public class Board {
     public ReadOnlyListProperty<GameElement> valueProperty(int line, int col) {
         return grid.valueProperty(line, col);
     }
+
     public LongProperty moveCountProperty() {
         return moveCount;
     }
+
     //compteur de mouvement
     public void incrementMoveCount(int nb) {
         moveCountProperty().set(moveCountProperty().get() + nb);
     }
+
     public LongBinding filledCellsCountProperty() {
         return grid.filledCellsCountProperty();
     }
@@ -269,6 +276,7 @@ public class Board {
 
     /**
      * Opens a file and loads its content into the grid.
+     *
      * @param file The file to open.
      */
     public Grid open(File file) {
@@ -352,6 +360,7 @@ public class Board {
 
     /**
      * Converts a character symbol to corresponding game elements.
+     *
      * @param symbol The character symbol.
      * @return A list of game elements.
      */
@@ -388,6 +397,7 @@ public class Board {
 
     /**
      * Checks if a player is placed on the grid.
+     *
      * @return True if a player is placed, false otherwise.
      */
     public boolean isPlayerPlaced() {
@@ -396,6 +406,7 @@ public class Board {
 
     /**
      * Creates a copy of the current board.
+     *
      * @return A new Board instance with the same grid configuration.
      */
     public Board copy() {
@@ -415,23 +426,23 @@ public class Board {
     /**
      * Replace randomly boxes of the grid
      */
-    public void mushroomEffect(){
+    public void mushroomEffect() {
         Grid grid = this.getGrid();
         Random random = new Random();
         int boxCount = 1;
         int boxNumber = 0;
         //List<GameElement> boxes = new ArrayList<>();
         // save etat initial
-        if (gridState.getBoardHistory().size() == 0) {
+        if (gridState.getBoardHistory().isEmpty()) {
             gridState.addBoardState(this);
         }
 
         // Clear current box(es)
         for (int i = 0; i < grid.getGridHeight(); i++) {
             for (int j = 0; j < grid.getGridWidth(); j++) {
-                List<GameElement> cellItems = this.valueProperty(i,j);
-                for (GameElement item : cellItems){
-                    if (item instanceof Box){
+                List<GameElement> cellItems = this.valueProperty(i, j);
+                for (GameElement item : cellItems) {
+                    if (item instanceof Box) {
                         cellItems.remove(item);
                         boxNumber++;
                         break;
@@ -444,10 +455,10 @@ public class Board {
         while (boxNumber > 0) {
             int i = random.nextInt(grid.getGridHeight());
             int j = random.nextInt(grid.getGridWidth());
-            List<GameElement> cellItems = grid.valueProperty(i,j);
+            List<GameElement> cellItems = grid.valueProperty(i, j);
             if (!(i == 0 || j == 0 || i == 9 || j == 14)) {
                 if ((cellItems.size() == 1) ||
-                        (cellItems.size() == 2 && cellItems.stream().anyMatch(element -> element instanceof Goal))){
+                        (cellItems.size() == 2 && cellItems.stream().anyMatch(element -> element instanceof Goal))) {
                     Box box = new Box();
                     box.setNumberLabel(new Label(String.valueOf(boxCount)));
                     cellItems.add(box);
@@ -464,26 +475,71 @@ public class Board {
     /**
      * To place mushroom on the grid
      */
-    public void mushroom(Grid grid){
+    public void mushroom(Grid grid) {
         Random random = new Random();
         boolean free = false;
 
         for (int i = 0; i < grid.getGridHeight(); i++) {
             for (int j = 0; j < grid.getGridWidth(); j++) {
-                List<GameElement> cellItems = this.valueProperty(i,j);
+                List<GameElement> cellItems = this.valueProperty(i, j);
                 if (cellItems.stream().anyMatch(element -> element instanceof Mushroom))
                     cellItems.remove(cellItems.size() - 2);
-                }
             }
+        }
 
         while (!free) {
             int i = random.nextInt(grid.getGridHeight());
             int j = random.nextInt(grid.getGridWidth());
-            List<GameElement> cellItems = grid.valueProperty(i,j);
+            List<GameElement> cellItems = grid.valueProperty(i, j);
             if (cellItems.stream().allMatch(element -> element instanceof Ground) && cellItems.size() == 1) {
                 cellItems.add(new Mushroom());
                 cellItems.add(new Ground());
                 free = true;
+            }
+        }
+    }
+
+    public int getnbGoals() {
+        int nb = 0;
+        for (int i = 0; i < grid.getGridHeight(); i++) {
+            for (int j = 0; j < grid.getGridWidth(); j++) {
+                List<GameElement> cellItems = this.valueProperty(i, j);
+                for (GameElement element : cellItems)
+                    if (element instanceof Goal)
+                        nb++;
+
+            }
+        }
+        return nb;
+    }
+
+    public boolean checkStack(List<Integer> stack, int nb){
+
+        for (Integer item : stack){
+            if (nb == item)
+                return false;
+        }
+        return true;
+    }
+
+
+    public void randomTarget(){
+        Random random = new Random();
+        int goals = getnbGoals();
+        int nb = random.nextInt(goals) + 1;
+        List<Integer> stack = new ArrayList<>();
+        for (int i = 0; i < grid.getGridHeight(); i++) {
+            for (int j = 0; j < grid.getGridWidth(); j++) {
+                List<GameElement> cellItems = this.valueProperty(i,j);
+                for (GameElement element : cellItems)
+                    if (element instanceof Goal){
+
+                        while (!(checkStack(stack,nb))){
+                            nb = random.nextInt(goals) + 1;
+                        }
+                        stack.add(nb);
+                        ((Goal) element).setNumberLabel(new Label(String.valueOf(nb)));
+                    }
             }
         }
     }
@@ -581,4 +637,18 @@ public class Board {
     }
 
 
+    public void goalNumber(Grid grid) {
+        int goalNumber = 0;
+        for (int i = 0; i < grid.getGridHeight(); ++i) {
+            for (int j = 0; j < grid.getGridWidth(); j++) {
+                List<GameElement> cellItems = grid.valueProperty(i,j);
+                for (GameElement element : cellItems) {
+                    if (element instanceof Goal) {
+                        goalNumber++;
+                        ((Goal) element).setNumberLabel(new Label(String.valueOf(goalNumber)));
+                    }
+                }
+            }
+        }
+    }
 }

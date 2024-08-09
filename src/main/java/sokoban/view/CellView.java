@@ -31,6 +31,7 @@ public abstract class CellView extends StackPane {
 
     // Panneau principal pour empiler les éléments de la cellule
     protected StackPane stackPane = new StackPane();
+    protected StackPane goalStackpane = new StackPane();
     // Composants visuels pour afficher les images des éléments
     protected ImageView imageView = new ImageView();
     protected ImageView midImageView = new ImageView();
@@ -55,8 +56,7 @@ public abstract class CellView extends StackPane {
      * Gère l'affichage du numéro de la boîte s'il y a une boîte dans la cellule.
      */
     protected void handleBoxNumber() {
-        Label numberLabel = viewModel.createBoxNumberLabel();
-
+        Label numberLabel = viewModel.getBoxNumberLabel();
         if (numberLabel != null && stackPane.getChildren().isEmpty()) {
             // Lier la taille de la police du label à la plus petite dimension de la cellule
             numberLabel.fontProperty().bind(Bindings.createObjectBinding(() ->
@@ -64,6 +64,18 @@ public abstract class CellView extends StackPane {
                     width));
             stackPane.getChildren().add(numberLabel);
             StackPane.setAlignment(numberLabel, Pos.CENTER);
+        }
+    }
+
+    protected void handleGoalNumber() {
+        Label label = viewModel.getGoalNumberLabel();
+        if (label != null) {
+            // Lier la taille de la police du label à la plus petite dimension de la cellule
+            label.fontProperty().bind(Bindings.createObjectBinding(() ->
+                            Font.font("Verdana", Math.min(width.get(), width.get()) / 2),
+                    width));
+            stackPane.getChildren().add(label);
+            StackPane.setAlignment(label, Pos.CENTER);
         }
     }
 
@@ -80,6 +92,7 @@ public abstract class CellView extends StackPane {
             midImageView.setImage(elements.get(2).getImage());
             topImageView.setImage(elements.get(1).getImage());
             handleBoxNumber();
+            handleGoalNumber();
         } else {
             if (elements.size() > 1) {
                 midImageView.setImage(elements.get(1).getImage());
@@ -89,6 +102,10 @@ public abstract class CellView extends StackPane {
             }
             if (viewModel.isBox()) {
                 handleBoxNumber();
+
+            }
+            if (viewModel.isGoal()) {
+                handleGoalNumber();
             }
         }
     }
@@ -103,6 +120,7 @@ public abstract class CellView extends StackPane {
             midImageView.setImage(elements.get(2).getImage());
             topImageView.setImage(elements.get(1).getImage());
             handleBoxNumber();
+            handleGoalNumber();
         } else {
             if (elements.size() > 1) {
                 if (viewModel.mushroomDisplay()){
@@ -115,6 +133,9 @@ public abstract class CellView extends StackPane {
             }
             if (viewModel.isBox()) {
                 handleBoxNumber();
+            }
+            if (viewModel.isGoal()) {
+                handleGoalNumber();
             }
         }
     }

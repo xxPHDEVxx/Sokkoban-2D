@@ -1,7 +1,6 @@
 package sokoban.view;
 
 import javafx.beans.binding.DoubleBinding;
-import sokoban.model.Grid;
 import sokoban.viewmodel.CellViewModel;
 
 public class CellView4Play extends CellView{
@@ -22,7 +21,7 @@ public class CellView4Play extends CellView{
 
 
         // Ajout des composants visuels au StackPane
-        getChildren().addAll(imageView, midImageView,stackPane, topImageView);
+        getChildren().addAll(imageView, midImageView, stackPane, topImageView);
 
 
         // un clic sur la cellule permet de jouer celle-ci

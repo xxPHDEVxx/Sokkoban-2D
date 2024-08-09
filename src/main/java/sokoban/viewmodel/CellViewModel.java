@@ -84,6 +84,35 @@ public class CellViewModel {
         }
         return null;
     }
+
+    public Label getBoxNumberLabel() {
+        Label label = new Label();
+        if (isBox()){
+            for (GameElement element : getCellValue()) {
+                if (element instanceof Box) {
+                    label = ((Box) element).getNumberLabel();
+                    label.setStyle("-fx-font-size: 26px; -fx-text-fill: black;" +
+                            " -fx-font-weight: bold; -fx-background-color: white; -fx-padding: 30%; -fx-height: 50%");
+            }
+            }
+        }
+        return label;
+    }
+
+    public Label getGoalNumberLabel() {
+        Label label = new Label();
+        if (isGoal()) {
+            for (GameElement element : getCellValue()) {
+                if (element instanceof Goal) {
+                    label = ((Goal) element).getNumberLabel();
+                    label.setStyle("-fx-font-size: 10px; -fx-text-fill: black;" +
+                            " -fx-font-weight: bold; -fx-background-color: white; -fx-padding: 30%; -fx-height: 20%");
+                }
+            }
+        }
+        return label;
+    }
+
     /**
      * Replace boxes of the grid if there is a mushroom on this cell
      */
@@ -103,4 +132,7 @@ public class CellViewModel {
     public void addBoardHistory(){
         board.getGridState().addBoardState(board);
     }
-}
+    public boolean isGoal() {
+        return (valueProperty().stream().anyMatch(element -> element instanceof Goal));
+    }
+    }

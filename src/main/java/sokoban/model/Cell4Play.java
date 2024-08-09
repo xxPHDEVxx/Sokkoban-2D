@@ -2,6 +2,8 @@ package sokoban.model;
 
 import javafx.beans.property.ReadOnlyListProperty;
 
+import java.util.Objects;
+
 /**
  * The Cell4Play class extends the abstract Cell class and provides concrete implementations
  * of its abstract methods. This class is used for managing the game elements within a cell
@@ -74,8 +76,18 @@ public class Cell4Play extends Cell {
      */
     @Override
     boolean isBoxInTarget() {
+        String box = "";
+        String goal = "";
+        for (GameElement element : values) {
+            if (element instanceof Box) {
+                box = ((Box) element).getNumberLabel().getText();
+            }
+            if (element instanceof Goal) {
+                goal = ((Goal) element).getNumberLabel().getText();
+            }
+        }
         return values.stream().anyMatch(value -> value instanceof Box)
-                && values.stream().anyMatch(value -> value instanceof Goal);
+                && values.stream().anyMatch(value -> value instanceof Goal) && Objects.equals(goal, box);
     }
 
     /**

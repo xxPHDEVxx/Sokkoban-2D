@@ -366,8 +366,13 @@ public class BoardViewModel {
         Grid4Play gridGame = new Grid4Play(gridWidth(), gridHeight());
         gridGame.copy(board.getGrid());
         boxNumber(gridGame);
+        goalNumber(gridGame);
         mushroom(gridGame);
         return gridGame;
+    }
+
+    public void randomTarget(){
+        board.randomTarget();
     }
 
     public void goToDesign(){
@@ -381,6 +386,10 @@ public class BoardViewModel {
      */
     public void boxNumber(Grid grid) {
         board.boxNumber(grid);
+    }
+
+    public void goalNumber(Grid grid) {
+        board.goalNumber(grid);
     }
 
     /**
