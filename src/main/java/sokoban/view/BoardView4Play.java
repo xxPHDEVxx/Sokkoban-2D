@@ -24,6 +24,7 @@ public class BoardView4Play extends BoardView  {
     private VBox headerPlay = new VBox();
     private Button btnFinish = new Button("Finish");
     private Button btnMushroom = new Button("Show mushroom");
+    private Button target = new Button("Numbering targets");
     // Constructeur de la vue de jeu
     public BoardView4Play(Stage primaryStage, GridView4Play gridView, BoardViewModel boardViewModel) {
         super(primaryStage, boardViewModel);
@@ -36,6 +37,7 @@ public class BoardView4Play extends BoardView  {
         createHeaderPlay();
         setupFinishButton(boardViewModel, primaryStage);
         showMushroom();
+        targetBtn();
     }
 
     // Initialisation des composants de la vue
@@ -53,7 +55,7 @@ public class BoardView4Play extends BoardView  {
         boardLvl.setAlignment(Pos.CENTER);
 
         // Ajout des composants à leurs conteneurs
-        HBox boxBtn = new HBox(btnFinish, btnMushroom);
+        HBox boxBtn = new HBox(btnFinish, btnMushroom, target);
         boxBtn.setSpacing(15);
         boxBtn.setAlignment(Pos.CENTER);
 
@@ -128,6 +130,14 @@ public class BoardView4Play extends BoardView  {
             GameAgain();
             new BoardView4Design(primaryStage, boardViewModel);
             boardViewModel.moveCountProperty().set(0);
+        });
+    }
+
+    private void targetBtn(){
+        target.setOnAction(action -> {
+            boardViewModel.randomTarget();
+            gridView.fillGrid(gridView.gridViewModel, gridWidth,gridHeight);
+            boardViewModel.configureBindings();
         });
     }
 

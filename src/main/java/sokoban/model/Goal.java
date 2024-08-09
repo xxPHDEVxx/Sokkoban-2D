@@ -20,7 +20,6 @@ public class Goal extends GameElement {
 
     }
     public Label getNumberLabel() {
-        System.out.println(numberLabel);
         return numberLabel;
     }
 
