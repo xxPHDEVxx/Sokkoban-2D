@@ -4,6 +4,13 @@
 
 Le projet **Sokoban** est une version personnalisée du célèbre jeu de puzzle, développée en Java avec JavaFX pour l'interface graphique. Ce jeu permet aux utilisateurs de créer leur propre grille, d'importer des grilles existantes, de sauvegarder des grilles créées, et bien sûr, de jouer. Le principe du jeu est simple : il faut déplacer des caisses numérotées sur leurs cibles correspondantes pour les associer par paire.
 
+<br>
+
+<div>
+    <img src="https://github.com/xxPHDEVxx/Sokkoban-2D/blob/main/pic1.png" width="500" height="300">
+    <img src="https://github.com/xxPHDEVxx/Sokkoban-2D/blob/main/pic2.png" width="500" height="300">
+</div>
+
 ## Fonctionnalités
 
 - **Création de grille** : Créez votre propre grille de Sokoban, avec la possibilité de placer des caisses et des cibles numérotées.
