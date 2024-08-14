@@ -31,7 +31,7 @@ Le projet **Sokoban** est une version personnalisée du célèbre jeu de puzzle,
 1. Clonez le dépôt GitHub du projet :
 
     ```bash
-    git clone https://github.com/votre-utilisateur/votre-projet-sokoban.git
+    git clone https://github.com/xxPHDEVxx/votre-projet-sokoban.git
     cd votre-projet-sokoban
     ```
 
